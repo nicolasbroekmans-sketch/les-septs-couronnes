@@ -1,0 +1,10 @@
+Police fan optionnelle « Game of Thrones » (Charlie Samways, dafont.com)
+------------------------------------------------------------------------
+Elle n'est PAS incluse : sa licence autorise seulement un usage personnel,
+non commercial, et ne permet pas de la redistribuer dans ce zip.
+
+Pour l'utiliser chez vous :
+1. Téléchargez-la sur https://www.dafont.com/game-of-thrones.font
+2. Copiez le fichier « Game of Thrones.ttf » dans ce dossier.
+3. Dans css/style.css, décommentez le bloc @font-face (en haut du fichier).
+Sans ce fichier, les titres utilisent automatiquement Cinzel Decorative.

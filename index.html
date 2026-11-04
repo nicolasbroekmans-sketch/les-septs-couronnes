@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Les Sept Couronnes — RPG (fan-made)</title>
+  <meta name="description" content="Jeu de rôle non officiel inspiré du Trône de fer : création de personnage, quêtes, combats, IA, exploration 3D.">
+  <meta name="theme-color" content="#0b0b0d">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%238b0000'/%3E%3Ccircle cx='16' cy='16' r='8' fill='none' stroke='%23c9a227' stroke-width='2'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/map.css">
+  <link rel="stylesheet" href="css/menus.css">
+  <link rel="stylesheet" href="css/hud.css">
+  <link rel="stylesheet" href="css/panels.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.4/howler.min.js" defer></script>
+  <script type="importmap">
+  { "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  } }
+  </script>
+</head>
+<body>
+  <div id="cursor" aria-hidden="true"><span></span></div>
+  <canvas id="fx" aria-hidden="true"></canvas>
+
+  <section id="intro" class="level active" aria-label="Introduction">
+    <div class="intro-inner">
+      <p class="intro-kicker">Un jeu de rôle non officiel</p>
+      <h1 id="title" aria-label="A Song of Ice and Fire">A SONG OF ICE AND FIRE</h1>
+      <div class="rule" aria-hidden="true"><i></i><b>✦</b><i></i></div>
+      <p id="subtitle">Choisissez votre destin</p>
+      <button id="enter" class="btn-gold" type="button"><span>Entrer</span></button>
+      <p class="intro-hint">Casque recommandé · le son démarre au clic</p>
+    </div>
+  </section>
+
+  <section id="menu" class="level" aria-label="Menu principal"></section>
+  <section id="create" class="level" aria-label="Création du personnage"></section>
+
+  <section id="map" class="level" aria-label="Carte du monde connu">
+    <div id="map-stage"></div>
+    <div id="map-title" aria-live="polite"></div>
+    <aside id="map-card" aria-live="polite"></aside>
+    <nav id="place-list" aria-label="Lieux du continent"><h3></h3><ul></ul></nav>
+    <p id="map-help"></p>
+    <div id="start-card" aria-live="polite"></div>
+    <button id="map-back" class="btn-ui" type="button" hidden>← Menu principal</button>
+  </section>
+
+  <section id="world" class="level" aria-label="Jeu">
+    <div id="three"></div>
+    <div id="hud"></div>
+    <div id="floaters" aria-hidden="true"></div>
+    <div id="lock-hint" class="off"><div class="lock-box"><h3>Cliquez pour jouer</h3>
+      <p><kbd>ZQSD</kbd>/<kbd>WASD</kbd> se déplacer · souris : caméra · <kbd>Maj</kbd> courir · <kbd>C</kbd> furtivité<br>
+      clic gauche : attaquer (maintenir = attaque lourde) · clic droit : parer · <kbd>Espace</kbd> esquiver<br>
+      <kbd>E</kbd> interagir · <kbd>H</kbd> se soigner · <kbd>I</kbd> <kbd>K</kbd> <kbd>J</kbd> <kbd>L</kbd> menus · <kbd>Échap</kbd> pause</p></div></div>
+    <div id="saved">Partie sauvegardée</div>
+  </section>
+
+  <div id="dialogue" aria-live="polite"></div>
+  <div id="panel"></div>
+  <div id="modal"></div>
+  <div id="dead" role="alertdialog"></div>
+  <div id="toasts" aria-live="polite"></div>
+
+  <div id="loader" aria-live="polite">
+    <div class="parchment">
+      <span class="kicker">En route vers</span>
+      <h2 id="loader-name">—</h2>
+      <p id="loader-text"></p>
+      <div class="bar"><i id="loader-bar"></i></div>
+      <span id="loader-pct">0 %</span>
+    </div>
+  </div>
+  <div id="veil" aria-hidden="true"></div>
+  <div id="ui"><div class="ui-right">
+    <button id="settings-btn" class="btn-ui icon" type="button" title="Paramètres" aria-label="Paramètres"></button>
+    <button id="mute" class="btn-ui icon" type="button" aria-pressed="false" title="Couper le son" aria-label="Couper le son"></button>
+  </div></div>
+  <div id="grain" aria-hidden="true"></div>
+  <div id="vignette" aria-hidden="true"></div>
+  <noscript><p class="noscript">Ce jeu nécessite JavaScript et WebGL.</p></noscript>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

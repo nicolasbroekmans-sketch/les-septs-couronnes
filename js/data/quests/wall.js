@@ -1,0 +1,36 @@
+// Quêtes du Mur.
+export default {
+  wall_patrol: {
+    title: 'Une nuit au Mur', region: 'wall', giver: 'aldous', category: 'Principale — Garde de Nuit',
+    desc: 'Accompagner une patrouille au-delà du Mur.', start: 'grove',
+    failOn: [{ event: 'npc:killed', npc: 'aldous', text: 'Frère Aldous est tombé. La patrouille est perdue.' }],
+    steps: {
+      grove: { text: 'Frère Aldous mène la patrouille. Passez le tunnel sous le Mur et rejoignez le bosquet du barral, au nord.',
+        objectives: [{ type: 'reach', marker: 'wall_grove', label: 'Rejoindre le bosquet du barral (au-delà du Mur)' }], next: 'ambush' },
+      ambush: { text: 'Des sauvageons sortent de la brume ! Défendez la patrouille.', enter: [{ flag: 'wall_ambush' }],
+        objectives: [{ type: 'defeat', group: 'wall_wildlings', count: 3, label: 'Repousser les sauvageons' }], next: 'choice' },
+      choice: { text: 'Une sauvageonne blessée, Ygra, a jeté sa lance. Que faites-vous d’elle ?', any: true,
+        objectives: [
+          { type: 'signal', signal: 'free', label: 'La laisser partir', branch: 'back_free' },
+          { type: 'signal', signal: 'prisoner', label: 'Ou : la ramener prisonnière', branch: 'back_prisoner' },
+          { type: 'signal', signal: 'execute', label: 'Ou : appliquer la loi du Mur', branch: 'back_execute' }] },
+      back_free: { text: 'Ygra a disparu entre les arbres. Retournez au camp voir Frère Aldous.', objectives: [{ type: 'talk', npc: 'aldous', label: 'Retourner voir Frère Aldous' }], complete: 'free' },
+      back_prisoner: { text: 'Ygra marche devant vous, mains liées. Ramenez-la à Frère Aldous.', objectives: [{ type: 'talk', npc: 'aldous', label: 'Retourner voir Frère Aldous' }], complete: 'prisoner' },
+      back_execute: { text: 'C’est fait. Le vent emporte tout. Retournez voir Frère Aldous.', objectives: [{ type: 'talk', npc: 'aldous', label: 'Retourner voir Frère Aldous' }], complete: 'execute' }
+    },
+    outcomes: {
+      free: { text: 'Aldous fronce les sourcils, mais un sauvageon, au loin, se souviendra de vous.', unlocks: ['wall_report'],
+        rewards: [{ xp: 170 }, { item: 'carte_sauvageon' }, { rep: { peuple_libre: 25, garde: -6 } }, { relation: { aldous: -10 } }, { memory: { npc: 'aldous', type: 'freed_wildling' } }] },
+      prisoner: { text: 'La prisonnière parlera. La Garde vous en est reconnaissante.', unlocks: ['wall_report'],
+        rewards: [{ xp: 160 }, { gold: 50 }, { rep: { garde: 20, peuple_libre: -10 } }, { relation: { aldous: 20 } }, { renown: 3 }] },
+      execute: { text: 'Aldous ne dit rien. Le Mur se souvient de tout.', unlocks: ['wall_report'],
+        rewards: [{ xp: 130 }, { rep: { garde: 10, peuple_libre: -30 } }, { relation: { aldous: 5 } }, { renown: -2 }] }
+    }
+  },
+  wall_report: {
+    title: 'Le rapport', region: 'wall', giver: 'aldous', category: 'Principale — Garde de Nuit',
+    desc: 'Rendre compte de la patrouille à l’intendant Corwen.', requires: { flag: 'unlocked:wall_report' }, start: 'report',
+    steps: { report: { text: 'Allez faire votre rapport à l’intendant Corwen, au réfectoire.', objectives: [{ type: 'talk', npc: 'corwen', label: 'Faire votre rapport à l’intendant Corwen' }], complete: 'done' } },
+    outcomes: { done: { text: 'Corwen consigne votre nom dans le registre des patrouilles.', rewards: [{ xp: 80 }, { gold: 40 }, { rep: { garde: 8 } }, { renown: 2 }] } }
+  }
+};

@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Générateur de modèles GLB</title>
+<style>body{background:#0b0b0d;color:#e8dcc0;font-family:Georgia,serif;padding:2rem}button{padding:.6rem 1.2rem}</style>
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/" } }</script>
+</head>
+<body>
+<h1>Générateur des modèles .glb (créations originales, CC0)</h1>
+<p>Ce petit outil construit les modèles low-poly utilisés par l'expérience (navire, cheval, Titan) et les exporte au format GLB via GLTFExporter.</p>
+<button id="go">Générer et télécharger</button>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';
+import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+
+const std = (color, o = {}) => new THREE.MeshStandardMaterial({ color, roughness: o.r ?? .8, metalness: o.m ?? 0, flatShading: o.flat ?? true, side: o.side ?? THREE.FrontSide, name: o.name });
+const part = (geo, mat, [x, y, z] = [0, 0, 0], [rx, ry, rz] = [0, 0, 0]) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.rotation.set(rx, ry, rz); return m; };
+
+function ship() {
+  const g = new THREE.Group(); g.name = 'ship';
+  const wood = std('#5a3b22', { name: 'bois' }), dark = std('#2e1e12', { name: 'bois_sombre' }), sail = std('#e8dcc0', { side: THREE.DoubleSide, name: 'voile' }), red = std('#8b0000', { side: THREE.DoubleSide, name: 'pavillon' });
+  // coque : profil extrudé puis effilé à la proue et à la poupe
+  const s = new THREE.Shape(); s.moveTo(-2.2, 2.2); s.lineTo(2.2, 2.2); s.quadraticCurveTo(2, .2, 0, 0); s.quadraticCurveTo(-2, .2, -2.2, 2.2);
+  const hull = new THREE.ExtrudeGeometry(s, { depth: 14, bevelEnabled: false, steps: 14 }); hull.translate(0, 0, -7);
+  const p = hull.attributes.position;
+  for (let i = 0; i < p.count; i++) { const z = p.getZ(i) / 7, k = 1 - Math.pow(Math.abs(z), 2.4) * .92; p.setX(i, p.getX(i) * k); p.setY(i, p.getY(i) + Math.pow(Math.abs(z), 2) * 1.2); }
+  hull.computeVertexNormals();
+  g.add(part(hull, wood));
+  g.add(part(new THREE.BoxGeometry(3.6, .2, 10), dark, [0, 2.1, 0]));
+  g.add(part(new THREE.BoxGeometry(3, 1.4, 2.6), wood, [0, 2.9, -4.4]));
+  g.add(part(new THREE.CylinderGeometry(.16, .22, 11, 8), dark, [0, 7.5, .5]));
+  g.add(part(new THREE.CylinderGeometry(.1, .1, 6.4, 6), dark, [0, 11, .5], [0, 0, Math.PI / 2]));
+  const sg = new THREE.PlaneGeometry(6, 6.5, 6, 6), sp = sg.attributes.position;
+  for (let i = 0; i < sp.count; i++) sp.setZ(i, Math.cos(sp.getX(i) / 3 * 1.4) * 1.1 - .6);
+  sg.computeVertexNormals();
+  g.add(part(sg, sail, [0, 7.6, .9]));
+  g.add(part(new THREE.PlaneGeometry(1.6, .8), red, [.8, 13.2, .5], [0, Math.PI / 2, 0]));
+  for (let i = -4; i <= 4; i += 2) for (const sx of [-1, 1]) g.add(part(new THREE.BoxGeometry(.12, .12, 3), dark, [sx * 2.1, 1.3, i], [.6 * sx, 0, 0]));
+  return g;
+}
+
+function horse() {
+  const g = new THREE.Group(); g.name = 'horse';
+  const bronze = std('#6b5a3a', { m: .85, r: .45, name: 'bronze' }), base = std('#8a8378', { name: 'socle' });
+  g.add(part(new THREE.BoxGeometry(4.2, 1.6, 1.4), bronze, [0, 3.2, 0]));
+  g.add(part(new THREE.BoxGeometry(1.2, 2.4, 1), bronze, [1.9, 4.6, 0], [0, 0, -.5]));
+  g.add(part(new THREE.BoxGeometry(1.6, .8, .8), bronze, [2.7, 5.7, 0], [0, 0, -.35]));
+  g.add(part(new THREE.ConeGeometry(.15, .5, 4), bronze, [2.4, 6.3, .25])); g.add(part(new THREE.ConeGeometry(.15, .5, 4), bronze, [2.4, 6.3, -.25]));
+  g.add(part(new THREE.BoxGeometry(1.4, .3, .5), bronze, [1.6, 5.2, 0], [0, 0, -.5]));
+  for (const [x, z, a] of [[1.6, .45, -.5], [1.6, -.45, -.25], [-1.6, .45, .15], [-1.6, -.45, .1]]) {
+    g.add(part(new THREE.BoxGeometry(.4, 1.5, .4), bronze, [x + Math.sin(a) * .5, 1.8, z], [0, 0, a]));
+    g.add(part(new THREE.BoxGeometry(.32, 1.4, .32), bronze, [x + Math.sin(a) * 1.2, .7, z], [0, 0, a * .3]));
+  }
+  g.add(part(new THREE.BoxGeometry(.3, 2.2, .3), bronze, [-2.4, 2.4, 0], [0, 0, -.4]));
+  g.add(part(new THREE.BoxGeometry(5.4, .3, 2.2), base, [0, .15, 0]));
+  return g;
+}
+
+function titan() {
+  const g = new THREE.Group(); g.name = 'titan';
+  const bronze = std('#4f5a4a', { m: .7, r: .55, name: 'bronze_vert' }), stone = std('#5b5b58', { name: 'pierre' }), eye = new THREE.MeshStandardMaterial({ color: '#ffb35a', emissive: '#ff8a20', emissiveIntensity: 4, name: 'yeux' });
+  // jambes écartées (le Titan enjambe la passe)
+  for (const s of [-1, 1]) {
+    g.add(part(new THREE.CylinderGeometry(2.2, 2.6, 22, 8), bronze, [s * 9, 13, 0], [0, 0, s * .32]));
+    g.add(part(new THREE.CylinderGeometry(2.6, 3, 20, 8), bronze, [s * 4.2, 33, 0], [0, 0, s * .18]));
+    g.add(part(new THREE.BoxGeometry(14, 6, 16), stone, [s * 13, 1, 0]));
+  }
+  g.add(part(new THREE.BoxGeometry(12, 8, 6), bronze, [0, 44, 0]));      // jupe d'armure
+  g.add(part(new THREE.CylinderGeometry(7, 5, 16, 8), bronze, [0, 55, 0])); // torse
+  g.add(part(new THREE.BoxGeometry(18, 3, 6), bronze, [0, 63, 0]));       // épaules
+  g.add(part(new THREE.CylinderGeometry(1.6, 1.4, 4, 8), bronze, [0, 66, 0]));
+  g.add(part(new THREE.SphereGeometry(4, 10, 8), bronze, [0, 70, 0]));     // tête / heaume
+  g.add(part(new THREE.BoxGeometry(1.2, 6, 9), bronze, [0, 74, -.5]));     // cimier
+  g.add(part(new THREE.BoxGeometry(1.2, .6, .4), eye, [-1.5, 70.4, 3.8])); g.add(part(new THREE.BoxGeometry(1.2, .6, .4), eye, [1.5, 70.4, 3.8]));
+  // bras : l'un tient l'épée levée, l'autre un bouclier
+  g.add(part(new THREE.CylinderGeometry(1.6, 1.8, 16, 8), bronze, [10.5, 70, 0], [0, 0, -.25]));
+  g.add(part(new THREE.BoxGeometry(1.4, 34, .6), std('#7d7a72', { m: .9, r: .3, name: 'acier' }), [12.5, 92, 0]));
+  g.add(part(new THREE.BoxGeometry(6, 1.2, 1.2), bronze, [12.5, 77, 0]));
+  g.add(part(new THREE.CylinderGeometry(1.6, 1.8, 15, 8), bronze, [-11, 55, 1], [0, 0, .5]));
+  g.add(part(new THREE.CylinderGeometry(7, 7, 1.2, 12), bronze, [-15, 50, 3], [Math.PI / 2, 0, 0]));
+  return g;
+}
+
+const MODELS = { ship, horse, titan };
+async function exportAll() {
+  const ex = new GLTFExporter(), out = {};
+  for (const [name, fn] of Object.entries(MODELS)) {
+    const buf = await ex.parseAsync(fn(), { binary: true });
+    out[name] = buf;
+  }
+  return out;
+}
+window.exportModelsBase64 = async () => {
+  const all = await exportAll(), res = {};
+  for (const [k, v] of Object.entries(all)) { let s = ''; const b = new Uint8Array(v); for (let i = 0; i < b.length; i++) s += String.fromCharCode(b[i]); res[k] = btoa(s); }
+  return res;
+};
+document.getElementById('go').onclick = async () => {
+  const all = await exportAll();
+  for (const [k, v] of Object.entries(all)) {
+    const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([v], { type: 'model/gltf-binary' })); a.download = `${k}.glb`; a.click();
+  }
+};
+</script>
+</body>
+</html>

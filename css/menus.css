@@ -1,0 +1,43 @@
+/* Menu principal et création du personnage. */
+#menu, #create { z-index: 6; overflow-y: auto; background: radial-gradient(ellipse at 50% 110%, #2a1206 0%, #0b0b0d 65%); }
+.menu-inner { min-height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 16px 30px; }
+.menu-title { font-family: var(--f-title); font-weight: 900; font-size: clamp(2.2rem, 6vw, 4.6rem); margin: .3rem 0; background: linear-gradient(176deg, #fff5cf, var(--gold) 55%, var(--gold-lo)); -webkit-background-clip: text; background-clip: text; color: transparent; filter: drop-shadow(0 0 20px rgba(201,162,39,.35)); }
+.menu-sub { font-style: italic; color: rgba(232,220,192,.7); margin: 0 0 2rem; }
+.menu-nav { display: flex; flex-direction: column; gap: 12px; width: min(440px, 100%); }
+.menu-btn { opacity: 1 !important; width: 100%; padding: .9rem 1rem; letter-spacing: .2em; }
+.menu-btn[disabled] { opacity: .35 !important; pointer-events: none; }
+.menu-foot { margin-top: 2rem; font-size: .8rem; color: rgba(232,220,192,.4); max-width: 520px; }
+.slots { display: flex; flex-direction: column; gap: 6px; }
+.slot { text-align: left; background: rgba(11,11,13,.7); border: 1px solid rgba(201,162,39,.35); color: var(--parchment); padding: .6rem .8rem; display: grid; }
+.slot span { font-style: italic; } .slot small { color: rgba(232,220,192,.5); }
+.slot:hover, .slot:focus-visible { border-color: var(--gold); }
+
+.create { max-width: 1200px; margin: 0 auto; padding: 64px 16px 24px; }
+.create header { display: flex; align-items: center; gap: 16px; }
+.create h2 { font-family: var(--f-title); margin: 0; font-size: clamp(1.4rem, 3vw, 2.2rem); }
+.create-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 24px; margin-top: 16px; }
+.create section { background: rgba(11,11,13,.55); border: 1px solid rgba(201,162,39,.3); padding: 16px 18px; }
+.create h4 { font-family: var(--f-sub); letter-spacing: .2em; text-transform: uppercase; font-size: .75rem; color: var(--gold); margin: 1rem 0 .5rem; }
+.row { display: grid; grid-template-columns: 140px 1fr; align-items: center; gap: 12px; margin: .45rem 0; }
+.row > span { font-family: var(--f-sub); font-size: .8rem; letter-spacing: .08em; color: rgba(232,220,192,.8); }
+input[type=text], input[type=number], select, textarea { background: rgba(232,220,192,.08); color: var(--parchment); border: 1px solid rgba(201,162,39,.4); padding: .45rem .6rem; font: inherit; width: 100%; }
+select option { background: #1a1410; }
+textarea { resize: vertical; }
+input[type=range] { width: 100%; accent-color: var(--gold); }
+.radio { display: flex; gap: 18px; }
+.classes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.class-card { text-align: left; background: rgba(232,220,192,.05); border: 1px solid rgba(201,162,39,.25); color: var(--parchment); padding: .6rem; display: grid; gap: 4px; }
+.class-card b { font-family: var(--f-sub); color: var(--gold-hi); }
+.class-card small { font-size: .82rem; color: rgba(232,220,192,.7); }
+.class-card.on { border-color: var(--gold); background: rgba(201,162,39,.16); box-shadow: inset 0 0 0 1px var(--gold); }
+canvas.preview { width: 100%; height: 340px; display: block; background: radial-gradient(ellipse at 50% 40%, rgba(201,162,39,.15), transparent 70%); }
+.swatches { display: flex; gap: 6px; flex-wrap: wrap; }
+.sw { width: 26px; height: 26px; border-radius: 50%; border: 2px solid rgba(0,0,0,.4); }
+.sw.on { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
+.attrs { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2px 18px; }
+.attrs li { display: flex; justify-content: space-between; align-items: center; gap: 6px; border-bottom: 1px dotted rgba(201,162,39,.2); padding: 2px 0; }
+.create footer { display: flex; justify-content: flex-end; align-items: center; gap: 16px; margin-top: 18px; }
+.create footer .btn-gold { opacity: 1; }
+.errors { color: #e07a6a; margin: 0; }
+@media (max-width: 860px) { .create-grid { grid-template-columns: 1fr; } .classes { grid-template-columns: 1fr 1fr; } .row { grid-template-columns: 110px 1fr; } }
+.settings { min-width: min(520px, 80vw); }

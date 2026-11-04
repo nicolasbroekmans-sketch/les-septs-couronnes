@@ -1,0 +1,11 @@
+{
+  "name": "asoiaf-rpg",
+  "private": true,
+  "type": "module",
+  "description": "Fan game RPG non officiel — logique testable dans Node, rendu Three.js dans le navigateur.",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "audit": "node tools/audit.mjs",
+    "train": "node tools/train-tactics.mjs"
+  }
+}

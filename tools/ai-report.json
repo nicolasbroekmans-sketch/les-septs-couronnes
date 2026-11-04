@@ -1,0 +1,64 @@
+{
+  "seed": 2026,
+  "architecture": [
+    11,
+    16,
+    7
+  ],
+  "features": [
+    "distance",
+    "selfHp",
+    "selfStamina",
+    "targetHp",
+    "allies",
+    "enemies",
+    "threat",
+    "ranged",
+    "morale",
+    "aggression",
+    "targetBlocking"
+  ],
+  "actions": [
+    "attack",
+    "retreat",
+    "dodge",
+    "defend",
+    "flee",
+    "call",
+    "switch"
+  ],
+  "imitationAccuracy": 0.917,
+  "es": {
+    "population": 40,
+    "sigma": 0.04,
+    "lr": 0.03,
+    "generations": 120,
+    "duelsPerEval": 48,
+    "bestGeneration": 105
+  },
+  "testDuels": 400,
+  "results": {
+    "random": {
+      "winRate": 0.05,
+      "survival": 0.05,
+      "fitness": -0.075
+    },
+    "utility": {
+      "winRate": 0.53,
+      "survival": 0.598,
+      "fitness": 0.601
+    },
+    "nn_imitation": {
+      "winRate": 0.517,
+      "survival": 0.61,
+      "fitness": 0.599
+    },
+    "nn_evolved": {
+      "winRate": 0.78,
+      "survival": 0.9,
+      "fitness": 0.93
+    }
+  },
+  "chosen": "nn_evolved",
+  "seconds": 19
+}

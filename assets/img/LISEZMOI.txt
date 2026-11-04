@@ -1,0 +1,5 @@
+Dossier réservé aux photos de référence (fiches, fonds).
+Aucune photo n'est livrée : tous les visuels de l'expérience sont générés
+(SVG, Three.js) ou proviennent de Poly Haven (CC0).
+Si vous ajoutez des photos Wikimedia Commons (CC BY / CC BY-SA), notez
+pour chacune l'auteur, la licence et l'URL source dans le README.
