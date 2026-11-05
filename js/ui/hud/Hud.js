@@ -56,7 +56,7 @@ export class Hud {
     this.set('trk', el, html, (e, v) => (e.innerHTML = v));
   }
   prompt(text) { this.set('prompt', $('#prompt'), text ?? '', (e, v) => { e.innerHTML = v ? `<kbd>E</kbd> ${v}` : ''; e.classList.toggle('on', !!v); }); }
-  lore(poi) { this.set('lore', $('#lore'), poi?.id ?? '', (e, v) => { if (v) e.innerHTML = `<span class="kicker">Lieu</span><h3>${poi.title}</h3><p>${poi.text}</p>`; e.classList.toggle('on', !!v); }); }
+  lore(poi) { this.set('lore', $('#lore'), poi ? poi.id + poi.title : '', (e, v) => { if (v) e.innerHTML = `<span class="kicker">Lieu</span><h3>${poi.title}</h3><p>${poi.text}</p>`; e.classList.toggle('on', !!v); }); }
   regionTitle(def) {
     const el = $('#region-title'); el.innerHTML = `<span class="kicker">${def.region}</span><h2>${def.name}</h2>`;
     el.classList.remove('on'); void el.offsetWidth; el.classList.add('on');
