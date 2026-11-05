@@ -38,4 +38,21 @@ export function kingslandingCity(ctx, keep) {
   // Quais : tonneaux, caisses, sacs, charrettes
   for (let i = 0; i < 26; i++) { const x = -90 + i * 7.3, z = 59 + (i % 3) * .9; i % 3 === 0 ? P.barrel(x, z) : i % 3 === 1 ? P.crate(x, z, 1, i * .4) : P.sack(x, z); }
   P.cart(-38, 54, 1.4); P.cart(24, 54, -1.3); P.cart(PLAZA[0] + 14, PLAZA[1] + 6, .3);
+  // Tour de la Main, dans l'enceinte du Donjon Rouge
+  const brick = red;
+  ctx.tower(kx - 24, kz + 18, { w: 9, h: 30, y: ky - 4, mat: brick, roof: ctx.mat('clay_roof_tiles', { uv: 2, color: '#b0603a' }), roofH: 8 });
+  P.banner(kx - 24, ky + 20, kz + 22.6, 'baratheon', 0, 1.6);
+  ctx.poi(kx - 24, kz + 26, 'La tour de la Main', 'Ici vit la Main du Roi, celle qui gouverne pendant que le roi chasse. On dit que ses occupants meurent rarement de vieillesse.');
+  // Rue de l'Acier : forges en bord de rue, enclumes, braises
+  const coal = ctx.mat(null, { color: '#ff5a10', emissive: '#ff4a00', ei: 2.5 }), dark = ctx.mat(null, { color: '#2b2b2e', metal: .8, rough: .4 }), st = ctx.mat('castle_wall_slates', { uv: 2, color: '#7a7a7a' });
+  for (const x of [-30, -48, -66, -84]) {
+    const y = height(x, 22.4); ctx.box(1.6, .9, 1, x, y, 22.4, st); ctx.box(1.3, .12, .7, x, y + .9, 22.4, coal, { solid: false }); ctx.fire(x, y + 1, 22.4, .35, { intensity: 10 });
+    ctx.box(.5, .6, .9, x + 1.8, y, 22, dark); for (let k = 0; k < 3; k++) ctx.box(.04, 1, .05, x - 1.5 + k * .25, y + .4, 23, dark, { solid: false });
+  }
+  ctx.poi(-48, 18, 'La rue de l’Acier', 'Le chant des marteaux du matin au soir. Les meilleurs forgerons du royaume ont leur échoppe ici — et leurs prix aussi.', { color: '#ff8a4a' });
+  // Statue devant le Grand Septuaire
+  const sx = -70, sz = -40, sy = height(sx, sz), marble = ctx.mat('plastered_wall', { uv: 3, color: '#ece6d8' });
+  ctx.box(3, 2, 3, sx, sy, sz, marble); ctx.cyl(.7, 3.6, sx, sy + 2, sz, marble, { seg: 10, rTop: .45 }); ctx.box(.5, .55, .5, sx, sy + 5.6, sz, marble);
+  for (const s of [-1, 1]) ctx.box(.25, 1.4, .25, sx + s * .6, sy + 4.3, sz + .3, marble, { rotY: s * .3, solid: false });
+  ctx.poi(sx, sz + 4, 'La statue de Baelor', 'Un roi en prière, les bras tendus vers la foule. Il jeûnait pour les Sept ; le peuple, lui, jeûnait sans le vouloir.');
 }

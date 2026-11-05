@@ -16,4 +16,15 @@ export function winterfellLore(ctx) {
   ctx.box(2.4, .9, 1.4, -12, 0, 121, wood); ctx.box(2.2, .02, 1.2, -12, .92, 121, mat(null, { color: '#d8c8a0' }), { solid: false });
   P.standard(-14, 126, 'stark', 6); P.standard(14, 126, 'stark', 6); P.barrel(19, 128); P.crate(-18, 124, 1, .3);
   ctx.poi(0, 128, 'Le camp de recrutement', 'Halvard engage les bras, le capitaine Rodrik les transforme en soldats. Sur la table, une carte du Bois-aux-Loups couverte de pions noirs.', { color: '#c9a227' });
+  // Porte sud : herse relevée, têtes de loup, grandes bannières sur le rempart extérieur, vapeur des sources dans les murs
+  const iron = mat(null, { color: '#2e2e32', metal: .8, rough: .45 }), grey = mat('castle_wall_slates', { uv: 3, color: '#8d9298' });
+  for (let k = -3.5; k <= 3.5; k += .7) ctx.box(.12, 3.2, .12, k, 6.5, 25.2, iron, { solid: false });
+  for (let y = 6.8; y < 9.6; y += .8) ctx.box(7.4, .12, .12, 0, y, 25.2, iron, { solid: false });
+  for (const s of [-1, 1]) { const x = s * 6.8; ctx.box(1.4, 1.2, .8, x, 7, 26.9, grey, { solid: false }); for (const e of [-.4, .4]) ctx.cone(.22, .6, x + e, 8.2, 26.9, grey, { seg: 4 }); ctx.box(.5, .4, .6, x, 6.9, 27.4, grey, { solid: false }); }
+  for (let x = -45; x <= 45; x += 15) if (Math.abs(x) > 8) P.banner(x, 9.4, 26.7, 'stark', 0, 2.1);
+  for (const [x, z] of [[-30, 25], [30, 25], [-55, -30], [55, -30], [0, -85]]) ctx.emitter('steam', x, 8, z, { box: [10, 8, 3], count: 30, opacity: .18 });
+  ctx.poi(0, 30, 'La porte de Winterfell', 'Deux têtes de loup gardent la herse. Au-dessus, sur le rempart, les bannières grises claquent dans le vent : ici commence le Nord.', { color: '#c8d0d8' });
+  // Tour de la bibliothèque
+  ctx.tower(32, -32, { w: 6, h: 20, mat: grey, round: true, roof: mat('grey_roof_tiles', { uv: 2, color: '#8a9298' }), roofH: 7 });
+  ctx.poi(32, -27.5, 'La tour de la bibliothèque', 'Des rayonnages jusqu’au toit, des cartes du Nord et des chroniques que personne n’a lues depuis cent ans. Le mestre y monte chaque soir.');
 }
