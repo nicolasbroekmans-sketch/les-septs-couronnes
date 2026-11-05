@@ -34,5 +34,11 @@ export default {
     for (const [x, z] of [[72, 67], [128, 67], [72, 123], [128, 123]]) ctx.fire(x, ctx.engine.groundFn(x, z), z, 1.6);
     ctx.poi(100, 64, 'Le temple rouge', 'Le plus grand temple du Maître de la Lumière : des marches de pierre rouge et des feux qui ne s’éteignent jamais. Ses prêtres promettent que la nuit est sombre et pleine de terreurs.', { color: '#ff6a3a' });
     await harbor(ctx, [[18, 120, 0], [-20, -140, Math.PI], [22, -220, .1]]);
+    // le Long Pont comme sur l'image : arches en plein cintre, tours à flèches sur le tablier ; la vieille ville à l'est
+    const st = mat('large_sandstone_blocks', { uv: 4, color: '#cdb594' }), slate = mat('grey_roof_01', { uv: 2, color: '#6a6458' });
+    for (let k = -4; k < 4; k++) for (let j = 0; j < 7; j++) { const a2 = j / 6 * Math.PI, x = k * 11 + 5.5 + Math.cos(a2) * 3.5; ctx.box(1.6, 1.4, 8, x, -2.6 + Math.sin(a2) * 2.6, 0, st, { solid: false }); }
+    for (const x of [-46, -14, 18, 46]) { ctx.tower(x, 9, { w: 4.5, h: 18, y: 1, mat: st, roof: slate, roofH: 6 }); }
+    for (const [x, z, h] of [[110, -40, 34], [140, -20, 28], [128, -70, 40], [150, -50, 24]]) { ctx.tower(x, z, { w: 7, h, mat: st, round: true, roof: slate, roofH: 9 }); }
+    ctx.poi(120, 10, 'La vieille ville', 'Derrière le Mur Noir, les palais des Anciens Sangs et leurs tours. On n’y entre que sur invitation — ou par effraction.');
   }
 };
