@@ -42,6 +42,10 @@ export async function build(ctx) {
     ctx.poi(x, z + 8, name[0].toUpperCase() + name.slice(1), 'Une tour coiffée d’une tête de dragon : la pierre a été coulée, pas taillée. Le feu des anciens dragons l’a façonnée comme de la cire.', { y });
   }
   for (let i = 0; i < 28; i++) { const a = i / 28 * 6.28, x = cx + Math.cos(a) * 31, z = cz + Math.sin(a) * 27; if (Math.abs(x) < 6 && z > cz) continue; ctx.cone(.6, 2.2, x, y + 15.5, z, dark, { seg: 4 }); ctx.box(.9, .8, 1.4, x, y + 14, z, dark, { solid: false, rotY: -a }); }
+  // ailerons de pierre : les crêtes en forme d'ailes de dragon au sommet des murs et des tours (comme dans la série)
+  for (let x = cx - 26; x <= cx + 26; x += 6.5) for (const z of [cz - 26, cz + 26]) if (Math.abs(x - cx) > 6 || z < cz) ctx.roof(2.6, 4.5 + (Math.abs(x - cx) % 3), 1.2, x, y + 14, z, dark, { solid: false });
+  for (let z = cz - 20; z <= cz + 20; z += 6.5) for (const x of [cx - 30, cx + 30]) ctx.roof(2.6, 4.5 + (Math.abs(z - cz) % 3), 1.2, x, y + 14, z, dark, { rotY: Math.PI / 2, solid: false });
+  for (const [x, z] of [[cx - 30, cz - 26], [cx + 30, cz - 26], [cx + 30, cz + 26], [cx - 30, cz + 26]]) ctx.roof(5, 9, 2, x, y + 24, z, dark, { rotY: Math.atan2(x - cx, z - cz), solid: false });
   for (const x of [-12, 0, 12]) P.banner(cx + x, y + 12, cz + 27.7, 'targaryen', 0, 1.8);
   room(ctx, 'throne', { x: cx, z: cz + 6, yaw: Math.PI }, { label: 'Entrer dans le Tambour de Pierre', banner: 'targaryen', wall: 'volcanic_rock_tiles', wallColor: '#4a4848', floorColor: '#5a5858', title: 'La salle de la Table Peinte', text: 'Une table immense, taillée comme une carte de Westeros. Celui qui s’y penche voit tout le royaume ; celui qui la regarde trop longtemps veut le posséder.' });
   // Montdragon : fumées et lueur
