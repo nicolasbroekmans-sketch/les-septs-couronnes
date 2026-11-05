@@ -119,6 +119,7 @@ function targetPose(h, dt, a) {
   else if (st === 'block') { P.shR = [-1.4, 0, .9]; P.elR = [-1.3, 0, 0]; P.shL = [-1.2, 0, -.4]; P.elL = [-1.4, 0, 0]; P.spine = [-.08, 0, 0]; P.hipsY = .9; }
   else if (st === 'dodge') { P.hipsY = .55; P.spine = [.9, 0, 0]; P.hipL = [-1.2, 0, 0]; P.hipR = [-.4, 0, 0]; P.knL = [1.6, 0, 0]; P.knR = [1.6, 0, 0]; P.shL = [-.6, 0, 0]; P.shR = [-.6, 0, 0]; }
   else if (st === 'stagger') { P.spine = [-.4, 0, .1]; P.shL = [-.4, 0, -.7]; P.shR = [-.4, 0, .7]; P.head = [-.3, 0, 0]; }
+  if (a.air && !a.dead && st !== 'dodge') { P.hipL = [-.9, 0, 0]; P.hipR = [-.2, 0, 0]; P.knL = [1.3, 0, 0]; P.knR = [.6, 0, 0]; P.shL = [-.8, 0, -.5]; P.shR[2] = .5; }
   if (a.sneak && !a.dead) { P.hipsY -= .18; P.spine[0] += .35; P.knL[0] += .5; P.knR[0] += .5; P.hipL[0] -= .4; P.hipR[0] -= .4; }
   if (a.sit && !a.dead) { P.hipsY = .32; P.hipL = [-1.45, 0, -.1]; P.hipR = [-1.45, 0, .1]; P.knL = [.2, 0, 0]; P.knR = [.3, 0, 0]; P.spine = [-.15, 0, 0]; P.shR = [-.9 + Math.sin(h.phase) * .05, 0, .2]; P.elR = [-1.2, 0, 0]; }
   if (a.surrender) { P.hipsY = .5; P.hipL = [-1.5, 0, 0]; P.hipR = [-1.5, 0, 0]; P.knL = [1.6, 0, 0]; P.knR = [1.6, 0, 0]; P.shL = [-2.8, 0, -.3]; P.shR = [-2.8, 0, .3]; P.elL = [-.3, 0, 0]; P.elR = [-.3, 0, 0]; P.spine = [.1, 0, 0]; P.head = [.3, 0, 0]; }

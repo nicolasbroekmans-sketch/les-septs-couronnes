@@ -26,7 +26,7 @@ export class Input {
   lock() { this.canvas.requestPointerLock?.()?.catch?.(() => {}); }
   unlock() { if (this.locked) document.exitPointerLock(); }
   down(...codes) { return codes.some(c => this.keys.has(c)); }
-  hit(code) { return this.pressed.has(code); }
+  hit(...codes) { return codes.some(c => this.pressed.has(c)); }
   /** À appeler en fin d'image : vide les événements ponctuels. */
   endFrame() { this.pressed.clear(); this.clicked.clear(); this.released.clear(); this.dx = this.dy = 0; this.wheel = 0; }
   reset() { this.keys.clear(); this.buttons.clear(); this.endFrame(); }

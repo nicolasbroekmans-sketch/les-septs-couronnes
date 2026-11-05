@@ -38,7 +38,7 @@ export class Dragon {
     const G = this.G, A = this.battle.soldiers.filter(s => s.team === 'A' && s.alive), tgt = Math.random() < .35 || !A.length ? G.player : A[Math.floor(Math.random() * A.length)];
     const dx = tgt.pos.x - this.pos.x, dz = tgt.pos.z - this.pos.z, l = Math.hypot(dx, dz) || 1;
     this.from = this.pos.clone(); this.to = new THREE.Vector3(tgt.pos.x + dx / l * 50, 0, tgt.pos.z + dz / l * 50); this.state = 'dive'; this.t0 = this.t;
-    audio.sfx('volcano', .8, .6); G.ui.toast(tgt === G.player ? 'Le dragon fond sur VOUS ! Esquivez (Espace) !' : 'Le dragon pique sur vos lignes !', 'warn');
+    audio.sfx('volcano', .8, .6); G.ui.toast(tgt === G.player ? 'Le dragon fond sur VOUS ! Esquivez (V) !' : 'Le dragon pique sur vos lignes !', 'warn');
   }
   /** Souffle : particules de feu sous la gueule, dégâts au sol aux alliés et au héros. */
   burn(dt, on) {

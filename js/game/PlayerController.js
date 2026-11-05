@@ -8,6 +8,18 @@ const HEAVY_HOLD = .32;
 
 export class PlayerController {
   constructor(game) { this.game = game; this.holdT = -1; this.dodgeDir = { x: 0, z: 0 }; this.sneak = false; }
+  /** Anti-blocage : retour au dernier point sûr si l'on tombe (eau, trou) ; dégagement si coincé dans un décor. */
+  safety(dt) {
+    const G = this.game, A = G.player, P = G.physics, p = A.pos, killY = G.env.cfg.killY ?? -40;
+    if (A.onGround && p.y > killY + 2 && !P.solidAt(p.x, p.y + 1, p.z) && (this.safeT = (this.safeT ?? 0) + dt) > .5) { this.safeT = 0; this.safe = { x: p.x, y: p.y, z: p.z }; }
+    const fell = p.y < killY || p.y < P.groundFn(p.x, p.z) - 6;
+    if (fell && this.safe) { Object.assign(p, this.safe); A.vy = 0; G.ui.toast('Vous remontez sur la terre ferme.', 'info'); return; }
+    if (!P.solidAt(p.x, p.y + 1, p.z)) return;
+    for (let r = .8; r < 12; r += .6) for (let a = 0; a < 6.28; a += .4) {
+      const x = p.x + Math.cos(a) * r, z = p.z + Math.sin(a) * r, y = P.groundAt(x, z, p.y + 1.5);
+      if (!P.solidAt(x, y + 1, z) && Math.abs(y - p.y) < 3) { p.x = x; p.z = z; p.y = y; return; }
+    }
+  }
   update(dt) {
     const G = this.game, I = G.input, A = G.player, f = A.fighter, rig = G.rig;
     rig.input(I.dx, I.dy, I.wheel);
@@ -23,10 +35,12 @@ export class PlayerController {
     if (run) { f.stamina -= 9 * dt; f.regenDelay = .4; }
     let speed = (run ? 7.4 : this.sneak ? 2.2 : 4.2) * d.moveSpeed;
     if (f.blocking) speed *= .45; if (f.attacking) speed *= .25; if (f.state === 'recover' || f.state === 'stagger') speed *= .3;
-    if (I.hit('Space') && f.dodge()) { this.dodgeDir = len > 0 ? { x: wx, z: wz } : { x: Math.sin(A.yaw), z: Math.cos(A.yaw) }; }
+    if (I.hit('Space') && A.onGround && f.state !== 'dodge') { A.vy = 7.2; A.onGround = false; f.stamina = Math.max(0, f.stamina - 4); }
+    if (I.hit('KeyV', 'AltLeft', 'AltRight') && f.dodge()) { this.dodgeDir = len > 0 ? { x: wx, z: wz } : { x: Math.sin(A.yaw), z: Math.cos(A.yaw) }; }
     let vx = wx * speed, vz = wz * speed;
     if (f.state === 'dodge') { const k = f.t < .35 ? 8 : 2; vx = this.dodgeDir.x * k; vz = this.dodgeDir.z * k; }
     A.move(vx * dt, vz * dt, dt, G.physics);
+    this.safety(dt);
     A.sneaking = this.sneak; A.aiming = f.weapon.ranged && (this.holdT >= 0 || f.attacking); A.pitch = rig.pitch; A.drawK = f.weapon.ranged && this.holdT >= 0 ? Math.min(1, this.holdT / .6) : 0;
     // combat
     const ui = G.ui.modal;

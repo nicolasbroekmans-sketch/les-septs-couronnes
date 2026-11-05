@@ -34,7 +34,7 @@ export class BattleRuntime {
     line(this.def.allies.units, 'A', 20, 1, 'allies');
     line(this.def.enemy.units, 'B', -60, -1, 'enemy');
     this.total = { A: this.count('A'), B: this.count('B') };
-    if (this.def.dragon) { this.dragon = new Dragon(G, this); this.ballistas(); setTimeout(() => G.ui.toast('UN DRAGON ! Tant qu’il vole, l’ennemi ne fuira pas. Courez aux trois scorpions derrière vos lignes (E) et tirez quand il pique bas. Esquivez son feu avec Espace.', 'warn'), 2500); }
+    if (this.def.dragon) { this.dragon = new Dragon(G, this); this.ballistas(); setTimeout(() => G.ui.toast('UN DRAGON ! Tant qu’il vole, l’ennemi ne fuira pas. Courez aux trois scorpions derrière vos lignes (E) et tirez quand il pique bas. Esquivez son feu avec V.', 'warn'), 2500); }
     G.ui.battleHud?.(this); G.ui.tutorial?.show('battle');
     G.ui.toast(`${this.def.name} — ${this.total.A} alliés contre ${this.total.B} ennemis. Touches : 1 charger · 2 tenir · 3 me suivre.`, 'quest');
     this.startT = this.def.prologue ? 8 : 12;

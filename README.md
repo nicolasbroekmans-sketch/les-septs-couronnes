@@ -31,7 +31,7 @@ Une connexion Internet est nécessaire pour les CDN (Three.js, GSAP, Howler.js) 
 | Courir / furtivité | Maj / C |
 | Attaque légère / lourde | clic gauche / clic gauche **maintenu** |
 | Parer | clic droit maintenu. Parer juste avant l'impact (parade parfaite) déséquilibre l'adversaire. |
-| Esquive (roulade) | Espace |
+| Sauter / esquiver (roulade) | Espace / V (ou Alt) |
 | Interagir (parler, fouiller, prendre) | E |
 | Se soigner | H |
 | Inventaire | I, R, T ou Tab |

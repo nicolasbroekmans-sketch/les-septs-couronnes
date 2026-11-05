@@ -9,7 +9,7 @@ export const direction = (dx, dz) => ['au nord', 'au nord-est', 'à l’est', 'a
 const SECTIONS = [
   ['Se déplacer', 'ZQSD ou WASD (ou les flèches), souris pour la caméra, Maj pour courir, C pour avancer discrètement, molette pour le zoom.'],
   ['Parler et agir', 'Approche-toi d’un personnage ou d’un objet : une invite « E » apparaît. Les « ! » dorés proposent une mission ; les « ? » bleus attendent ta visite pour la suite.'],
-  ['Combattre', 'Clic gauche : attaque légère. Maintenir : attaque lourde (brise la garde). Clic droit : parer. Espace : roulade (invulnérable un instant). Surveille ton endurance (barre dorée). H : soin.'],
+  ['Combattre', 'Clic gauche : attaque légère. Maintenir : attaque lourde (brise la garde). Clic droit : parer. Espace : sauter. V : roulade (invulnérable un instant). Surveille ton endurance (barre dorée). H : soin.'],
   ['Progresser', 'Missions, combats et découvertes rapportent de l’expérience. À chaque niveau : un point de compétence (K) et un point d’attribut (R → fiche). Les aptitudes progressent en les pratiquant.'],
   ['S’équiper', 'R, T ou I : inventaire. Achète chez les marchands (nom bleu), fais améliorer tes armes et armures chez les forgerons, récupère le butin des ennemis (E sur un corps).'],
   ['Réputation', 'L : factions et personnes rencontrées. Voler, mentir ou trahir a des conséquences : les gens s’en souviennent.'],

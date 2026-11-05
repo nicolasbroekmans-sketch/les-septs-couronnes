@@ -12,7 +12,7 @@ export function pauseTabs(G, { onLoad, onQuit, onSettings }) {
   }));
   return [
     { id: 'pause', label: 'Pause', render: el => el.append(h('div.pause', {}, h('h3', {}, 'Le temps s’est arrêté.'),
-      h('p.sub', {}, 'Commandes : ZQSD / WASD ou flèches · souris : caméra · clic gauche : attaque (maintenir = lourde) · clic droit : parer · Espace : esquive · Maj : courir · C : furtivité · E : interagir · H : se soigner · molette : zoom.'),
+      h('p.sub', {}, 'Commandes : ZQSD / WASD ou flèches · souris : caméra · clic gauche : attaque (maintenir = lourde) · clic droit : parer · Espace : sauter · V : esquive · Maj : courir · C : furtivité · E : interagir · H : se soigner · molette : zoom.'),
       h('div.actions', {}, h('button.btn-gold', { type: 'button', on: { click: () => G.ui.closePanel() } }, h('span', {}, 'Reprendre')),
         h('button.btn-ui', { type: 'button', on: { click: onQuit } }, 'Sauvegarder et quitter vers le menu')))) },
     { id: 'save', label: 'Sauvegarder', render: (el, rr) => el.append(slotList('save', rr)) },

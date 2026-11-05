@@ -27,7 +27,7 @@ export class Actor {
   sync(dt) {
     const r = this.model.root, f = this.fighter;
     r.position.set(this.pos.x, this.pos.y, this.pos.z); r.rotation.y = this.yaw + Math.PI; r.visible = !this.hidden;
-    this.model.update(dt, { speed: this.speed, state: f.state, t: f.t, dur: f.phase(), heavy: f.heavy, dead: !f.alive, surrender: this.surrendered, talking: this.talking, aim: this.aiming, draw: this.drawK, pitch: this.pitch, sneak: this.sneaking, sit: this.def.sit && this.speed < .2 && !this.talking });
+    this.model.update(dt, { speed: this.speed, state: f.state, t: f.t, dur: f.phase(), heavy: f.heavy, dead: !f.alive, surrender: this.surrendered, talking: this.talking, aim: this.aiming, draw: this.drawK, pitch: this.pitch, sneak: this.sneaking, air: !this.onGround && this.vy > -12, sit: this.def.sit && this.speed < .2 && !this.talking });
   }
   dispose() { this.plate?.dispose(); this.model.root.removeFromParent(); }
 }

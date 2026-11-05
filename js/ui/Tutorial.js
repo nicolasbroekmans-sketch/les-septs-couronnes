@@ -4,7 +4,7 @@ import { $, h } from './dom.js';
 const TIPS = {
   start: ['Bienvenue !', 'Clique dans le jeu pour diriger la caméra avec la souris. Déplace-toi avec ZQSD (ou WASD), cours avec Maj. Les personnages marqués d’un « ! » doré ont une mission pour toi : approche-toi et appuie sur E. Touche G : guide complet. Touche M : la carte, d’où l’on peut voyager vers toutes les villes et tous les villages du royaume.'],
   quest: ['Ta première mission', 'L’objectif est affiché en haut à droite. Une colonne de lumière dorée et le losange ◆ de la boussole t’indiquent où aller. M ouvre la carte, J le journal.'],
-  combat: ['Combat !', 'Clic gauche : attaque (maintenir = attaque lourde qui brise la garde). Clic droit : parer — juste avant l’impact, la parade déséquilibre l’ennemi. Espace : roulade. H : boire un onguent.'],
+  combat: ['Combat !', 'Clic gauche : attaque (maintenir = attaque lourde qui brise la garde). Clic droit : parer — juste avant l’impact, la parade déséquilibre l’ennemi. Espace : sauter. V : roulade. H : boire un onguent.'],
   loot: ['Butin', 'Un ennemi vaincu laisse souvent de l’or ou des objets : approche-toi du corps et appuie sur E. Un ennemi qui se rend peut être épargné… ou non.'],
   level: ['Niveau supérieur', 'Appuie sur K pour dépenser tes points de compétence, et sur R (ou T, I) pour ouvrir ton inventaire et équiper une meilleure arme ou armure.'],
   merchant: ['Marchands', 'Les noms en bleu sont des marchands. Parle-leur (E) puis « Voyons vos marchandises ». Les forgerons améliorent aussi tes armes et armures.'],
