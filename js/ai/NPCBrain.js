@@ -61,6 +61,11 @@ export class NPCBrain {
       this.morale = Math.max(0, Math.min(1, this.morale - (hp < .3 ? .02 : 0) - W.fear(a)));
       if (action === 'flee') return this.startFlee(W);
     }
+    // Pas de recul sans fin : après 6 s à reculer, un PNJ blessé fuit (ou se rend), sinon il revient au contact.
+    if (this.action === 'retreat' && this.actionT > 6) {
+      if (a.fighter.hp / a.fighter.maxHp < .4) return this.startFlee(W);
+      this.action = 'attack'; this.actionT = 0; this.decideT = 2;
+    }
     return act(this, W, dt);
   }
   startFlee(W) {

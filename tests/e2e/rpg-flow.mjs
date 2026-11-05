@@ -68,7 +68,7 @@ try {
     ok('Wat s’est rendu et a été épargné', await G(`__game.core.state.npcs.wat.flags.spared === true`));
   }
   console.log('4. Récupérer la caisse');
-  await walk(-103, -64, 1.6);
+  await walk(-103, -65.5, 1);
   await until(`document.querySelector('#prompt').textContent.includes('caisse')`, 60000, 'invite caisse');
   await press('KeyE');
   ok('Caisse récupérée, étape « retour »', await G(`__game.core.state.player.inventory.some(s => s.id === 'caisse_fer') && __game.core.state.quests.wf_iron.step === 'back'`));
