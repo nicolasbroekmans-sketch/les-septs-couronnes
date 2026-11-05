@@ -51,7 +51,7 @@ export class Game {
 
   /** Démarre (ou reprend) une partie à partir d'un état complet. */
   async start(state) {
-    this.stop(); this.clearBattle();
+    this.stop(); this.clearBattle(); this.ui.battleHud?.(null); this.ui.skipButton?.(false);
     this.core = new GameCore(state); wireEvents(this); this.ui.startTutorial(this);
     await this.enterRegion(state.player.region, state.player.position);
     this.run();
