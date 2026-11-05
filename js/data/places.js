@@ -23,7 +23,7 @@ export const PLACES = [
   P('kingslanding', 'westeros', 565, 760, 'Port-Réal', 'Terres de la Couronne', 'La Couronne', 'Chaleur dorée, vent marin',
     'Chaque ruelle grimpe vers le Donjon Rouge, chaque murmure aussi.', 'kingslanding', true),
   P('dragonstone', 'westeros', 660, 712, 'Peyredragon', 'La Baie de la Néra', 'Targaryen — le dragon tricéphale', 'Roche volcanique, embruns',
-    'La pierre se souvient du feu qui l’a façonnée.'),
+    'La pierre se souvient du feu qui l’a façonnée.', 'places/dragonstone'),
   P('casterly', 'westeros', 236, 682, 'Castral Roc', 'Les Terres de l’Ouest', 'Lannister — le lion d’or', 'Falaises dorées, couchant',
     'On dit que la montagne a des veines d’or et un cœur de lion.', 'places/casterly'),
   P('highgarden', 'westeros', 330, 880, 'Hautjardin', 'Le Bief', 'Tyrell — la rose d’or', 'Doux, fleuri, ensoleillé',

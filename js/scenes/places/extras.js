@@ -20,18 +20,6 @@ export default {
     for (let r = 0; r < 14; r++) for (let k = 0; k < 18; k++) { const x = 52 + k * 3.2, z = -125 + r * 3.4; ctx.box(.5, 1.1, .5, x, g(x, z), z, mat(null, { color: '#4a7a2a' }), { solid: false, cast: false }); }
     ctx.poi(78, -76, 'Les vignes de la Rose', 'Du vin doré, doux comme une promesse et traître comme elle. Les Tyrell en envoient à toutes les tables qui comptent.');
   },
-  // PEYREDRAGON : village de pêcheurs sur le plateau, dragons de pierre, étendards au dragon
-  async dragonstone(ctx) {
-    const { mat, props: P } = ctx, g = ctx.engine.groundFn, basalt = mat('volcanic_rock_tiles', { uv: 4, color: '#3e3c3c' });
-    village(ctx, 55, 20, { style: 'fer', houses: 20, radius: 24, banner: 'targaryen', wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('grey_roof_tiles', { uv: 3, instanced: true }),
-      tints: ['#9a9694', '#8a8682', '#a8a4a0'], roofTints: ['#4a4848', '#3a3838'], name: 'Le village des pêcheurs', text: 'Des maisons de pierre noire, des filets qui sèchent sur les rochers et des pêcheurs qui ne lèvent jamais les yeux vers le château.' });
-    for (const [x, z, r] of [[-20, 6, .3], [20, 6, -.3], [-60, -10, .8], [60, -12, -.8]]) {
-      const y = g(x, z); ctx.box(3, 2, 6, x, y, z, basalt); ctx.cone(1.4, 4, x, y + 2, z - 2.5, basalt, { seg: 5, rotY: r });
-      for (const s of [-1, 1]) ctx.box(.4, 3.2, 4, x + s * 2.2, y + 2, z, basalt, { rotY: s * .5, solid: false });
-    }
-    for (const x of [-30, -10, 10, 30]) P.banner(x, g(0, -55) + 16, -14.2, 'targaryen', 0, 1.5);
-    ctx.poi(0, 8, 'Les dragons de pierre', 'Les anciens maîtres valyriens ont coulé la roche en forme de dragons. Certains jurent qu’ils ont bougé, la nuit où le dernier dragon est mort.', { color: '#ff7a3a' });
-  },
   // PYK : drakkars dans la baie, bannières à la seiche, remparts sur les îles
   async pyke(ctx) {
     const { mat, props: P } = ctx;
