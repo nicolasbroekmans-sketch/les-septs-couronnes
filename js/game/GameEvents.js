@@ -20,6 +20,9 @@ export function wireEvents(G) {
   bus.on('player:upgraded', ({ id, level }) => { ui.toast(`${ITEMS[id].name} amélioré(e) : +${level}`, 'rep'); audio.sfx('anvil', .5); G.refreshPlayerStats(); });
   bus.on('faction:rep', ({ faction, amount }) => Math.abs(amount) >= 3 && ui.toast(`Réputation ${amount > 0 ? '+' : ''}${Math.round(amount)} : ${G.factionName(faction)}`, amount > 0 ? 'rep' : 'warn'));
   bus.on('dialogue:check', ({ ok, label }) => ui.toast(`${label} : ${ok ? 'réussite' : 'échec'}`, ok ? 'rep' : 'warn'));
+  bus.on('ui:army', () => setTimeout(() => ui.openArmy(true), 50));
+  bus.on('battle:start', ({ id }) => setTimeout(() => G.startBattle(id), 300));
+  bus.on('army:recruited', ({ unit, qty }) => { audio.sfx('anvil', .3, 1.1); ui.refresh(); });
   bus.on('ui:trade', ({ npc }) => ui.openTrade(G.region.actors.get(npc)));
   bus.on('player:heal', ({ amount }) => { G.player.fighter.hp = Math.min(G.player.fighter.maxHp, G.player.fighter.hp + amount); });
   bus.on('npc:provoked', ({ npc, group }) => { const a = G.region.actors.get(npc); if (a) a.provoked = true; if (group) G.core.state.world.flags['provoked:' + group] = true; });

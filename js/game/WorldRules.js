@@ -32,6 +32,8 @@ export function escaped(G, a) {
 }
 export function onDeath(G, a, killer) {
   if (a.kind === 'player') return G.playerDied();
+  if (a.kind === 'crowd') { G.battle?.onDeath(a); if (killer?.kind === 'player') { addXp(G.core.state.player, 8, G.core.bus, 'combat'); G.core.state.stats.kills++; } return; }
+  if (a.def.follower) return G.followers?.onDeath(a);
   defeated(G, a);
   if (a.def.stealthTarget) G.core.effects([{ flag: a.def.stealthTarget, value: !!a.ambushed && !a.seen }]);
   G.core.bus.emit('npc:killed', { npc: a.id, group: a.group });

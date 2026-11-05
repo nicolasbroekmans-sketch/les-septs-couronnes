@@ -3,6 +3,8 @@
 import * as THREE from 'three';
 import { QUESTS } from '../quests/QuestRegistry.js';
 import { objectiveTargets } from '../ui/hud/Targets.js';
+import { BATTLES } from '../data/battles.js';
+import { check } from '../core/Conditions.js';
 
 export function questMarker(G, actor) {
   const q = G.core.quests, s = G.core.state;
@@ -15,6 +17,7 @@ export function questMarker(G, actor) {
       if (o.type === 'signal' && G.core.dialogue.trees[actor.id]?.entries.some(e => JSON.stringify(e.when).includes(`"${id}"`) && JSON.stringify(e.when).includes(`"${st.step}"`))) return '?';
     }
   }
+  if (actor.def?.role === 'captain' && Object.entries(BATTLES).some(([id, b]) => b.region === s.player.region && !s.world.flags['won:' + id] && check(b.requires, s))) return '!';
   return null;
 }
 

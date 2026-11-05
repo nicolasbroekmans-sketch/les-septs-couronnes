@@ -28,6 +28,8 @@ export function apply(effects, game, ctx = {}) {
     if (e.payBounty) { delete p.bounty[e.payBounty]; bus.emit('player:bounty', { faction: e.payBounty, value: 0 }); }
     if (e.pacify) bus.emit('group:pacified', { group: e.pacify });
     if (e.trade) bus.emit('ui:trade', { npc: e.trade });
+    if (e.openArmy) bus.emit('ui:army', {});
+    if (e.startBattle) bus.emit('battle:start', { id: e.startBattle });
     if (e.heal) bus.emit('player:heal', { amount: e.heal });
     if (e.advanceTime) bus.emit('world:advance', { minutes: e.advanceTime });
   }

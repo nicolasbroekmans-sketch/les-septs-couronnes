@@ -7,7 +7,7 @@ export class Interaction {
     const G = this.game, p = G.player, out = [];
     if (!p?.alive) return null;
     for (const a of G.actors) {
-      if (a === p || !a.alive || a.hidden || a.brain?.state === 'flee') continue;
+      if (a === p || a.kind === 'crowd' || !a.alive || a.hidden || a.brain?.state === 'flee') continue;
       if (!a.surrendered && G.hostile(a, p)) continue;
       const d = dist(a.pos, p.pos); if (d < 3.5) out.push({ kind: 'npc', ref: a, d, label: a.surrendered ? `Décider du sort de ${a.name}` : `Parler à ${a.name}` });
     }

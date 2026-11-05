@@ -1,6 +1,7 @@
 // Nœuds génériques : villageois (rumeurs, demander une pièce), mendiants (aumône), marchand méfiant,
 // garde et amende, ennemi qui se rend. Les réactions varient et les PNJ se souviennent.
 import { attitude } from '../ai/Memory.js';
+import { armyNodes } from './ArmyDialogues.js';
 
 const REFUS = ['Ah non, je n’ai pas envie.', 'Va travailler, comme tout le monde !', 'Une pièce ? Et puis quoi encore, une maison ?', 'Les temps sont durs pour tout le monde, l’ami.', 'Je ne donne pas aux inconnus.'];
 const DON = ['Bon… tiens, une pièce. Ne la bois pas d’un coup.', 'Tiens. Les Sept voient tout, paraît-il.', 'Une seule, hein. Et file.'];
@@ -28,6 +29,7 @@ export function genericNodes(npc, game) {
       npc.role === 'villager' ? { text: 'Tu n’aurais pas une pièce pour moi ?', when: { memory: 'begged', npc: npc.id }, next: 'coin_again' } : null
     ].filter(Boolean) };
   }
+  if (npc.role === 'recruiter' || npc.role === 'captain') Object.assign(nodes, armyNodes(npc, game));
   if (npc.role === 'beggar') Object.assign(nodes, {
     default: { text: npc.barks ?? ['Une pièce, par pitié…'], options: [
       { text: 'Donner une pièce.', when: { gold: 1 }, next: 'alms', effects: [{ gold: -1 }, { relation: { [npc.id]: 10 } }, { karma: 1 }, { signal: [null, 'alms'] }] },

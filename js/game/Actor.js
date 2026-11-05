@@ -3,8 +3,7 @@ import { Fighter } from '../combat/Fighter.js';
 import { Humanoid } from '../engine/Humanoid.js';
 import { Nameplate } from '../engine/Nameplate.js';
 import { ITEMS } from '../data/items.js';
-
-const GRAVITY = 24;
+import { Motion } from './Motion.js';
 
 export class Actor {
   constructor(o) {
@@ -25,20 +24,6 @@ export class Actor {
     this.fighter.weapon = ITEMS[this.weaponId] ?? ITEMS.poings;
     this.model.setWeapon(this.fighter.weapon.cls, this.weaponId);
   }
-  /** Déplacement d'un vecteur (m) avec collisions, marches, gravité. */
-  move(dx, dz, dt, physics) {
-    const n = Math.ceil(Math.hypot(dx, dz) / .25) || 1;
-    for (let i = 0; i < n; i++) { this.pos.x += dx / n; this.pos.z += dz / n; physics.collide(this.pos, this.pos.y, this.radius); }
-    const g = physics.groundAt(this.pos.x, this.pos.z, this.pos.y), near = this.pos.y - g < .45 && this.vy <= 0;
-    this.vy -= GRAVITY * dt; this.pos.y += this.vy * dt;
-    if (this.pos.y <= g || near) { this.pos.y = g; this.vy = 0; this.onGround = true; } else this.onGround = false;
-    this.speed = this.speed * .8 + (Math.hypot(dx, dz) / Math.max(dt, 1e-4)) * .2;
-  }
-  turnTo(yaw, dt, rate = 10) {
-    let d = yaw - this.yaw; d = Math.atan2(Math.sin(d), Math.cos(d));
-    this.yaw += d * Math.min(1, rate * dt);
-  }
-  faceTo(p, dt, rate = 10) { this.turnTo(Math.atan2(-(p.x - this.pos.x), -(p.z - this.pos.z)), dt, rate); }
   sync(dt) {
     const r = this.model.root, f = this.fighter;
     r.position.set(this.pos.x, this.pos.y, this.pos.z); r.rotation.y = this.yaw + Math.PI; r.visible = !this.hidden;
@@ -46,3 +31,4 @@ export class Actor {
   }
   dispose() { this.plate?.dispose(); this.model.root.removeFromParent(); }
 }
+Object.assign(Actor.prototype, Motion);

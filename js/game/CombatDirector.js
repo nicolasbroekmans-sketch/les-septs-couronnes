@@ -36,13 +36,13 @@ export class CombatDirector {
   onHit(h) {
     const G = this.game, { attacker: A, target: T, res } = h, wasHostile = G.hostile(A, T) || T.provoked;
     if (!T.everHit) { T.everHit = true; T.ambushed = !!T.unaware && A.kind === 'player'; }
-    G.ui.damage(T, res);
+    if (A.kind === 'player' || T.kind === 'player' || G.distToPlayer(T) < 25) G.ui.damage(T, res);
     if (res.dodged) return;
     if (res.parried || res.blocked) audio.sfx('anvil', res.parried ? .5 : .25, res.parried ? 1.3 : 1.7); else audio.sfx('seal', .4, .7 + G.rng() * .3);
     if (T.kind === 'player') { G.renderer.hitFlash(Math.min(1, res.amount / 30)); G.flashT = .35; G.rig.shake = .25; }
     if (A.kind === 'player') {
       practice(G.core.state.player, A.fighter.weapon.ranged ? 'tir' : 'combat', res.amount > 0 ? .5 : .2);
-      if (!wasHostile) G.crime(T, h.killed ? 'meurtre' : 'agression');
+      if (!wasHostile && !T.team && !T.def?.follower) G.crime(T, h.killed ? 'meurtre' : 'agression');
       T.provoked = true;
       if (T.group) G.core.state.world.flags['provoked:' + T.group] = true;
     }

@@ -25,6 +25,9 @@ import { createGameState } from '../core/GameState.js';
 import { audio } from '../audio.js';
 import { Humanoid } from '../engine/Humanoid.js';
 import { lookFromCosmetics } from '../player/Rewards.js';
+import { Followers } from './Followers.js';
+import { BattleRuntime } from './BattleRuntime.js';
+import { BATTLES } from '../data/battles.js';
 
 export class Game {
   constructor(ui, settings, storage) {
@@ -47,36 +50,37 @@ export class Game {
 
   /** Démarre (ou reprend) une partie à partir d'un état complet. */
   async start(state) {
-    this.stop();
+    this.stop(); this.clearBattle();
     this.core = new GameCore(state); wireEvents(this); this.ui.startTutorial(this);
     await this.enterRegion(state.player.region, state.player.position);
     this.running = true; this.input.enabled = true; this.lastT = performance.now(); this.autoT = 0;
-    this.renderer.renderer.setAnimationLoop(() => { const now = performance.now(), dt = Math.min(.05, (now - this.lastT) / 1000); this.lastT = now; frame(this, dt); });
+    this.renderer.renderer.setAnimationLoop(() => { const now = performance.now(), dt = Math.min(.05, (now - this.lastT) / 1000); this.lastT = now; if (!this.loadingRegion) frame(this, dt); });
     this.ui.showHud(true); this.ui.lockHint(true);
   }
   async enterRegion(id, position = null) {
     const def = REGIONS[id]; if (!def) throw new Error('Région inconnue : ' + id);
-    this.ui.loading(0, def.name, def.intro);
+    this.ui.loading(0, def.name, def.intro); this.loadingRegion = true;
     this.region?.dispose(); this.combat.clear(); this.actors = [];
     if (this.env) this.renderer.dispose(this.env.scene);
     const { E, ctx } = await loadScene(this.renderer, def.scene, def.placeId ?? def.id, (v, t) => this.ui.loading(v, def.name, t), c => def.build?.(c));
     this.env = E; this.ctx = ctx; this.weatherFx = null;
     def.bounds ??= E.cfg.bounds ?? [-150, -150, 150, 150]; def.spawn ??= E.spawn;
     this.nav = new NavGrid(def.bounds, 1).bake(E.physics.all(), E.physics.groundFn, .45);
-    const st = this.core.state, p = st.player; p.region = id;
-    if (!st.world.discovered.includes(id)) st.world.discovered.push(id);
+    const st = this.core.state, p = st.player;
+    if (!def.battle) { p.region = id; if (!st.world.discovered.includes(id)) st.world.discovered.push(id); }
     const sp = position ?? [def.spawn.x, def.spawn.y, def.spawn.z];
     this.player = new Actor({ id: 'player', kind: 'player', name: p.name, faction: 'joueur', x: sp[0], z: sp[2], yaw: position ? p.yaw : def.spawn.yaw, stats: derive(p), weaponId: p.equipped.weapon, hp: p.hp, stamina: p.stamina, look: this.playerLook() });
     this.player.pos.y = E.physics.groundAt(sp[0], sp[2], sp[1] ?? E.physics.groundFn(sp[0], sp[2]) + 1);
     this.player.hostileTo = o => this.hostile(this.player, o);
     this.addActor(this.player); this.rig.yaw = this.player.yaw; this.player.lookKey = JSON.stringify(this.playerLook());
     this.region = new RegionRuntime(this, def); this.region.refresh();
+    this.followers = new Followers(this); if (!def.battle && !st.explore) this.followers.spawn();
     this.markers = new WorldMarkers(this);
     this.setWeather(st.world.time.weather ?? this.core.clock.rollWeather(def.climate));
     this.ui.loading(.9, def.name, 'Compilation des shaders…');
     await this.renderer.renderer.compileAsync(E.scene, this.renderer.camera);
     audio.setAmbience(E.ambience);
-    this.ui.loading(1, def.name); this.ui.regionTitle(def);
+    this.ui.loading(1, def.name); this.ui.regionTitle(def); this.loadingRegion = false;
     this.autosave();
   }
   playerLook() {
@@ -117,10 +121,28 @@ export class Game {
     if (map[w] && !(cfg.hdri.includes('noon') && w === 'snow')) this.weatherFx = this.ctx.particles(map[w], { count: w === 'rain' ? 6000 : 3000 });
     this.ui.refresh();
   }
-  autosave() { if (!this.core || !this.player?.alive || this.core.state.explore) return; this.persistPosition(); this.saves.save('auto', this.core.state, 'Sauvegarde auto'); this.ui.saved?.(); }
-  save(slot) { this.persistPosition(); return this.saves.save(slot, this.core.state, slot); }
+  autosave() { if (!this.core || this.battle || this.region?.def.battle || !this.player?.alive || this.core.state.explore) return; this.persistPosition(); this.saves.save('auto', this.core.state, 'Sauvegarde auto'); this.ui.saved?.(); }
+  save(slot) { if (this.battle) { this.ui.toast('Impossible de sauvegarder pendant une bataille.', 'warn'); return false; } this.persistPosition(); return this.saves.save(slot, this.core.state, slot); }
   persistPosition() { const p = this.core.state.player, A = this.player; if (A) { p.position = [A.pos.x, A.pos.y, A.pos.z]; p.yaw = A.yaw; p.hp = A.fighter.hp; p.stamina = A.fighter.stamina; } }
-  playerDied() { this.input.unlock(); this.ui.gameOver(); }
+  playerDied() { if (this.battle) return this.battle.finish(false); this.input.unlock(); this.ui.gameOver(); }
+  /** Grande bataille : champ dédié, retour au point de départ ensuite (victoire ou défaite). */
+  async startBattle(id) {
+    const b = BATTLES[id]; if (!b || this.battle) return;
+    this.ui.closePanel(); this.persistPosition(); this.autosave();
+    const rid = 'battle:' + id, p = this.core.state.player;
+    REGIONS[rid] ??= { id: rid, battle: id, scene: 'battlefield', placeId: id, name: b.name, region: REGIONS[b.region].region, climate: b.theme === 'neige' ? 'nord' : 'tempere', lawFaction: null, prices: {}, intro: b.desc, npcs: [], groups: [], markers: [], objects: [], rumors: [] };
+    this.returnTo = { region: p.region, pos: p.position };
+    await this.enterRegion(rid);
+    this.battle = new BattleRuntime(this, id);
+  }
+  async endBattle() {
+    const b = this.battle; if (!b || this.leavingBattle) return;
+    this.leavingBattle = true; const back = this.returnTo, p = this.core.state.player;
+    if (!b.won) p.hp = Math.max(p.hp, derive(p).maxHp * .4);
+    this.clearBattle(); this.ui.battleHud(null);
+    await this.enterRegion(back.region, back.pos); this.leavingBattle = false;
+  }
+  clearBattle() { this.battle?.dispose(); this.battle = null; }
   async respawn() {
     const s = this.core.state; s.player.gold = Math.floor(s.player.gold * .8); s.player.hp = derive(s.player).maxHp; s.player.position = null;
     await this.enterRegion(s.player.region, null);

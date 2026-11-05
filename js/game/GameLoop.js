@@ -19,6 +19,7 @@ export function frame(G, dt) {
       if (a.brain && a.alive) { const v = a.brain.update(step, G.world); if (!G.region.leaving.has(a)) a.move(v.x * step, v.z * step, step, G.physics); }
     }
     G.combat.update(dt);
+    G.battle?.update(dt); G.followers?.update(dt);
     G.region.update(dt, G.player);
     G.markers?.update(dt);
     G.core.clock.advance(dt * (G.settings.timeScale ?? 1), G.region.def.climate);

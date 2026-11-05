@@ -36,3 +36,14 @@
 dl.guide dt { font-family: var(--f-sub); color: #6e3a10; margin-top: .6rem; } dl.guide dd { margin: .1rem 0 0; }
 .forge { border: 1px solid rgba(139,0,0,.35); padding: 8px 12px; margin-bottom: 14px; background: rgba(139,0,0,.05); }
 @media (max-width: 760px) { #hud-gift { top: 132px; } #tip { bottom: 160px; } }
+
+/* Armée et bataille */
+.army-head h3{margin:0 0 .2em}.army-unit{display:flex;justify-content:space-between;gap:1em;align-items:center;padding:.6em .8em;margin:.35em 0;border:1px solid rgba(201,162,39,.25);background:rgba(0,0,0,.25);border-radius:4px}
+.army-actions{display:flex;gap:.4em;flex-wrap:wrap;justify-content:flex-end}.army-actions .btn-ui{padding:.3em .7em}
+.army-battle{padding:.7em .9em;margin:.5em 0;border-left:3px solid #c9a227;background:rgba(201,162,39,.07)}.army-battle.won{border-color:#9fd06a}
+.army-battle p{margin:.25em 0}.army-battle .warn,.army-tab .warn{color:#e0806a}.army-battle .ok,.battle-res .ok{color:#9fd06a}
+#battle-hud{position:absolute;top:14px;left:50%;transform:translateX(-50%);min-width:min(520px,92vw);padding:.5em 1em;text-align:center;background:linear-gradient(#120d0bdd,#120d0b99);border:1px solid #c9a22766;border-radius:4px;font-family:Cinzel,serif;color:#efe4c9;pointer-events:none}
+#battle-hud b{letter-spacing:.08em}#battle-hud p{margin:.25em 0 0;font-size:.82em;opacity:.85}
+.bh-bars{display:flex;align-items:center;gap:.5em;margin-top:.3em;font-size:.85em}.bh-bar{flex:1;height:8px;background:#0008;border-radius:4px;overflow:hidden;display:block}
+.bh-fa,.bh-fe{display:block;height:100%;transition:width .4s}.bh-fa{background:#5a8ad0}.bh-fe{background:#c0442a;margin-left:auto}.bh-a{color:#8fb4ea}.bh-e{color:#e08a6a}
+.battle-res{text-align:center;padding:1.5em}.battle-res h2{font-family:'Cinzel Decorative',serif;font-size:2.4em;margin:.2em 0}.battle-res.win h2{color:#e8c86a}.battle-res.loss h2{color:#c0442a}.battle-res .btn-gold{margin-top:1em}
