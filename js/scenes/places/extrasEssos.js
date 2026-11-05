@@ -11,6 +11,7 @@ export default {
     await harbor(ctx, [[-40, 110, .4], [30, 120, -.3], [90, 140, 1.2]], { piers: [[-20, 76, 26, 0], [24, 76, 26, 0]] });
   },
   async vaesdothrak(ctx) {
+    // (porte des chevaux plus bas)
     const { mat } = ctx, g = ctx.engine.groundFn, cloth = ['#8a6a4a', '#a07a50', '#6a5038', '#b08a5a'];
     for (let ring = 0; ring < 3; ring++) for (let i = 0; i < 10 + ring * 5; i++) {
       const a = i / (10 + ring * 5) * 6.28, r = 30 + ring * 12, x = 90 + Math.cos(a) * r, z = 40 + Math.sin(a) * r;
@@ -19,6 +20,13 @@ export default {
     ctx.fire(90, g(90, 40), 40, 1.4);
     const horse = await ctx.gltf('horse');
     for (let i = 0; i < 18; i++) { const h = horse.clone(), x = 40 + (i % 6) * 9 + Math.random() * 3, z = 100 + Math.floor(i / 6) * 9; h.position.set(x, g(x, z), z); h.rotation.y = Math.random() * 6; ctx.add(h); }
+    // la Porte des Chevaux (deux étalons de bronze cabrés dont les sabots se rejoignent) et la Voie des Dieux
+    const bronze = mat(null, { color: '#7a5a2e', metal: .85, rough: .38 }), st = mat('rock_face', { uv: 3, color: '#a8988a' });
+    for (const s2 of [-1, 1]) { const x = s2 * 9, y = g(x, 120); ctx.box(4, 3, 9, x, y, 120, st); ctx.box(3, 9, 5, x, y + 3, 120, bronze); ctx.box(2.4, 6, 2.2, x - s2 * 2.5, y + 11, 120, bronze, { rotY: 0 }); ctx.box(1.6, 2.6, 4, x - s2 * 4.5, y + 15, 120, bronze); }
+    ctx.box(10, 1.2, 2, 0, g(0, 120) + 17, 120, bronze, { solid: false });
+    ctx.poi(0, 128, 'La Porte des Chevaux', 'Deux étalons de bronze se cabrent l’un vers l’autre ; leurs sabots se rejoignent au-dessus de la route. On entre à Vaes Dothrak à pied, en baissant la tête.', { color: '#d8a860' });
+    for (let k = 0; k < 14; k++) { const x = (k % 2 ? 1 : -1) * 8, z = 100 - k * 14, y = g(x, z); ctx.box(2, 5 + (k % 4) * 2, 2, x, y, z, st, { rotY: k }); ctx.box(2.4, 1.6, 1.8, x, y + 5 + (k % 4) * 2, z, st, { rotY: k * .7, solid: false }); }
+    ctx.poi(12, 40, 'La Voie des Dieux', 'Des dieux volés à tous les peuples vaincus, alignés le long de la route : têtes de pierre, idoles brisées, statues sans nom.');
     ctx.poi(90, 72, 'Le khalasar', 'Cent tentes, mille chevaux, et un khal qui ne descend de selle que pour dormir. À Vaes Dothrak, aucune lame ne peut être tirée : c’est la seule paix que connaissent les cavaliers.', { color: '#ffb070' });
   },
   async qarth(ctx) {
