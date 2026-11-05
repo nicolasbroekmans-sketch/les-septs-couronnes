@@ -1,3 +1,4 @@
+import { braavosMap } from './details/braavosMap.js';
 // BRAAVOS — cent îles, canaux réfléchissants (Water), ponts, façades colorées, le Titan à l'entrée du port.
 export const config = {
   hdri: 'kloofendal_misty_morning_puresky', exposure: 1, bg: .95, env: 1,
@@ -43,7 +44,7 @@ export async function build(ctx) {
   // Façades colorées : 4 quartiers par île, rue en croix vers les ponts
   const lots = [];
   for (const o of isl) {
-    if ((o.i === 3 && o.j === 2) || (o.i === 1 && o.j === 3)) continue; // îles des monuments
+    if ((o.i === 3 && o.j === 2) || (o.i === 1 && o.j === 3) || (o.i === 2 && o.j === 2)) continue; // îles des monuments (Banque, Noir et Blanc, Île des Dieux)
     const hw = (o.x1 - o.x0) / 2, hd = (o.z1 - o.z0) / 2;
     for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
       const qx = o.cx + sx * (hw + 2.5) / 2, qz = o.cz + sz * (hd + 2.5) / 2, qw = hw - 5.5, qd = hd - 5.5;
@@ -83,6 +84,7 @@ export async function build(ctx) {
   for (const s of [-1, 1]) ctx.box(60, 30, 90, s * 80, -4, -470, mat('rock_face', { uv: 8, color: '#5e5f5c' }), { solid: false });
   ctx.poi(0, -128, 'Le Titan de Braavos', 'Mi-forteresse, mi-dieu de bronze, il enjambe la passe. Quand un navire approche, il rugit, et ses yeux s’allument comme deux phares.');
 
+  await braavosMap(ctx, at(2, 2));
   // Navires (GLTF) et gondoles sur les canaux
   const ship = await ctx.gltf('ship');
   [[-60, -200, .4], [50, -230, -.3], [-20, -300, .1], [130, -170, 1.4]].forEach(([x, z, r], i) => {
