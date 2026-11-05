@@ -23,6 +23,18 @@ export async function build(ctx) {
   for (const [x, z, w, hh] of [[110, -40, 14, 46], [140, -10, 10, 38], [100, 20, 9, 34], [150, -60, 9, 30], [125, 40, 8, 30], [85, -80, 8, 28], [160, 25, 7, 26]]) ctx.tower(x, z, { w, h: hh, y: top(x, z), mat: sand, roof: red, roofH: w * 1.2 });
   ctx.box(46, 20, 30, 125, top(125, -20), -20, sand); ctx.roof(47, 9, 31, 125, top(125, -20) + 20, -20, red);
   for (const [x, z] of [[110, -40], [140, -10], [100, 20]]) P.banner(x - 5.2, top(x, z) + 30, z, 'lannister', -Math.PI / 2, 2);
+  // bastions en paliers sur la face ouest du Roc (d'après l'image) : remparts blancs, tours rondes, maisons sur les terrasses
+  const white = mat('old_stone_wall', { uv: 5, color: '#ece6da' }), slate = mat('grey_roof_01', { uv: 2, color: '#5a7a6a' });
+  for (const [x0, x1, y, z0, z1, gap] of [[31, 48, 46, -120, 56, 15], [50, 68, 96, -105, 44, 0]]) {
+    const parts = gap ? [[z0, -gap], [gap, z1]] : [[z0, z1]];
+    for (const [a1, b1] of parts) {
+      ctx.box(x1 - x0, y, b1 - a1, (x0 + x1) / 2, 0, (a1 + b1) / 2, sand);
+      ctx.wall(x0, a1, x0, b1, { h: 2.4, t: 1.4, y, mat: white, outward: [-1, 0] });
+      const lots = []; for (let z = a1 + 6; z < b1 - 6; z += 9 + rand() * 3) lots.push({ x: (x0 + x1) / 2 + 2, z, w: 6 + rand() * 3, d: 6 + rand() * 2, h: 4 + rand() * 4, y });
+      ctx.houses(lots, { style: 'ouest', sink: .5 });
+    }
+    for (let z = z0; z <= z1; z += 29) if (!gap || Math.abs(z) > gap + 4) { ctx.cyl(3.4, y + 12, x0, 0, z, white, { seg: 16 }); for (let k = 0; k < 8; k++) { const a2 = k / 8 * 6.28; ctx.box(.9, 1.2, .9, x0 + Math.cos(a2) * 3.1, y + 12, z + Math.sin(a2) * 3.1, white, { solid: false }); } ctx.cone(3.6, 3.5, x0, y + 12.6, z, slate, { seg: 16, rotY: 0 }); }
+  }
   ctx.poi(60, 120, 'Castral Roc', 'Le Roc fait trois fois la hauteur du Mur, dit-on à Port-Lannis — ce qui est faux, mais personne ne le vérifie. Les Lannister y vivent au-dessus de tout, y compris de leurs ennemis.', { color: '#ffcf5a' });
 
   // --- la porte du Lion : gueule de pierre dans la falaise ---
