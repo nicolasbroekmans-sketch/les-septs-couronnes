@@ -1,0 +1,22 @@
+/* Habillage « fer forgé » (d'après les planches d'interface de référence) : cadres de fer sombre à rivets,
+   parchemin à l'intérieur des fenêtres, barres de vie et d'endurance serties, onglets et boutons en métal. */
+:root { --iron-1: #3a3836; --iron-2: #1c1b1a; --iron-hi: #6a6660; --rivet: radial-gradient(circle at 35% 35%, #9a948a, #3a3632 60%, #1a1816); }
+.panel, .help-box, #tip, .lock-box, #dialogue .dlg, .dead { position: relative; border: 10px solid transparent !important; border-image: linear-gradient(145deg, var(--iron-hi), var(--iron-1) 30%, var(--iron-2) 60%, var(--iron-1)) 1 !important;
+  box-shadow: 0 0 0 1px #000, 0 0 0 3px #4a4640, 0 30px 80px rgba(0,0,0,.75), inset 0 0 50px rgba(60,40,10,.35) !important; }
+.panel::before, .panel::after, .help-box::before, .help-box::after { content: ''; position: absolute; width: 14px; height: 14px; border-radius: 50%; background: var(--rivet); box-shadow: 0 1px 2px #000; z-index: 2; pointer-events: none; }
+.panel::before, .help-box::before { top: -12px; left: -12px; } .panel::after, .help-box::after { bottom: -12px; right: -12px; }
+.panel-tabs { background: linear-gradient(#2a2826, #1a1918) !important; border-bottom: 2px solid #000 !important; }
+.panel-tabs button { color: #c8bca0 !important; text-shadow: 0 1px 0 #000; }
+.panel-tabs button.on { color: #ffd970 !important; box-shadow: inset 0 -3px 0 #b8902a !important; background: linear-gradient(transparent, rgba(184,144,42,.12)); }
+.panel-close { color: #c8bca0 !important; }
+.panel button:not(.panel-tabs button), .btn-ui { background: linear-gradient(#4a4642, #2a2826) !important; color: #f1e6cb !important; border: 1px solid #0c0b0a !important; box-shadow: inset 0 1px 0 #6a6660, 0 1px 2px #000; }
+.panel button:not(.panel-tabs button):hover, .btn-ui:hover { background: linear-gradient(#6a2a1a, #3a1408) !important; }
+/* barres du HUD serties dans le fer */
+.bar { border: 2px solid #2a2826 !important; box-shadow: 0 0 0 1px #000, 0 0 0 3px #5a564e, 0 2px 6px rgba(0,0,0,.6); border-radius: 3px; background: #0c0b0a !important; }
+#bar-hp { height: 15px !important; } #bar-hp i { background: linear-gradient(#d0382a, #7a0e0a) !important; } #bar-st i { background: linear-gradient(#e8c060, #8a6a18) !important; }
+#minimap { border: 4px solid #3a3836 !important; box-shadow: 0 0 0 2px #000, 0 0 0 5px #6a6660, 0 6px 20px rgba(0,0,0,.6) !important; }
+#tracker { border: 3px solid #3a3836 !important; border-left: 4px solid #b8902a !important; box-shadow: 0 0 0 1px #000, 0 0 0 3px #5a564e, 0 8px 24px rgba(0,0,0,.55) !important; }
+#prompt { background: linear-gradient(#2a2826, #141312) !important; border: 2px solid #5a564e !important; box-shadow: 0 0 0 1px #000; }
+#toasts .toast { border-left-width: 4px !important; box-shadow: 0 0 0 1px #000, 0 0 0 3px #3a3836, 0 6px 16px rgba(0,0,0,.5); }
+/* cases d'inventaire et d'icônes */
+.panel .slot, .panel .item, .panel .inv li, .panel .cos { border: 2px solid #3a3836 !important; box-shadow: inset 0 0 12px rgba(0,0,0,.35), 0 0 0 1px #000; }
