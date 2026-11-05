@@ -3,7 +3,7 @@ export function winterfellTown(ctx, lots) {
   const P = ctx.props, r = ctx.rand;
   P.market(0, 98, 9, 6, ['#5a5f66', '#6a2a2a', '#3a4a5a', '#6a5a3a', '#2a3a2a']);
   ctx.poi(0, 104, 'La place du marché', 'Fourrures, harengs salés, bougies de suif et rumeurs : tout se vend sur la place, même quand le vent coupe le souffle.');
-  for (let z = 40; z < 165; z += 14) { P.lantern(-6, z); P.lantern(6, z + 7); }
+  for (let z = 38; z < 165; z += 16) { P.lantern(-5.5, z); P.lantern(5.5, z); }
   for (const [x, z, a] of [[-4, 60, .2], [4.5, 130, -.1], [-4.5, 150, .3]]) P.cart(x, z, a);
   P.standard(-8, 30, 'stark', 7); P.standard(8, 30, 'stark', 7);
   // petits détails près des maisons (bois, tonneaux, foin, clôtures)

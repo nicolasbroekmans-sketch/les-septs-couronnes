@@ -11,6 +11,7 @@ const V = {
   sablerouge: { hdri: 'qwantani_noon_puresky', ground: ['brown_mud', '#d8a070'], fog: ['#f0d0a8', .004], sun: ['#fff1d8', 4], tree: ['palm', '#4a7a3a'], walls: ['#e0b080', '#d8a070', '#e8c49a'], roofs: [], flat: true, banner: 'martell', particles: 'dust', sound: 'wind', feature: 'oasis', hills: 10 }
 };
 import { room } from './rooms.js';
+import { walkHouse } from './houses.js';
 export const config = id => { const v = V[id]; return { hdri: v.hdri, exposure: 1, bg: 1, env: 1, fog: v.fog, hemi: ['#f4f0e8', '#5a4a3a', .55], sun: [v.sun[0], v.sun[1], [.4, .6, .3]], bloom: [.4, .5, .88], tint: '#fff8f0', bounds: [-150, -150, 150, 150] }; };
 
 export async function build(ctx, id) {
@@ -19,7 +20,9 @@ export async function build(ctx, id) {
   ctx.terrain({ size: 600, seg: 150, height: h, mat: mat(v.ground[0], { uv: 6, color: v.ground[1], rough: 1 }) });
   const wall = mat('plastered_wall', { uv: 4, instanced: true }), roof = mat(v.flat ? null : 'clay_roof_tiles', { uv: 2.5, instanced: true });
   village(ctx, 0, 0, { houses: 22, radius: 22, banner: v.banner, wall, roof, tints: v.walls, roofTints: v.roofs, flat: v.flat, avoid: (x, z) => Math.abs(x) < 5 && z > 0 || (v.feature === 'port' && z > 36) || (v.feature === 'river' && Math.abs(z - 45) < 7) });
-  road(ctx, 0, 140, 0, 8, { w: 4.5 }); road(ctx, -140, -10, -8, -4, { w: 4 });
+  road(ctx, 0, 140, 0, 8, { w: 4.5 });
+  const warm = !!v.flat, style = warm ? { stone: '#c8a070', plaster: '#e8c49a', roofTex: 'clay_roof_tiles', roof: '#b0704a' } : { stone: '#9a9690', plaster: '#e6dcc8', roof: v.roofs[0] ?? '#7a6a5a' };
+  walkHouse(ctx, -9, -56, 0, { ...style, house: v.banner, owner: 'La veuve du meunier', name: 'Une maison du village' }); walkHouse(ctx, 9, -56, 0, { ...style, owner: 'Le forgeron du village' }); road(ctx, -140, -10, -8, -4, { w: 4 });
   // auberge : grande maison à étage, enseigne, bancs
   const inn = mat('weathered_planks', { uv: 3, color: '#b09070' });
   ctx.box(12, 7, 9, -14, h(-14, 8) - .5, 8, inn); ctx.roof(13, 3.5, 10, -14, h(-14, 8) + 6.5, 8, mat('grey_roof_tiles', { uv: 3, color: '#7a6a5a' }));

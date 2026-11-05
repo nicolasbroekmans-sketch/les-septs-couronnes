@@ -2,6 +2,7 @@ import { winterfellCastle } from './details/winterfellCastle.js';
 import { winterfellTown } from './details/winterfellTown.js';
 import { winterfellLore } from './details/winterfellLore.js';
 import { room } from './places/rooms.js';
+import { walkHouse } from './places/houses.js';
 
 // WINTERFELL — double enceinte, Grand Hall, forge, bois sacré, sources chaudes, Winter Town.
 export const config = {
@@ -80,7 +81,7 @@ export async function build(ctx) {
 
 
   // Winter Town : grille irrégulière de maisons en bois et pierre
-  const city = ctx.cityGrid({ x0: -110, x1: 110, z0: 36, z1: 172, block: 14, street: 4.5, hMin: 3.2, hMax: 6.5, avoid: (x, z, w = 0, d = 0) => Math.abs(x) < 7 + w / 2 || Math.hypot(x, z - 98) < 16 || (Math.abs(z - 126) < 8 + d / 2 && Math.abs(x) < 25 + w / 2) || x + w / 2 > 110 || z + d / 2 > 172 });
+  const city = ctx.cityGrid({ x0: -110, x1: 110, z0: 36, z1: 172, block: 14, street: 4.5, hMin: 3.2, hMax: 6.5, avoid: (x, z, w = 0, d = 0) => Math.abs(x) < 7 + w / 2 || Math.hypot(x, z - 98) < 16 || (Math.abs(z - 126) < 8 + d / 2 && Math.abs(x) < 25 + w / 2) || (Math.abs(x) < 20 + w / 2 && z > 36 - d / 2 && z < 86 + d / 2) || x + w / 2 > 110 || z + d / 2 > 172 });
   ctx.houses(city.lots, {
     wall: mat('weathered_planks', { uv: 3, instanced: true }), roof: mat('grey_roof_tiles', { uv: 3, instanced: true }),
     tints: ['#e8d8c0', '#d8c6aa', '#f2e8d8', '#cbbfae'], roofTints: ['#e9eef2', '#dfe5ea', '#cfd6dc'], windows: '#ffb05a', roofH: .6
@@ -88,6 +89,9 @@ export async function build(ctx) {
   for (const st of city.streets) ctx.box(st.w, .04, st.d, st.x, .01, st.z, mud, { solid: false, cast: false });
   ctx.box(9, .05, 140, 0, .02, 104, mud, { solid: false, cast: false });
   winterfellCastle(ctx); winterfellTown(ctx, city.lots); winterfellLore(ctx);
+  // maisons à étage où l'on entre à pied, de part et d'autre de la grand-rue de Winter Town
+  const owners = ['Gage le charpentier', 'Mère Tessa', 'Vieille Nell la conteuse', 'Jory le tanneur', 'Bethany la tisserande', 'Harwin le palefrenier'];
+  [46, 62, 78].forEach((z, i) => { walkHouse(ctx, 13, z, 3, { house: 'stark', owner: owners[i * 2], name: i ? undefined : 'Une maison de Winter Town', text: 'La porte est ouverte. En bas, l’âtre et la table ; l’escalier mène à la chambre, sous le toit.' }); walkHouse(ctx, -13, z, 1, { house: i === 1 ? 'stark' : null, owner: owners[i * 2 + 1], blanket: '#3a4a5a' }); });
   // fumées de cheminées
   for (let i = 0; i < 10; i++) { const l = city.lots[Math.floor(rand() * city.lots.length)]; ctx.emitter('smoke', l.x, l.h + 2, l.z, { count: 30, opacity: .12, box: [5, 22, 5] }); }
   for (let z = 40; z < 130; z += 18) { ctx.torch(-5, 2.8, z, { light: z < 60 }); ctx.torch(5, 2.8, z + 9, { light: false }); }

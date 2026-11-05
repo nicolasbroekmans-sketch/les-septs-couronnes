@@ -3,6 +3,7 @@
 // procédurale : marche/course, attaques légère et lourde, tir à l'arc, parade, esquive, recul, mort, reddition.
 import * as THREE from 'three';
 import { weaponMesh } from './Weapons3D.js';
+import { bannerTexture, HOUSES } from './builders/sigils.js';
 
 const cache = new Map();
 const std = (c, o = {}) => { const k = c + JSON.stringify(o); if (!cache.has(k)) cache.set(k, new THREE.MeshStandardMaterial({ color: c, roughness: o.r ?? .8, metalness: o.m ?? 0 })); return cache.get(k); };
@@ -23,12 +24,14 @@ export class Humanoid {
     J.spine = joint(J.hips, 0, .08, 0);
     part(J.spine, cap(fem ? .15 : .16, .3), armorM, .26).scale.set(fem ? 1.05 : 1.15, 1, .78);
     part(J.spine, new THREE.CylinderGeometry(.19, .17, .12, 10), std('#2a1d14'), .06); // ceinture
+    part(J.spine, new THREE.BoxGeometry(.06, .05, .02), std('#b8962e', { m: .8, r: .35 }), .06, 0, .17); // boucle
+    part(J.spine, new THREE.TorusGeometry(.09, .025, 6, 14), look.armor ? armorM : tunic, .5).rotation.x = Math.PI / 2; // col
     J.head = joint(J.spine, 0, .58, 0);
     part(J.spine, new THREE.CylinderGeometry(.045, .055, .12, 10), skin, .55); // cou
     face(J.head, look, skin, std(look.hair ?? '#3a2a1e', { r: .9 }), fem);
     if (look.helmet) { part(J.head, new THREE.SphereGeometry(.135, 16, 10, 0, Math.PI * 2, 0, Math.PI * .55), std('#7a7f86', { m: .9, r: .35 }), .1); part(J.head, new THREE.BoxGeometry(.025, .09, .03), std('#7a7f86', { m: .9, r: .35 }), .1, 0, .13); }
     // tabard / jupe de tunique sous la ceinture, épaulières si armure
-    part(J.hips, new THREE.CylinderGeometry(.17, fem ? .25 : .21, .3, 12, 1, true), look.armor ? armorM : tunic, -.12).material.side = THREE.DoubleSide;
+    const dress = fem && !look.armor, skirt = part(J.hips, new THREE.CylinderGeometry(.17, dress ? .32 : fem ? .25 : .21, dress ? .78 : .3, 14, 1, true), look.armor ? armorM : tunic, dress ? -.36 : -.12); skirt.material = skirt.material.clone(); skirt.material.side = THREE.DoubleSide;
     if (look.armor === 'maille' || look.armor === 'plates') for (const x of [-1, 1]) part(J.spine, new THREE.SphereGeometry(.085, 10, 6, 0, Math.PI * 2, 0, Math.PI / 2), armorM, .47, x * .2).scale.set(1.2, .8, 1);
     for (const side of ['L', 'R']) {
       const x = side === 'L' ? -1 : 1;
@@ -37,17 +40,20 @@ export class Humanoid {
       const el = J['el' + side] = joint(sh, 0, -.3, 0);
       part(el, cap(.045, .2), skin, -.13);
       J['hand' + side] = joint(el, 0, -.28, 0);
-      part(J['hand' + side], new THREE.SphereGeometry(.045, 8, 6), skin);
+      part(J['hand' + side], new THREE.BoxGeometry(.07, .09, .04), look.armor === 'plates' || look.armor === 'maille' ? std('#4a3a2a') : skin, -.02);
+      part(J['hand' + side], new THREE.BoxGeometry(.025, .05, .03), skin, -.01, x * .045, .015);
       const hp = J['hip' + side] = joint(J.hips, x * .1, -.04, 0);
       part(hp, cap(.075, .32), pants, -.22);
       const kn = J['kn' + side] = joint(hp, 0, -.45, 0);
       part(kn, cap(.06, .3), boots, -.2);
       part(kn, new THREE.BoxGeometry(.1, .07, .22), boots, -.43, 0, .05);
+      part(kn, new THREE.CylinderGeometry(.075, .07, .06, 10), boots, -.06);
     }
     if (look.cloak) { // cape accrochée aux épaules : pivot en haut, légèrement arrondie, ne traverse plus le corps
       const pivot = joint(J.spine, 0, .5, -.12), geo = new THREE.CylinderGeometry(.3, .4, 1.05, 12, 4, true, Math.PI - .9, 1.8).translate(0, -.52, .2);
       const m = new THREE.MeshStandardMaterial({ color: look.cloak, roughness: .95, side: THREE.DoubleSide });
       const c = new THREE.Mesh(geo, m); c.castShadow = true; pivot.add(c); this.cloak = pivot;
+      const H = HOUSES[look.house]; if (H) { const s = new THREE.Mesh(new THREE.PlaneGeometry(.3, .42), new THREE.MeshStandardMaterial({ map: bannerTexture(...H), roughness: .9, transparent: true, alphaTest: .1 })); s.position.set(0, -.42, -.215); s.rotation.y = Math.PI; pivot.add(s); }
       part(J.spine, new THREE.TorusGeometry(.13, .025, 6, 16, Math.PI), m, .5, 0, -.02).rotation.set(-Math.PI / 2 + .3, 0, Math.PI);
     }
     this.root.traverse(o => { if (o.isMesh) o.castShadow = true; });
@@ -70,7 +76,7 @@ export class Humanoid {
       const o = J[name]; o.rotation.x += ((rot[0] ?? 0) - o.rotation.x) * k; o.rotation.y += ((rot[1] ?? 0) - o.rotation.y) * k; o.rotation.z += ((rot[2] ?? 0) - o.rotation.z) * k;
     }
     if (this.bowMesh) { const u = Math.min(1, (a.t ?? 0) / Math.max(.01, a.dur ?? .3)); this.bowMesh.userData.setDraw?.(a.draw > 0 ? a.draw : a.state === 'windup' ? u : 0); const up = a.aim || a.state === 'windup' || a.state === 'active'; this.bowMesh.rotation.x += ((up ? 0 : -Math.PI / 2) - this.bowMesh.rotation.x) * Math.min(1, dt * 10); }
-    if (this.cloak) { const back = a.dead ? 0 : a.sit ? .9 : -.08 - Math.min(.55, (a.speed ?? 0) * .1) - Math.abs(Math.sin(this.phase)) * .05 * Math.min(1, (a.speed ?? 0) / 3); this.cloak.rotation.x += (back - this.cloak.rotation.x) * Math.min(1, dt * 8); }
+    if (this.cloak) { const sp = a.speed ?? 0, back = a.dead ? 0 : a.sit ? .9 : .12 + Math.min(.7, sp * .13) + Math.abs(Math.sin(this.phase)) * .08 * Math.min(1, sp / 3); /* la cape s'envole vers l'arrière, jamais dans le corps */ this.cloak.rotation.x += (back - this.cloak.rotation.x) * Math.min(1, dt * 8); }
   }
 }
 
@@ -87,9 +93,12 @@ function face(head, look, skin, hairM, fem) {
     part(head, new THREE.SphereGeometry(.022, 8, 6), skin, .1, e * .1, 0).scale.set(.45, 1, .7); // oreille
   }
   part(head, new THREE.BoxGeometry(.04, .009, .01), lip, .052, 0, .1);
-  part(head, new THREE.SphereGeometry(.112, 16, 10, 0, Math.PI * 2, 0, Math.PI * (fem ? .58 : .42)), hairM, .115, 0, -.012).rotation.x = -.35;
-  part(head, new THREE.SphereGeometry(.108, 14, 10, 0, Math.PI * 2, Math.PI * .3, Math.PI * .45), hairM, .1, 0, -.02).rotation.x = .9;
-  if (fem) { part(head, cap(.075, .26), hairM, -.03, 0, -.07); for (const e of [-1, 1]) part(head, cap(.03, .16), hairM, .03, e * .085, .01); }
+  if ((look.hairStyle ?? '') !== 'chauve') part(head, new THREE.SphereGeometry(.112, 16, 10, 0, Math.PI * 2, 0, Math.PI * (fem ? .58 : .42)), hairM, .115, 0, -.012).rotation.x = -.35;
+  if ((look.hairStyle ?? '') !== 'chauve') part(head, new THREE.SphereGeometry(.108, 14, 10, 0, Math.PI * 2, Math.PI * .3, Math.PI * .45), hairM, .1, 0, -.02).rotation.x = .9;
+  const style = look.hairStyle ?? (fem ? 'long' : 'court');
+  if (style === 'long') { part(head, cap(.075, .26), hairM, -.03, 0, -.07); for (const e of [-1, 1]) part(head, cap(.03, .16), hairM, .03, e * .085, .01); }
+  if (style === 'queue') { part(head, cap(.03, .22), hairM, -.03, 0, -.12).rotation.x = .3; part(head, new THREE.SphereGeometry(.035, 8, 6), hairM, .08, 0, -.1); }
+  if (style === 'tresse') for (let i = 0; i < 4; i++) part(head, new THREE.SphereGeometry(.03 - i * .003, 8, 6), hairM, .02 - i * .06, 0, -.1 - i * .01);
   if (look.beard) { part(head, new THREE.SphereGeometry(.07, 12, 8, 0, Math.PI * 2, Math.PI * .5, Math.PI * .45), hairM, .07, 0, .035).scale.set(1, 1.15, 1); part(head, new THREE.BoxGeometry(.05, .012, .015), hairM, .066, 0, .1); }
 }
 

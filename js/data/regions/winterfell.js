@@ -2,7 +2,7 @@
 import { look, townsfolk, camp } from './common.js';
 
 const CAMP = [-105, -62];
-const stark = o => look({ tunic: '#5a5f66', cloak: '#3a3a3e', ...o });
+const stark = o => look({ tunic: '#5a5f66', cloak: '#3a3a3e', house: 'stark', ...o });
 export default {
   id: 'winterfell', scene: 'winterfell', name: 'Winterfell', region: 'Le Nord', climate: 'nord', lawFaction: 'stark',
   prices: { weapon: .95, armor: 1, luxe: 1.3, vivres: 1.1, fourrure: .7, consumable: 1.1 },

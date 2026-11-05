@@ -99,7 +99,8 @@ export class Game {
   }
   playerLook() {
     const a = this.core.state.player.appearance, p = this.core.state.player, c = lookFromCosmetics(p);
-    return { ...a, female: p.sex === 'femme', armor: p.equipped.armor, cloak: c.cloak ?? a.cloak, tunic: c.tunic ?? a.tunic, armorTint: c.armorTint };
+    const house = { blason_loup: 'stark', blason_corbeau: 'garde', blason_dragon: 'targaryen', blason_soleil: 'martell' }[p.cosmetics?.equipped?.sigil] ?? { nord: 'stark', couronne: 'baratheon', bief: 'tyrell', ouest: 'lannister', dorne: 'martell', fer: 'greyjoy' }[p.origin];
+    return { ...a, female: p.sex === 'femme', armor: p.equipped.armor, cloak: c.cloak ?? a.cloak ?? '#3a2a22', tunic: c.tunic ?? a.tunic, armorTint: c.armorTint, house };
   }
   refreshPlayerStats(heal = false) {
     const p = this.core.state.player, A = this.player; if (!A) return;

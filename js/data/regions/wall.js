@@ -2,7 +2,7 @@
 import { look, camp } from './common.js';
 
 const GROVE = [-40, -205];
-const crow = o => look({ tunic: '#1e1e20', cloak: '#141416', pants: '#1a1a1a', ...o });
+const crow = o => look({ tunic: '#1e1e20', cloak: '#141416', pants: '#1a1a1a', house: 'garde', ...o });
 const onPatrol = { quest: 'wall_patrol', step: ['tunnel', 'grove', 'ambush', 'choice'] };
 export default {
   id: 'wall', scene: 'wall', name: 'Le Mur — Châteaunoir', region: 'Au bord du monde', climate: 'glace', lawFaction: 'garde',

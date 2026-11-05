@@ -11,7 +11,7 @@ const COLORS = { lannister: '#8b0000', tyrell: '#3f6a34', martell: '#d97a2a', ar
 const LINES = ['Le bonjour, voyageur.', 'Belle journée… pour l’instant.', 'Tu n’es pas d’ici, toi.', 'Méfie-toi des routes à la nuit tombée.'];
 
 export function placeRegion(p) {
-  const law = LAW[p.id] ?? 'peuple', c = COLORS[law] ?? '#6a5a3a', guard = o => look({ tunic: c, cloak: c, ...o });
+  const law = LAW[p.id] ?? 'peuple', c = COLORS[law] ?? '#6a5a3a', guard = o => look({ tunic: c, cloak: c, house: law, ...o });
   const rel = [
     { id: p.id + '_marchand', name: 'Marchande du coin', role: 'merchant', merchant: true, faction: 'peuple', dx: 5, dz: -6, weapon: 'dague', hp: 60, stock: { onguent: 5, ration: 12, fourrure: 3, cuir: 2, maille: 1, epee_longue: 1, arc_court: 1 }, look: look({ female: true }), barks: ['Approche, approche ! Des vivres, des onguents, du cuir.', 'Tout est frais. Enfin, presque tout.'], ai: { wander: 2 } },
     { id: p.id + '_garde1', name: 'Garde', role: 'guard', faction: law, dx: -4, dz: -12, weapon: 'lance', armor: 'maille', hp: 110, look: guard({ helmet: true }), ai: { wander: 3 } },

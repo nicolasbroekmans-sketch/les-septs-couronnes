@@ -1,3 +1,4 @@
+import { room } from '../places/rooms.js';
 // Winterfell, détails du château inspirés de la série : douves gelées, pont-levis, tour de la cloche,
 // Premier Donjon, jardins de verre, cryptes, passerelle couverte, écuries, archerie, bannières au loup.
 export function winterfellCastle(ctx) {
@@ -33,6 +34,7 @@ export function winterfellCastle(ctx) {
   ctx.box(5, 4, 3, -2, 0, -38, dark); ctx.box(2.4, 2.8, .2, -2, 0, -36.45, mat(null, { color: '#060606' }), { solid: false });
   ctx.roof(5.4, 1.6, 3.4, -2, 4, -38, roof, { rotY: Math.PI / 2 });
   ctx.torch(-3.6, 2.6, -36.3, { light: true, color: '#8ab0ff' });
+  room(ctx, 'crypt', { x: -2, z: -35.2, yaw: Math.PI }, { label: 'Descendre dans les cryptes', wall: 'castle_wall_slates', wallColor: '#5a5e64', floorColor: '#6a6a6a', title: 'Les cryptes de Winterfell', text: 'Rangée après rangée, les Rois de l’Hiver vous regardent passer, une épée de fer sur les genoux, un loup de pierre à leurs pieds. Il fait froid, et le silence pèse plus lourd que la pierre.' });
   ctx.poi(-2, -33.5, 'Les cryptes', 'Sous le château, les Rois de l’Hiver dorment sur leurs trônes de pierre, une épée de fer sur les genoux, pour que leurs esprits restent en place.', { color: '#8ab0ff' });
   // Passerelle couverte entre le Grand Donjon et le Grand Hall
   ctx.box(7.4, .5, 2.6, 7.6, 10, -45, wood, { solid: false }); ctx.box(7.4, 2.4, .2, 7.6, 10.5, -46.2, wood, { solid: false }); ctx.box(7.4, 2.4, .2, 7.6, 10.5, -43.8, wood, { solid: false });

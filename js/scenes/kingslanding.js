@@ -1,6 +1,7 @@
 import { kingslandingCity, avoidExtra } from './details/kingslandingCity.js';
 import { height } from './details/klTerrain.js';
 import { room } from './places/rooms.js';
+import { walkHouse } from './places/houses.js';
 
 // PORT-RÉAL — ville en pente vers la baie, Donjon Rouge sur la colline, Septuaire à dôme, port.
 export const config = {
@@ -54,12 +55,14 @@ export async function build(ctx) {
   ctx.poi(-12, 68, 'La porte de la Rivière', 'Les marins l’appellent la porte de la Gadoue. Ici débarquent le vin d’Arbor, les épices d’Essos et les rumeurs de partout.', { y: 1 });
 
   // La ville : grille irrégulière, ruelles étroites, toits de tuiles ocre
-  const avoid = (x, z, w = 0, d = 0) => avoidExtra(x, z, w, d) || (Math.abs(x - kx) < 46 && z < kz + 40 && z > kz - 40) || Math.hypot(x - sx, z - sz) < 26 || (Math.abs(x - kx) < 7 && z > kz + 26 && z < kz + 90) || (Math.abs(x) < 6 && z > 20) || z > 56 || (Math.abs(z - 20) < 3 + d / 2 && x < 0);
+  const avoid = (x, z, w = 0, d = 0) => (Math.abs(x) < 19 + w / 2 && z > 30 - d / 2 && z < 50 + d / 2) || avoidExtra(x, z, w, d) || (Math.abs(x - kx) < 46 && z < kz + 40 && z > kz - 40) || Math.hypot(x - sx, z - sz) < 26 || (Math.abs(x - kx) < 7 && z > kz + 26 && z < kz + 90) || (Math.abs(x) < 6 && z > 20) || z > 56 || (Math.abs(z - 20) < 3 + d / 2 && x < 0);
   const city = ctx.cityGrid({ x0: -160, x1: 160, z0: -165, z1: 58, block: 13, street: 3.4, hMin: 4, hMax: 9, empty: .06, avoid });
   ctx.houses(city.lots, {
     wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }),
     tints: ['#f2dfc0', '#e9cfa6', '#f6e7cf', '#e2c08f', '#f0d6b8'], roofTints: ['#ffffff', '#f0c8a8', '#e6b090'], roofH: .45, sink: 4, windows: '#3a2a1e'
   });
+  const kl = { stone: '#c8b89a', plaster: '#f2e2c8', roofTex: 'clay_roof_tiles', roof: '#c87a50' };
+  walkHouse(ctx, 13, 40, 3, { ...kl, house: 'baratheon', owner: 'Maître Pell, drapier', name: 'Une maison de Port-Réal', text: 'Une maison de marchand : boutique en bas, chambre à l’étage. La porte est ouverte.' }); walkHouse(ctx, -13, 40, 1, { ...kl, house: 'lannister', owner: 'Dame Ysilla' });
   ctx.poi(-20, -10, 'Culpucier', 'Le quartier des ruelles tordues, où l’odeur du ragoût de bol se mêle à celle du poisson. Ici, on vend de tout ; surtout ce qui n’appartient à personne.');
   ctx.poi(kx, kz + 92, 'Les escaliers du Roi', 'Trois volées de marches taillées pour les processions. Les petits gens les montent à genoux les jours de fête ; les seigneurs, à cheval.');
 

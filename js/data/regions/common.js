@@ -8,7 +8,7 @@ const pick = a => a[Math.floor(r() * a.length)];
 export function look(o = {}) {
   const female = o.female ?? r() < .4;
   return { skin: pick(SKIN), hair: pick(HAIR), tunic: pick(o.tunics ?? ['#5a3a2a', '#4a4a3a', '#6a5a3a', '#3a4a5a', '#5a2a2a']), pants: pick(['#3a3028', '#2a2a2a', '#4a3a2a']),
-    beard: !female && r() < .5, female, height: .94 + r() * .1, ...o };
+    beard: !female && r() < .5, female, height: .94 + r() * .1, hairStyle: female ? pick(['long', 'long', 'tresse', 'queue']) : pick(['court', 'court', 'queue', 'chauve', 'long']), ...o };
 }
 
 /** Villageois : journée sur une place, nuit à la maison (caché à l'intérieur). */

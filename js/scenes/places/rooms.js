@@ -1,7 +1,7 @@
 // Intérieurs visitables : auberge, grande salle, maison. Construits à l'écart de la carte (même scène) et reliés à
 // une porte extérieure : E pour entrer, E pour sortir. Chaque intérieur annonce qui l'habite (aubergiste, clients…).
 let next = 0;
-const ROOM = { inn: [18, 14, 5], hall: [16, 34, 9], house: [9, 8, 3.6], throne: [22, 44, 14] };
+const ROOM = { inn: [18, 14, 5], hall: [16, 34, 9], house: [9, 8, 3.6], throne: [22, 44, 14], crypt: [9, 46, 4.4] };
 
 /** Porte : point d'interaction qui téléporte vers `to` ({x,z,yaw}). */
 export function door(ctx, x, z, label, to) { (ctx.engine.doors ??= []).push({ x, z, label, to }); }
@@ -17,6 +17,7 @@ export function room(ctx, kind, outside, o = {}) {
   ctx.box(1.6, 2.4, .1, cx, y, cz + D / 2 - .25, mat('weathered_planks', { uv: 2, color: '#5a3a22' }), { solid: false });
   door(ctx, cx, cz + D / 2 - 1.2, 'Sortir', outside); door(ctx, outside.x, outside.z, o.label ?? 'Entrer', { ...inside, y });
   const people = [];
+  if (kind === 'crypt') { crypt(ctx, cx, cz, y, W, D, o); (ctx.engine.rooms ??= []).push({ kind, people }); if (o.title) ctx.poi(cx, cz - D / 4, o.title, o.text ?? '', { y }); return inside; }
   ctx.fire(cx, y + .2, cz - D / 2 + 1.6, 1.1, { intensity: 30 }); ctx.box(3.2, 3.5, 1, cx, y, cz - D / 2 + .7, mat('castle_wall_slates', { uv: 2, color: '#6a6a6a' }));
   if (kind === 'inn') {
     ctx.box(6, 1.1, 1, cx + W / 2 - 4, y, cz - 1, mat('weathered_planks', { uv: 2, color: '#6a4a2a' }));
@@ -38,6 +39,18 @@ export function room(ctx, kind, outside, o = {}) {
   }
   if (kind === 'house') { ctx.box(2, .5, 1.2, cx - W / 2 + 1.4, y, cz - 1, mat(null, { color: '#a89070' })); ctx.box(1.4, .8, 1, cx + 2, y, cz, mat('weathered_planks', { uv: 2, color: '#7a5a3a' })); P.bench(cx + 2, cz + 1); people.push({ role: 'villager', name: 'Habitant', x: cx + 1.5, z: cz + .8 }); }
   (ctx.engine.rooms ??= []).push({ kind, people, title: o.title });
-  if (o.title) ctx.poi(cx, cz + D / 2 - 3, o.title, o.text ?? '', { y });
+  if (o.title) ctx.poi(cx, cz - D / 4, o.title, o.text ?? '', { y });
   return inside;
+}
+
+/** Cryptes : allée de rois de pierre assis, épée sur les genoux, loup à leurs pieds ; torches bleutées. */
+function crypt(ctx, cx, cz, y, W, D, o) {
+  const st = ctx.mat('castle_wall_slates', { uv: 2, color: '#7a7e84' }), iron = ctx.mat(null, { color: '#4a4a50', metal: .8, rough: .5 });
+  for (let k = -D / 2 + 5, i = 0; k < D / 2 - 4; k += 5, i++) for (const s of [-1, 1]) {
+    const x = cx + s * (W / 2 - 1.3), z = cz + k;
+    ctx.box(1.8, .9, 1.4, x, y, z, st); ctx.box(.9, 1.3, .7, x, y + .9, z, st); ctx.box(.5, .45, .45, x, y + 2.2, z, st); ctx.box(1.2, .9, .25, x + s * .45, y + .9, z, st, { solid: false });
+    ctx.box(.1, .06, 1.2, x - s * .5, y + 1.2, z, iron, { solid: false, rotY: Math.PI / 2 });
+    ctx.box(.5, .55, 1, x - s * 1.4, y, z + .6, st); ctx.cone(.22, .5, x - s * 1.4, y + .55, z + 1.1, st, { seg: 4, rotY: 0 });
+    if (i % 2 === 0) ctx.torch(x - s * .2, y + 2.8, z - 2.4, { light: k < 0 && s < 0, color: '#8ab0ff' });
+  }
 }
