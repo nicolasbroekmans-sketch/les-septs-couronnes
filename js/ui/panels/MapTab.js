@@ -2,6 +2,7 @@
 import { h } from '../dom.js';
 import { questMarker } from '../../game/WorldMarkers.js';
 import { objectiveTargets } from '../hud/Targets.js';
+import { destinations } from '../../game/Travel.js';
 
 export function mapTab(G) {
   return { id: 'map', label: 'Carte', render(el) {
@@ -25,7 +26,16 @@ export function mapTab(G) {
     for (const t of objectiveTargets(G)) { g.save(); g.translate(tx(t.x), tz(t.z)); g.rotate(Math.PI / 4); g.fillStyle = '#c9a227'; g.fillRect(-7, -7, 14, 14); g.strokeRect(-7, -7, 14, 14); g.restore(); }
     const P = G.player.pos; g.save(); g.translate(tx(P.x), tz(P.z)); g.rotate(-G.player.yaw);
     g.fillStyle = '#8b0000'; g.strokeStyle = '#fff'; g.lineWidth = 2; g.beginPath(); g.moveTo(0, -12); g.lineTo(8, 9); g.lineTo(0, 5); g.lineTo(-8, 9); g.closePath(); g.fill(); g.stroke(); g.restore();
-    el.append(h('div.map-wrap', {}, h('h4', {}, `${def.name} — ${def.region}`), cv,
+    el.append(travel(G), h('div.map-wrap', {}, h('h4', {}, `${def.name} — ${def.region}`), cv,
       h('p.sub', {}, '◆ objectif · « ! » mission disponible · « ? » personne à retrouver · bleu : marchands et recruteurs · rouge : ennemis · flèche : toi')));
   } };
+}
+
+/** Voyager : toutes les villes et tous les villages de la carte, du plus proche au plus lointain. */
+function travel(G) {
+  const p = G.core.state.player, seen = G.core.state.world.discovered;
+  if (G.battle || G.core.state.explore) return h('p.sub', {}, G.battle ? 'Impossible de voyager pendant une bataille.' : '');
+  return h('div.travel', {}, h('h4', {}, 'Voyager'), h('p.sub', {}, 'Choisissez une destination : on y arrive à pied, à cheval ou en bateau. Chaque lieu a ses habitants, ses marchands, ses gardes et son recruteur.'),
+    h('div.travel-list', {}, destinations(p.region).map(d => h('button.travel-dest' + (seen.includes(d.place.id) ? '.seen' : ''), { type: 'button', disabled: p.gold < d.gold, on: { click: () => G.travel(d.place.id) } },
+      h('b', {}, d.place.name), h('span', {}, `${d.place.region}${d.sea ? ' · traversée en bateau' : ''}`), h('em', {}, `${d.hours} h · ${d.gold} or`)))));
 }

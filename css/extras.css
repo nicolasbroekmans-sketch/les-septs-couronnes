@@ -49,3 +49,7 @@ dl.guide dt { font-family: var(--f-sub); color: #6e3a10; margin-top: .6rem; } dl
 .battle-res{text-align:center;padding:1.5em}.battle-res h2{font-family:'Cinzel Decorative',serif;font-size:2.4em;margin:.2em 0}.battle-res.win h2{color:#e8c86a}.battle-res.loss h2{color:#c0442a}.battle-res .btn-gold{margin-top:1em}
 #skip-prologue{position:fixed;right:18px;bottom:18px;z-index:60}
 .battle-res.welcome h2{font-size:clamp(2rem,6vw,3.6rem);color:#e8c86a;text-shadow:0 0 30px #c9a22766}.battle-res .kicker{letter-spacing:.3em;text-transform:uppercase;color:#9fd06a;margin:0}
+.travel{margin-top:1em}.travel-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:.5em}
+.travel-dest{display:flex;flex-direction:column;align-items:flex-start;gap:.15em;padding:.6em .8em;text-align:left;background:rgba(0,0,0,.3);border:1px solid #c9a22755;border-radius:4px;color:#efe4c9;cursor:pointer;font:inherit}
+.travel-dest:hover:not(:disabled){border-color:#c9a227;background:rgba(201,162,39,.12)}.travel-dest:disabled{opacity:.45;cursor:not-allowed}.travel-dest.seen b::after{content:' ✓';color:#9fd06a}
+.travel-dest span{font-size:.8em;opacity:.75}.travel-dest em{font-size:.85em;color:#e8c86a;font-style:normal}

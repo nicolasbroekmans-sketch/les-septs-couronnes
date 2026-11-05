@@ -25,7 +25,8 @@ test('chaque quête est jouable dans sa région : donneur, marqueurs, objets, gr
 });
 
 test('données de région valides : factions, armes, armures, stocks, dialogues', () => {
-  assert.deepEqual(Object.keys(REGIONS).sort(), [...START_REGIONS].sort());
+  for (const id of START_REGIONS) assert.ok(REGIONS[id], id);
+  assert.ok(Object.keys(REGIONS).length >= 20, 'tous les lieux de la carte sont jouables');
   for (const R of Object.values(REGIONS)) {
     for (const n of [...R.npcs, ...R.groups.flatMap(g => g.members.map(m => ({ ...m, faction: g.faction })))]) {
       assert.ok(FACTIONS[n.faction], `${n.id} : faction ${n.faction}`);
@@ -34,7 +35,7 @@ test('données de région valides : factions, armes, armures, stocks, dialogues'
       for (const id of Object.keys(n.stock ?? {})) assert.ok(ITEMS[id], `${n.id} : stock ${id}`);
       if (n.merchant || ['quest', 'priest'].includes(n.role)) assert.ok(DIALOGUES[n.id] || n.barks, `${n.id} : pas de dialogue`);
     }
-    const s = newGame(R.id).state;
+    const s = newGame(START_REGIONS.includes(R.id) ? R.id : 'kingslanding').state;
     for (const n of R.npcs) check(n.when, s); // aucune condition invalide
     for (const g of R.groups) { check(g.when, s); if (Array.isArray(g.stance)) g.stance.forEach(x => check(x.when, s)); }
   }
@@ -49,4 +50,14 @@ test('Wat épargné devient apprenti à la forge (mémoire et conséquence)', ()
   g.bus.emit('marker:reached', { marker: 'wf_camp' }); g.effects([{ item: 'caisse_fer' }]); talk(g, 'torvald', 'La voici');
   assert.ok(check(forgeWat.when, g.state), 'Wat apparaît à la forge');
   assert.match(talk(g, 'wat').text, /Grâce à vous/);
+});
+
+test('voyage : chaque lieu est joignable, le coût croît avec la distance, la mer coûte plus', async () => {
+  const { travelCost, destinations } = await import('../js/game/Travel.js');
+  const { PLACES } = await import('../js/data/places.js');
+  assert.equal(destinations('winterfell').length, PLACES.length - 1);
+  const near = travelCost('winterfell', 'combegivre'), far = travelCost('winterfell', 'dorne'), sea = travelCost('kingslanding', 'braavos');
+  assert.ok(near.gold < far.gold && near.hours < far.hours, JSON.stringify({ near, far }));
+  assert.ok(sea.sea && sea.gold > travelCost('kingslanding', 'dragonstone').gold);
+  for (const p of PLACES) { const R = REGIONS[p.id]; assert.ok(R, p.id); if (R.localize) { R.localize(R, { x: 10, z: 20 }); assert.ok(R.npcs.every(n => Number.isFinite(n.x) && Number.isFinite(n.z)), p.id); } }
 });

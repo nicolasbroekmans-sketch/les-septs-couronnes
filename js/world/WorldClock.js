@@ -5,6 +5,7 @@ import { createRng } from '../core/Random.js';
 export const CLIMATES = {
   tempere: { clear: .45, cloudy: .3, rain: .2, fog: .05 },
   nord: { clear: .25, cloudy: .3, snow: .35, fog: .1 },
+  desert: { clear: .85, cloudy: .15 },
   glace: { cloudy: .3, snow: .5, fog: .2 },
   chaud: { clear: .7, cloudy: .2, rain: .1 }
 };

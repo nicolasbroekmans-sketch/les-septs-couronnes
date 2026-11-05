@@ -35,6 +35,18 @@ export const PLACES = [
   P('pyke', 'westeros', 168, 618, 'Pyk', 'Les Îles de Fer', 'Greyjoy — la seiche dorée', 'Tempête, embruns salés',
     'Des tours sur des rochers, des ponts sur le vide, et la mer en dessous qui attend.'),
 
+  // Villages (lieux originaux) : de quoi se promener entre les grandes cités.
+  P('combegivre', 'westeros', 330, 236, 'Combe-Givre', 'Le Nord', 'Vassaux des Stark', 'Neige, pins, fumées de tourbe',
+    'Douze maisons, un moulin gelé et une auberge où l’on parle plus de loups que de rois.', 'places/village'),
+  P('gue', 'westeros', 468, 622, 'Le Gué-aux-Corbeaux', 'Le Conflans', 'Vassaux des Tully', 'Rivière, prairies, brume',
+    'Le village où s’est jouée la grande bataille. On y trouve encore des pointes de flèches dans les champs.', 'places/village'),
+  P('portsel', 'westeros', 622, 640, 'Port-Sel', 'Le Val, côte', 'Vassaux des Arryn', 'Embruns, filets, galets',
+    'Un port de pêcheurs qui sent le sel et le hareng. Les barques y sont plus vieilles que les pêcheurs.', 'places/village'),
+  P('mielbois', 'westeros', 392, 828, 'Mielbois', 'Le Bief', 'Vassaux des Tyrell', 'Vergers, ruches, soleil doux',
+    'Des vergers à perte de vue, des ruches et un septon qui bénit le cidre plus souvent que les fidèles.', 'places/village'),
+  P('sablerouge', 'westeros', 468, 1004, 'Sablerouge', 'Dorne, désert', 'Vassaux des Martell', 'Dunes rouges, oasis',
+    'Une oasis, trois palmiers et un puits que l’on garde mieux qu’un trésor.', 'places/village'),
+
   P('braavos', 'essos', 905, 375, 'Braavos', 'Cités libres', 'La Banque de Fer', 'Brume marine, canaux',
     'Une cité de cent îles, née d’esclaves en fuite et gardée par un géant de bronze.', 'braavos', true),
   P('pentos', 'essos', 892, 560, 'Pentos', 'Cités libres', 'Les princes marchands', 'Brise tiède, couchant',

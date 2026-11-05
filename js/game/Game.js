@@ -29,6 +29,7 @@ import { Followers } from './Followers.js';
 import { BattleRuntime } from './BattleRuntime.js';
 import { BATTLES } from '../data/battles.js';
 import { pardon } from '../factions/Reputation.js';
+import { travelCost } from './Travel.js';
 
 export class Game {
   constructor(ui, settings, storage) {
@@ -79,7 +80,7 @@ export class Game {
     if (this.env) this.renderer.dispose(this.env.scene);
     const { E, ctx } = await loadScene(this.renderer, def.scene, def.placeId ?? def.id, (v, t) => this.ui.loading(v, def.name, t), c => def.build?.(c));
     this.env = E; this.ctx = ctx; this.weatherFx = null;
-    def.bounds ??= E.cfg.bounds ?? [-150, -150, 150, 150]; def.spawn ??= E.spawn;
+    def.bounds ??= E.cfg.bounds ?? [-150, -150, 150, 150]; def.spawn ??= E.spawn; def.localize?.(def, def.spawn);
     this.nav = new NavGrid(def.bounds, 1).bake(E.physics.all(), E.physics.groundFn, .45);
     const st = this.core.state, p = st.player;
     if (!def.battle) { p.region = id; if (!st.world.discovered.includes(id)) st.world.discovered.push(id); }
@@ -157,6 +158,19 @@ export class Game {
     if (!b.won) p.hp = Math.max(p.hp, derive(p).maxHp * .4);
     this.clearBattle(); this.ui.battleHud(null);
     await this.enterRegion(back.region, back.pos); this.leavingBattle = false;
+  }
+  /** Voyage vers un autre lieu de la carte : coût en or et en temps selon la distance. */
+  async travel(id) {
+    const c = travelCost(this.core.state.player.region, id), p = this.core.state.player;
+    if (this.battle || !REGIONS[id] || id === p.region) return false;
+    if (p.gold < c.gold) { this.ui.toast(`Le voyage coûte ${c.gold} or (escorte, vivres, passage).`, 'warn'); return false; }
+    p.gold -= c.gold; this.ui.closePanel(); this.persistPosition();
+    const k = this.core.clock; k.advance(c.hours * 60, REGIONS[id].climate);
+    if (k.isNight) k.advance(((32 - k.hour) % 24) * 60, REGIONS[id].climate); // on fait halte la nuit : arrivée au matin
+    k.rollWeather(REGIONS[id].climate); p.position = null;
+    await this.enterRegion(id);
+    this.ui.toast(`Après ${c.hours} h de route, vous arrivez : ${REGIONS[id].name}.`, 'quest');
+    return true;
   }
   clearBattle() { this.battle?.dispose(); this.battle = null; }
   async respawn() {
