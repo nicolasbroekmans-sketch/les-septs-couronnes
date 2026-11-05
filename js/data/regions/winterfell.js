@@ -9,7 +9,7 @@ export default {
   spawn: { x: 0, z: 118, yaw: 0 }, bounds: [-160, -140, 120, 150],
   intro: 'Winter Town, au pied des remparts de Winterfell. Le froid mord, la neige tombe. Ici, on juge un homme à ses actes.',
   npcs: [
-    { id: 'torvald', name: 'Torvald le forgeron', role: 'merchant', merchant: true, faction: 'stark', x: 23, z: 0, yaw: Math.PI, weapon: 'masse', hp: 90,
+    { id: 'torvald', name: 'Torvald le forgeron', role: 'merchant', merchant: true, smith: true, faction: 'stark', x: 23, z: 0, yaw: Math.PI, weapon: 'masse', hp: 90,
       stock: { epee_longue: 2, hache_guerre: 1, masse: 1, lance: 1, dague: 2, cuir: 2, brigandine: 1, maille: 1, arc_long: 1 }, look: look({ female: false, beard: true, tunic: '#3a2a22' }), ai: { wander: 1.5 } },
     { id: 'hilda', name: 'Hilda l’aubergiste', role: 'merchant', merchant: true, faction: 'peuple', x: 6, z: 64, weapon: 'poings', hp: 50,
       stock: { onguent: 5, ration: 12, fourrure: 3, vin_arbor: 1, sel: 4 }, look: look({ female: true, tunic: '#6a4a3a' }), ai: { wander: 3 } },

@@ -11,7 +11,7 @@ export default {
   npcs: [
     { id: 'orwyn', name: 'Orwyn Pell', role: 'merchant', merchant: true, faction: 'peuple', x: -8, z: 52, yaw: Math.PI / 2, weapon: 'dague', hp: 50,
       stock: { onguent: 6, ration: 10, vin_arbor: 4, sel: 6, epices: 2, cuir: 2, epee_courte: 1, arc_court: 1 }, look: look({ female: false, tunic: '#6a3a5a', beard: true }), ai: { wander: 2 } },
-    { id: 'dalla', name: 'Dalla l’armurière', role: 'merchant', merchant: true, faction: 'peuple', x: 5, z: 44, yaw: -Math.PI / 2, weapon: 'masse', hp: 70,
+    { id: 'dalla', name: 'Dalla l’armurière', role: 'merchant', merchant: true, smith: true, faction: 'peuple', x: 5, z: 44, yaw: -Math.PI / 2, weapon: 'masse', hp: 70,
       stock: { epee_longue: 2, epee_chateau: 1, masse: 1, hache_guerre: 1, lance: 1, arc_long: 1, arbalete: 1, dague: 2, brigandine: 2, maille: 1, plates: 1 }, look: look({ female: true, tunic: '#3a2a22' }), ai: { wander: 1.5 } },
     { id: 'bram', name: 'Sergent Bram', role: 'guard', faction: 'guet', x: -3, z: 50, weapon: 'lance', armor: 'maille', hp: 110, look: look({ female: false, tunic: '#c9a227', cloak: '#c9a227', helmet: true }),
       ai: { patrol: [[-3, 50], [-3, 12], [3, 12], [3, 50]], aggression: .7, morale: .8 } },

@@ -1,0 +1,38 @@
+/* Conseils, cadeau mystère, profil, carte de région, guide, forge. */
+#tip { position: fixed; left: 18px; bottom: 120px; z-index: 62; width: min(360px, calc(100vw - 36px)); padding: .9rem 1.1rem; color: var(--ink);
+  background: linear-gradient(150deg, #f1e6cb, #d9c69a); border: 1px solid var(--gold-lo); border-left: 5px solid var(--lannister); box-shadow: 0 12px 40px rgba(0,0,0,.55);
+  transform: translateX(-120%); transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+#tip.open { transform: none; }
+#tip h4 { margin: .15rem 0 .35rem; font-family: "Cinzel Decorative", serif; color: #3a1608; }
+#tip p { margin: 0 0 .6rem; line-height: 1.4; } #tip .kicker { color: var(--lannister); }
+.tip-actions { display: flex; gap: 10px; align-items: center; }
+.tip-actions button { background: #3a2410; color: #f1e6cb; border: 1px solid #6e5310; padding: .3rem .8rem; font-family: var(--f-sub); font-size: .78rem; }
+.tip-actions .link { background: none; color: #6a5030; border: 0; text-decoration: underline; }
+#hud-gift { position: absolute; right: 18px; top: 200px; font-family: var(--f-sub); font-size: .78rem; color: var(--gold-hi); text-shadow: 0 1px 4px #000; }
+#hud-clock { top: 222px; } #tracker { top: 248px; }
+#gift { position: fixed; inset: 0; z-index: 67; display: none; place-items: center; background: radial-gradient(ellipse at center, rgba(40,25,5,.55), rgba(5,5,7,.8)); }
+#gift.open { display: grid; animation: giftIn .5s ease; }
+@keyframes giftIn { from { opacity: 0; } }
+.gift-box { text-align: center; padding: 1.6rem 2.4rem 1.8rem; background: rgba(11,11,13,.9); border: 2px solid var(--rar); box-shadow: 0 0 60px var(--rar); max-width: calc(100vw - 32px); }
+.gift-box h3 { font-family: "Cinzel Decorative", serif; font-size: 2rem; margin: .3rem 0; } .gift-box p { font-size: 1.15rem; }
+.chest { position: relative; width: 120px; height: 96px; margin: 0 auto 10px; }
+.chest .body { position: absolute; left: 10px; right: 10px; bottom: 0; height: 56px; background: linear-gradient(#7a4a22, #4a2a12); border: 3px solid var(--gold); }
+.chest .lid { position: absolute; left: 6px; right: 6px; top: 14px; height: 30px; background: linear-gradient(#9a6a32, #5a3a1a); border: 3px solid var(--gold); border-radius: 30px 30px 4px 4px; transform-origin: 50% 100%; animation: lid 1.2s .3s ease forwards; }
+.chest .glow { position: absolute; left: 50%; top: 40%; width: 10px; height: 10px; border-radius: 50%; background: var(--rar); box-shadow: 0 0 60px 30px var(--rar); opacity: 0; animation: glow 1.2s .6s ease forwards; }
+@keyframes lid { to { transform: rotateX(70deg) translateY(-18px) rotate(-12deg); } } @keyframes glow { to { opacity: 1; } }
+.gift-box .btn-gold { opacity: 1; }
+.hero-card { display: flex; gap: 18px; align-items: center; border: 1px solid rgba(110,83,16,.35); padding: 12px 16px; background: rgba(255,255,255,.18); }
+.hero-card h3 { margin: 0; font-family: "Cinzel Decorative", serif; color: #3a1608; } .hero-card em { font-family: var(--f-sub); color: var(--lannister); font-style: normal; }
+.sigil { width: 72px; height: 84px; display: grid; place-items: center; font-size: 2.2rem; background: linear-gradient(#8b0000, #4a0000); color: #f1dc94; clip-path: polygon(0 0, 100% 0, 100% 62%, 50% 100%, 0 62%); }
+.gift-next { font-family: var(--f-sub); color: #6e3a10; margin: .3rem 0 0; }
+.cos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin-top: 14px; }
+.cos-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.panel button.cos { background: rgba(255,255,255,.35); color: var(--ink); border: 2px solid; display: inline-flex; align-items: center; gap: 6px; }
+.panel button.cos.on { background: #3a2410; color: #f1e6cb; }
+.swatch { width: 14px; height: 14px; border-radius: 50%; border: 1px solid #000; display: inline-block; } .glyph { font-style: normal; }
+.map-wrap { text-align: center; } canvas.region-map { max-width: 100%; border: 2px solid var(--gold-lo); box-shadow: inset 0 0 40px rgba(110,70,20,.4); }
+.guide-now { border-left: 4px solid var(--gold); padding: .4rem .9rem; background: rgba(201,162,39,.1); }
+.guide-now h4 { margin: .2rem 0; } .guide-now li.done { text-decoration: line-through; opacity: .6; } .where { font-family: var(--f-sub); color: #6e3a10; }
+dl.guide dt { font-family: var(--f-sub); color: #6e3a10; margin-top: .6rem; } dl.guide dd { margin: .1rem 0 0; }
+.forge { border: 1px solid rgba(139,0,0,.35); padding: 8px 12px; margin-bottom: 14px; background: rgba(139,0,0,.05); }
+@media (max-width: 760px) { #hud-gift { top: 132px; } #tip { bottom: 160px; } }

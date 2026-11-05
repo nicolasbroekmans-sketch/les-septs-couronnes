@@ -10,6 +10,12 @@ import { inventoryTab } from './panels/InventoryTab.js';
 import { skillsTab } from './panels/SkillsTab.js';
 import { journalTab } from './panels/JournalTab.js';
 import { factionsTab } from './panels/FactionsTab.js';
+import { mapTab } from './panels/MapTab.js';
+import { guideTab } from './panels/GuideTab.js';
+import { profileTab } from './panels/ProfileTab.js';
+import { Tutorial } from './Tutorial.js';
+import { revealGift } from './GiftReveal.js';
+import { equipCosmetic } from '../player/Rewards.js';
 import { pauseTabs } from './menus/PauseMenu.js';
 
 export class UI {
@@ -22,6 +28,7 @@ export class UI {
     $('#lock-hint').addEventListener('click', () => this.game?.input.lock());
   }
   attach(G) { this.game = G; this.panel.onClose = () => this.lockHint(true); }
+  startTutorial(G) { this.tutorial = new Tutorial(); this.tutorial.attach(G); }
   get modal() { return this.modals.size > 0; }
   setModal(name, on) {
     on ? this.modals.add(name) : this.modals.delete(name);
@@ -31,17 +38,18 @@ export class UI {
   key(e) {
     const G = this.game; if (!G?.running || e.target.closest?.('input, textarea, select')) return;
     if (this.modals.has('dialogue') || this.modals.has('dead')) return;
-    const tabs = { KeyI: 'inv', KeyK: 'skills', KeyJ: 'journal', KeyL: 'factions', Tab: 'inv' };
+    const tabs = { KeyI: 'inv', KeyR: 'inv', KeyT: 'inv', Tab: 'inv', KeyK: 'skills', KeyJ: 'journal', KeyL: 'factions', KeyM: 'map', KeyG: 'guide', KeyP: 'profile' };
     if (tabs[e.code]) { e.preventDefault(); if (this.panel.isOpen && this.panel.active === tabs[e.code]) return this.closePanel(); return this.openCharacter(tabs[e.code]); }
     if (e.code === 'Escape' && this.panel.isOpen) return this.closePanel();
     if (e.code === 'Escape' && !G.input.locked && !this.modal) this.openPause();
   }
-  openCharacter(tab = 'inv') { const G = this.game; this.panel.open([inventoryTab(G), skillsTab(G), journalTab(G), factionsTab(G)], tab, 'Personnage'); }
+  openCharacter(tab = 'inv') { const G = this.game; this.panel.open([inventoryTab(G), skillsTab(G), journalTab(G), mapTab(G), factionsTab(G), profileTab(G), guideTab(G)], tab, 'Personnage'); }
   openPause() { this.panel.open(pauseTabs(this.game, this.handlers), 'pause', 'Pause'); }
   openTrade(actor) { if (actor) this.panel.open([tradeTab(this.game, actor), inventoryTab(this.game)], 'trade', 'Commerce'); }
   closePanel() { this.panel.close(); }
   refresh() { if (this.panel.isOpen && this.panel.active !== 'settings') this.panel.render(); }
   toast(t, k) { this.toasts.push(t, k); }
+  gift(g) { revealGift(g, id => equipCosmetic(this.game.core.state.player, id, this.game.core.bus)); }
   damage(actor, res) { this.floaters.damage(actor, res); }
   bark(actor, text) { this.floaters.bark(actor, text); }
   prompt(t) { this.hudView.prompt(t); }

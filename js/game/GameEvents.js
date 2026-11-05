@@ -16,6 +16,8 @@ export function wireEvents(G) {
   bus.on('player:equipped', () => G.refreshPlayerStats());
   bus.on('player:skill', () => G.refreshPlayerStats());
   bus.on('player:attr', () => G.refreshPlayerStats());
+  bus.on('player:cosmetic', () => G.refreshPlayerStats());
+  bus.on('player:upgraded', ({ id, level }) => { ui.toast(`${ITEMS[id].name} amélioré(e) : +${level}`, 'rep'); audio.sfx('anvil', .5); G.refreshPlayerStats(); });
   bus.on('faction:rep', ({ faction, amount }) => Math.abs(amount) >= 3 && ui.toast(`Réputation ${amount > 0 ? '+' : ''}${Math.round(amount)} : ${G.factionName(faction)}`, amount > 0 ? 'rep' : 'warn'));
   bus.on('dialogue:check', ({ ok, label }) => ui.toast(`${label} : ${ok ? 'réussite' : 'échec'}`, ok ? 'rep' : 'warn'));
   bus.on('ui:trade', ({ npc }) => ui.openTrade(G.region.actors.get(npc)));

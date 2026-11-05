@@ -2,6 +2,7 @@
 // temps du monde → caméra → interface → rendu.
 import { audio } from '../audio.js';
 import { addXp } from '../player/Progression.js';
+import { checkGift } from '../player/Rewards.js';
 
 export function frame(G, dt) {
   const I = G.input, ui = G.ui;
@@ -19,9 +20,11 @@ export function frame(G, dt) {
     }
     G.combat.update(dt);
     G.region.update(dt, G.player);
+    G.markers?.update(dt);
     G.core.clock.advance(dt * (G.settings.timeScale ?? 1), G.region.def.climate);
     G.core.state.stats.playTime += dt;
     discover(G);
+    if (!G.core.state.explore) { const gift = checkGift(G.core); if (gift) G.ui.gift(gift); }
     if ((G.autoT += dt) > 120) { G.autoT = 0; G.autosave(); }
     if (G.flashT > 0) { G.flashT -= dt; G.renderer.hitFlash(Math.max(0, G.flashT * 2)); }
   }
@@ -34,6 +37,7 @@ export function frame(G, dt) {
   audio.listener(cam.position, f);
   const c = G.interaction.find();
   ui.prompt(c && !ui.modal ? c.label : null);
+  if (c?.kind === 'npc') ui.tutorial?.near(c.ref);
   ui.hud(G);
   G.renderer.render(dt);
   I.endFrame();

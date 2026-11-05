@@ -5,6 +5,7 @@ import { price, stockOf } from '../../economy/Markets.js';
 import { buy, sell, steal, canTrade } from '../../economy/Trading.js';
 import { derive } from '../../player/Stats.js';
 import { audio } from '../../audio.js';
+import { upgrade, upgradeCost, upgradeLevel } from '../../economy/Upgrades.js';
 
 export function tradeTab(G, actor) {
   return { id: 'trade', label: `Commerce — ${actor.name}`, render(el, rerender) {
@@ -15,7 +16,12 @@ export function tradeTab(G, actor) {
     const row = (id, qty, mode) => h('li', {}, h('span.it', {}, `${ITEMS[id].name}`, h('small', {}, ` ×${qty}`)), h('span.pr', {}, `${price(id, mode, p, mods)} or`),
       mode === 'buy' ? [h('button', { type: 'button', on: { click: () => act(buy, id) } }, 'Acheter'), h('button.risky', { type: 'button', title: `Chance estimée : ${theft} %`, on: { click: () => { const r = steal(G, npc, id); msg.textContent = r.ok ? 'Personne n’a rien vu…' : r.reason; if (r.caught) G.crime(actor, 'vol'); setTimeout(rerender, 600); } } }, `Voler (${theft} %)`)]
         : h('button', { type: 'button', on: { click: () => act(sell, id) } }, 'Vendre'));
-    el.append(msg, h('div.trade', {},
+    const forge = actor.def.smith ? h('section.forge', {}, h('h4', {}, 'Forge — améliorer votre équipement'), h('ul.items', {}, p.inventory.filter(x => upgradeCost(p, x.id) !== null || upgradeLevel(p, x.id)).map(x => {
+      const c = upgradeCost(p, x.id), lvl = upgradeLevel(p, x.id);
+      return h('li', {}, h('span.it', {}, `${ITEMS[x.id].name} +${lvl}`, h('em', {}, ITEMS[x.id].type === 'weapon' ? '+12 % de dégâts par niveau' : '+4 % de protection par niveau')),
+        c === null ? h('span.tag', {}, 'Maximum') : [h('span.pr', {}, `${c} or`), h('button', { type: 'button', on: { click: () => { const r = upgrade(G.core, x.id); msg.textContent = r.ok ? `Amélioré au niveau +${r.level} pour ${r.cost} or.` : r.reason; if (r.ok) setTimeout(rerender, 400); } } }, 'Améliorer')]);
+    }))) : null;
+    el.append(msg, forge ?? '', h('div.trade', {},
       h('div', {}, h('h4', {}, 'Étal'), h('ul.items', {}, Object.entries(stock).filter(([, q]) => q > 0).map(([id, q]) => row(id, q, 'buy')))),
       h('div', {}, h('h4', {}, 'Votre sac'), h('ul.items', {}, p.inventory.filter(x => price(x.id, 'sell', p, mods) > 0).map(x => row(x.id, x.qty, 'sell'))))));
   } };

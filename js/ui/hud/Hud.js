@@ -6,6 +6,8 @@ import { Minimap } from './Minimap.js';
 import { objectiveTargets } from './Targets.js';
 import { xpForLevel } from '../../player/Progression.js';
 import { QUESTS } from '../../quests/QuestRegistry.js';
+import { secondsToGift } from '../../player/Rewards.js';
+import { direction } from '../panels/GuideTab.js';
 
 const WEATHER = { clear: ['sun', 'Ciel clair'], cloudy: ['cloud', 'Nuageux'], rain: ['rain', 'Pluie'], snow: ['snow', 'Neige'], fog: ['fog', 'Brouillard'] };
 
@@ -32,6 +34,8 @@ export class Hud {
     const targets = objectiveTargets(G);
     this.tracker(G, targets);
     this.map.draw(G, targets, G.rig.yaw);
+    const sg = secondsToGift(G.core.state);
+    this.set('gift', $('#hud-gift'), G.core.state.explore ? '' : `🎁 ${Math.floor(sg / 60)}:${String(Math.floor(sg % 60)).padStart(2, '0')}`, (e, v) => (e.textContent = v));
     const bounty = p.bounty[G.region.def.lawFaction];
     this.set('bounty', $('#hud-bounty'), bounty ?? 0, (e, v) => { e.hidden = !v; e.textContent = `Recherché · prime ${v} or`; });
   }
@@ -44,7 +48,7 @@ export class Hud {
     }
     const P = G.player.pos, near = targets[0], dist = near ? Math.round(Math.hypot(near.x - P.x, near.z - P.z)) : null;
     const objs = G.core.quests.objectives(id).filter(o => o.label);
-    const html = `<h4>${QUESTS[id].title}</h4><ul>${objs.map(o => `<li class="${o.done ? 'done' : ''}">${o.label}${o.count > 1 ? ` (${Math.min(o.have, o.count)}/${o.count})` : ''}</li>`).join('')}</ul>${dist !== null ? `<small>◆ ${dist} m</small>` : ''}`;
+    const html = `<h4>${QUESTS[id].title}</h4><ul>${objs.map(o => `<li class="${o.done ? 'done' : ''}">${o.label}${o.count > 1 ? ` (${Math.min(o.have, o.count)}/${o.count})` : ''}</li>`).join('')}</ul>${dist !== null ? `<small>◆ ${dist} m, ${direction(near.x - P.x, near.z - P.z)}</small>` : ''}`;
     this.set('trk', el, html, (e, v) => (e.innerHTML = v));
   }
   prompt(text) { this.set('prompt', $('#prompt'), text ?? '', (e, v) => { e.innerHTML = v ? `<kbd>E</kbd> ${v}` : ''; e.classList.toggle('on', !!v); }); }
@@ -57,9 +61,9 @@ export class Hud {
   static markup() {
     return h('div', {}, h('div#vitals', {}, h('div#hud-level', {}, 'Niv. 1'),
       h('div.bar#bar-hp', {}, h('i'), h('b')), h('div.bar#bar-st', {}, h('i')), h('div.bar#bar-xp', {}, h('i'))),
-    h('div#hud-gold'), h('div#hud-clock'), h('div#hud-bounty', { hidden: true }),
+    h('div#hud-gold'), h('div#hud-clock'), h('div#hud-gift', { title: 'Prochain cadeau mystère' }), h('div#hud-bounty', { hidden: true }),
     h('div#compass', { 'aria-hidden': 'true' }, h('div#compass-strip'), h('i')), h('canvas#minimap', { width: 320, height: 320, 'aria-label': 'Mini-carte' }),
     h('div#tracker', { 'aria-live': 'polite' }), h('div#prompt', { 'aria-live': 'polite' }), h('div#crosshair'), h('div#lore', { 'aria-live': 'polite' }), h('div#region-title'),
-    h('div#keys', {}, h('span', { html: '<kbd>I</kbd> Inventaire <kbd>K</kbd> Compétences <kbd>J</kbd> Journal <kbd>L</kbd> Factions <kbd>Échap</kbd> Menu' })));
+    h('div#keys', {}, h('span', { html: '<kbd>R</kbd> Inventaire <kbd>K</kbd> Compétences <kbd>J</kbd> Journal <kbd>M</kbd> Carte <kbd>P</kbd> Profil <kbd>G</kbd> Guide <kbd>Échap</kbd> Menu' })));
   }
 }

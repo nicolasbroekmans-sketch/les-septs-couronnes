@@ -16,7 +16,7 @@ export class Humanoid {
     const s = look.height ?? 1, fem = !!look.female;
     this.root = new THREE.Group(); this.root.scale.setScalar(s);
     const skin = std(look.skin ?? '#d8b49a'), tunic = std(look.tunic ?? '#5a3a2a'), pants = std(look.pants ?? '#3a3028'), boots = std('#2a1d14');
-    const armorM = look.armor === 'maille' || look.armor === 'plates' ? std('#8a8f96', { m: .85, r: .4 }) : look.armor === 'brigandine' ? std('#5a2a20', { r: .6 }) : look.armor === 'cuir' ? std('#6a4a30', { r: .7 }) : tunic;
+    const T = look.armorTint, armorM = look.armor === 'maille' || look.armor === 'plates' ? std(T ?? '#8a8f96', { m: .85, r: .4 }) : look.armor === 'brigandine' ? std(T ?? '#5a2a20', { r: .6 }) : look.armor === 'cuir' ? std(T ?? '#6a4a30', { r: .7 }) : tunic;
     const J = this.j = {};
     J.hips = joint(this.root, 0, .95, 0);
     part(J.hips, new THREE.BoxGeometry(fem ? .32 : .3, .16, .2), pants, 0);

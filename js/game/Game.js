@@ -8,6 +8,7 @@ import { NavGrid } from '../ai/Pathfinding.js';
 import { GameCore } from './GameCore.js';
 import { Actor } from './Actor.js';
 import { RegionRuntime } from './RegionRuntime.js';
+import { WorldMarkers } from './WorldMarkers.js';
 import { CombatDirector } from './CombatDirector.js';
 import { Interaction } from './Interaction.js';
 import { PlayerController } from './PlayerController.js';
@@ -23,6 +24,7 @@ import { createRng } from '../core/Random.js';
 import { createGameState } from '../core/GameState.js';
 import { audio } from '../audio.js';
 import { Humanoid } from '../engine/Humanoid.js';
+import { lookFromCosmetics } from '../player/Rewards.js';
 
 export class Game {
   constructor(ui, settings, storage) {
@@ -46,7 +48,7 @@ export class Game {
   /** Démarre (ou reprend) une partie à partir d'un état complet. */
   async start(state) {
     this.stop();
-    this.core = new GameCore(state); wireEvents(this);
+    this.core = new GameCore(state); wireEvents(this); this.ui.startTutorial(this);
     await this.enterRegion(state.player.region, state.player.position);
     this.running = true; this.input.enabled = true; this.lastT = performance.now(); this.autoT = 0;
     this.renderer.renderer.setAnimationLoop(() => { const now = performance.now(), dt = Math.min(.05, (now - this.lastT) / 1000); this.lastT = now; frame(this, dt); });
@@ -67,8 +69,9 @@ export class Game {
     this.player = new Actor({ id: 'player', kind: 'player', name: p.name, faction: 'joueur', x: sp[0], z: sp[2], yaw: position ? p.yaw : def.spawn.yaw, stats: derive(p), weaponId: p.equipped.weapon, hp: p.hp, stamina: p.stamina, look: this.playerLook() });
     this.player.pos.y = E.physics.groundAt(sp[0], sp[2], sp[1] ?? E.physics.groundFn(sp[0], sp[2]) + 1);
     this.player.hostileTo = o => this.hostile(this.player, o);
-    this.addActor(this.player); this.rig.yaw = this.player.yaw;
+    this.addActor(this.player); this.rig.yaw = this.player.yaw; this.player.lookKey = JSON.stringify(this.playerLook());
     this.region = new RegionRuntime(this, def); this.region.refresh();
+    this.markers = new WorldMarkers(this);
     this.setWeather(st.world.time.weather ?? this.core.clock.rollWeather(def.climate));
     this.ui.loading(.9, def.name, 'Compilation des shaders…');
     await this.renderer.renderer.compileAsync(E.scene, this.renderer.camera);
@@ -77,8 +80,8 @@ export class Game {
     this.autosave();
   }
   playerLook() {
-    const a = this.core.state.player.appearance, p = this.core.state.player;
-    return { ...a, female: p.sex === 'femme', armor: p.equipped.armor, cloak: a.cloak };
+    const a = this.core.state.player.appearance, p = this.core.state.player, c = lookFromCosmetics(p);
+    return { ...a, female: p.sex === 'femme', armor: p.equipped.armor, cloak: c.cloak ?? a.cloak, tunic: c.tunic ?? a.tunic, armorTint: c.armorTint };
   }
   refreshPlayerStats(heal = false) {
     const p = this.core.state.player, A = this.player; if (!A) return;
@@ -86,8 +89,9 @@ export class Game {
     A.stats = d; f.stats = d; f.maxHp = d.maxHp; f.maxStamina = d.maxStamina;
     if (heal) { f.hp = d.maxHp; f.stamina = d.maxStamina; }
     if (A.weaponId !== p.equipped.weapon) A.setWeapon(p.equipped.weapon);
-    if (A.armorId !== p.equipped.armor) { // l'armure change l'apparence : on reconstruit le modèle
-      const m = A.model.root, parent = m.parent; A.armorId = p.equipped.armor;
+    const lookKey = JSON.stringify(this.playerLook());
+    if (A.lookKey !== lookKey) { // armure ou cosmétique : on reconstruit le modèle
+      const m = A.model.root, parent = m.parent; A.lookKey = lookKey;
       parent?.remove(m); A.model = new Humanoid(this.playerLook()); A.model.setWeapon(f.weapon.cls, A.weaponId); parent?.add(A.model.root);
     }
     this.ui.refresh();

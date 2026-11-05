@@ -3,6 +3,7 @@
 import { SKILLS } from '../data/skills.js';
 import { ITEMS } from '../data/items.js';
 import { DIFFICULTIES } from '../data/classes.js';
+import { weaponBonus, armorBonus } from '../economy/Upgrades.js';
 
 export function perkFx(p) {
   const fx = {};
@@ -17,15 +18,15 @@ export function derive(p) {
     maxHp: Math.round(60 + a.constitution * 10 + (p.level - 1) * 6 + (fx.hp ?? 0)),
     maxStamina: Math.round(60 + a.endurance * 8 + (p.level - 1) * 3),
     staminaRegen: (14 + a.endurance * 1.2) * (1 + (fx.regen ?? 0)),
-    melee: (1 + a.force * .07 + apt.combat / 220) * (1 + (fx.melee ?? 0)) * diff.dealt,
-    ranged: (1 + a.agilite * .06 + apt.tir / 200) * (1 + (fx.ranged ?? 0)) * diff.dealt,
+    melee: (1 + a.force * .07 + apt.combat / 220) * (1 + (fx.melee ?? 0)) * diff.dealt * weaponBonus(p, p.equipped?.weapon),
+    ranged: (1 + a.agilite * .06 + apt.tir / 200) * (1 + (fx.ranged ?? 0)) * diff.dealt * weaponBonus(p, p.equipped?.weapon),
     heavyBonus: fx.heavy ?? 0, cleave: !!fx.cleave, sneak: !!fx.sneak,
     attackSpeed: 1 + a.agilite * .025,
     crit: .03 + a.perception * .008 + (weapon.crit ?? 0),
     block: Math.min(.9, .55 + apt.combat / 400 + (fx.block ?? 0)),
     parryWindow: .18 + (fx.parryWindow ?? 0),
     dodgeCost: Math.max(12, 26 - a.agilite),
-    armor: armor?.armor ?? 0, moveSpeed: armor?.speed ?? 1,
+    armor: Math.min(.7, (armor?.armor ?? 0) + (armor ? armorBonus(p, p.equipped.armor) : 0)), moveSpeed: armor?.speed ?? 1,
     taken: diff.taken, xpMult: diff.xp * (1 + a.intelligence * .03),
     detection: 1 - (fx.stealth ?? 0) - apt.furtivite / 300,
     persuade: a.charisme * 5 + apt.diplomatie * .6 + (fx.persuade ?? 0),

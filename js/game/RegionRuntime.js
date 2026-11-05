@@ -7,6 +7,8 @@ import { npcStats } from '../combat/DamageSystem.js';
 import { ITEMS } from '../data/items.js';
 import { npcRecord } from '../ai/Memory.js';
 
+const ROLES = { merchant: 'Marchand', guard: 'Garde', quest: 'A besoin d\u2019aide', priest: 'Religieux', beggar: 'Mendiant', recruiter: 'Recruteur', captain: 'Capitaine de guerre', faceless: '???' };
+
 export class RegionRuntime {
   constructor(game, def) {
     this.game = game; this.def = def; this.actors = new Map(); this.inside = new Set(); this.loot = []; this.leaving = new Set();
@@ -39,6 +41,7 @@ export class RegionRuntime {
     const a = new Actor({ id: n.id, kind: 'npc', name: n.name, faction: n.faction, group: n.group, def: n, x: n.x, y, z: n.z, yaw: n.yaw ?? 0, stats, weaponId: n.weapon ?? 'poings',
       look: { ...n.look, armor: n.armor, cloak: n.look?.cloak } });
     a.brain = new NPCBrain(a, n.ai ?? {}); a.surrendered = !!n.surrendered;
+    n.roleLabel ??= ROLES[n.role];
     a.hostileTo = o => this.game.hostile(a, o);
     this.actors.set(n.id, a); this.game.addActor(a);
     return a;
