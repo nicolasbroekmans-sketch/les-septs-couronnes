@@ -28,7 +28,7 @@ test('compagnons : pris dans les troupes, limités par les places', () => {
 
 test('batailles : ~100 combattants, conditions de déblocage valides', () => {
   for (const [id, b] of Object.entries(BATTLES)) {
-    if (b.prologue) continue;
+    if (b.prologue || b.finale) continue;
     const n = Object.values(b.enemy.units).reduce((a, x) => a + x, 0) + Object.values(b.allies.units).reduce((a, x) => a + x, 0);
     assert.ok(n >= 60 && n <= 80, `${id} : ${n} soldats PNJ (+ armée du joueur jusqu’à ~30)`);
     for (const u of [...Object.keys(b.enemy.units), ...Object.keys(b.allies.units)]) assert.ok(UNITS[u]);
@@ -113,4 +113,14 @@ test('conseiller : explique quoi faire pour débloquer la bataille, puis désign
   g.state.player.army = { troops: { levee: 10 }, followers: [] };
   assert.equal(battle().npc, 'wf_capitaine', 'avec une armée : aller voir le capitaine');
   assert.match(talk(g, { id: 'wf_capitaine', role: 'captain', faction: 'stark' }).options.map(o => o.text).join('|'), /je suis prêt/);
+});
+
+test('finale : débloquée par les trois batailles et le niveau 6, avec un dragon', () => {
+  const b = BATTLES.finale, g = newGame('kingslanding');
+  assert.ok(b.dragon && b.finale);
+  assert.equal(check(b.requires, g.state), false);
+  g.state.player.level = 6; for (const k of ['route', 'bois', 'mur']) g.state.world.flags['won:bataille_' + k] = true;
+  assert.equal(check(b.requires, g.state), true);
+  const sum = u => Object.values(u).reduce((a, x) => a + x, 0);
+  assert.ok(sum(b.enemy.units) > sum(b.allies.units), 'l’ennemi est plus nombreux : il faut amener ses propres hommes');
 });

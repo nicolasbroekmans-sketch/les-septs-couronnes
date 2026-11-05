@@ -22,6 +22,7 @@ export function wireEvents(G) {
   bus.on('dialogue:check', ({ ok, label }) => ui.toast(`${label} : ${ok ? 'réussite' : 'échec'}`, ok ? 'rep' : 'warn'));
   for (const ev of ['quest:started', 'quest:updated', 'quest:completed', 'battle:ended', 'npc:killed', 'army:recruited']) bus.on(ev, () => (G.idleT = 0));
   bus.on('ui:contracts', () => setTimeout(() => ui.openContracts(), 50));
+  bus.on('battle:ballista', ({ i }) => G.battle?.fireBallista(i));
   bus.on('ui:army', () => setTimeout(() => ui.openArmy(true), 50));
   bus.on('battle:start', ({ id }) => setTimeout(() => G.startBattle(id), 300));
   bus.on('army:followers', () => G.followers?.refresh());

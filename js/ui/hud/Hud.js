@@ -42,6 +42,7 @@ export class Hud {
   }
   tracker(G, targets) {
     const id = G.core.state.world.tracked, el = $('#tracker');
+    if (G.battle) return this.set('trk', el, '', e => (e.innerHTML = ''));
     if (!id || G.core.quests.status(id) !== 'active') {
       const next = Object.entries(G.core.state.quests).find(([, q]) => q.state === 'active');
       if (next) { G.core.state.world.tracked = next[0]; return; }

@@ -19,7 +19,7 @@ export function advise(core, region) {
   for (const [id, b] of Object.entries(BATTLES)) {
     if (b.region !== p.region || b.prologue || s.world.flags['won:' + id]) continue;
     const missing = [];
-    for (const c of b.requires) if (!check(c, s)) missing.push(c.level ? `atteindre le niveau ${c.level} (il vous manque ${xpForLevel(p.level) - p.xp} XP pour le prochain niveau)` : `terminer la mission « ${QUESTS[c.quest]?.title} »`);
+    for (const c of b.requires) if (!check(c, s)) missing.push(c.level ? `atteindre le niveau ${c.level} (il vous manque ${xpForLevel(p.level) - p.xp} XP pour le prochain niveau)` : c.flag ? `remporter « ${BATTLES[c.flag.slice(4)]?.name} »` : `terminer la mission « ${QUESTS[c.quest]?.title} »`);
     const captain = region?.npcs?.find(n => n.role === 'captain'), recruiter = region?.npcs?.find(n => n.role === 'recruiter');
     if (missing.length) out.push({ kind: 'battle', title: b.name, text: `Pour débloquer cette grande bataille : ${missing.join(' et ')}.` });
     else if (troopCount(p) < 8 && recruiter) out.push({ kind: 'battle', title: 'Levez une armée', text: `${b.name} est prête, mais vous n’avez que ${troopCount(p)} homme(s). Engagez-en au moins 8 auprès de ${recruiter.name} (touche B pour voir votre armée).`, npc: recruiter.id });

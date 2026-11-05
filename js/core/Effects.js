@@ -31,6 +31,7 @@ export function apply(effects, game, ctx = {}) {
     if (e.trade) bus.emit('ui:trade', { npc: e.trade });
     if (e.troops) { const a = (p.army ??= { troops: {}, followers: [] }); for (const [u, n] of Object.entries(e.troops)) { a.troops[u] = (a.troops[u] ?? 0) + n; if (e.follow) for (let i = 0; i < n; i++) a.followers.push(u); } bus.emit('army:followers', {}); out.push('Nouvelles recrues'); }
     if (e.openArmy) bus.emit('ui:army', {});
+    if ('ballista' in e) bus.emit('battle:ballista', { i: e.ballista });
     if (e.openContracts) bus.emit('ui:contracts', {});
     if (e.contract) turnIn(game, e.contract);
     if (e.startBattle) bus.emit('battle:start', { id: e.startBattle });

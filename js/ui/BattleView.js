@@ -9,15 +9,17 @@ export function battleHud(b, a, e) {
   if (!b) { el?.remove(); el = null; last = ''; return; }
   if (!el) { el = h('div#battle-hud'); $('#hud').append(el); }
   a ??= b.total.A; e ??= b.total.B;
-  const key = `${a}|${e}|${b.order}|${b.started}`; if (key === last) return; last = key;
+  const dh = b.dragon ? Math.ceil(b.dragon.hp / 24) : -1, key = `${a}|${e}|${b.order}|${b.started}|${dh}`; if (key === last) return; last = key;
   const pa = a / b.total.A * 100, pe = e / b.total.B * 100;
   el.replaceChildren(h('b', {}, b.def.name),
     h('div.bh-bars', {}, h('span.bh-a', {}, `${a} alliés`), h('i.bh-bar', {}, h('i.bh-fa', { style: { width: pa + '%' } })), h('i.bh-bar', {}, h('i.bh-fe', { style: { width: pe + '%' } })), h('span.bh-e', {}, `${e} ennemis`)),
+    b.dragon ? h('div.bh-bars', {}, h('span.bh-e', {}, b.dragon.alive ? `Dragon ${dh} %` : 'Dragon abattu !'), h('i.bh-bar', {}, h('i.bh-fe', { style: { width: dh + '%', background: '#ff7a20' } })), h('span', {}, 'E près d’un scorpion : tirer')) : null,
     h('p', {}, b.started ? `Ordre : ${ORDERS[b.order]}` : 'Les lignes se forment…', ' · ', h('kbd', {}, '1'), ' charger ', h('kbd', {}, '2'), ' tenir ', h('kbd', {}, '3'), ' me suivre'));
 }
 
 export function battleResult(ui, b, win) {
   if (b.def.prologue) return welcome(ui);
+  if (b.def.finale && win) return ending(ui, b);
   const lost = Object.entries(b.losses).map(([u, n]) => `${n} × ${UNITS[u].name}`).join(', ') || 'aucune';
   ui.panel.open([{ id: 'res', label: win ? 'Victoire' : 'Défaite', render(c) {
     c.append(h('div.battle-res' + (win ? '.win' : '.loss'), {}, h('h2', {}, win ? 'Victoire !' : 'Défaite…'),
@@ -41,4 +43,16 @@ function welcome(ui) {
 export function skipButton(on, onSkip) {
   $('#skip-prologue')?.remove(); if (!on) return;
   document.body.append(h('button#skip-prologue.btn-ui', { type: 'button', on: { click: onSkip } }, 'Passer le prologue ›'));
+}
+
+/** Fin du jeu : la bataille des Sept Couronnes est gagnée. On peut continuer à jouer ensuite. */
+function ending(ui, b) {
+  const lost = Object.values(b.losses).reduce((x, y) => x + y, 0);
+  ui.panel.open([{ id: 'res', label: 'Épilogue', render(c) {
+    c.append(h('div.battle-res.win.welcome', {}, h('p.kicker', {}, 'Victoire !'), h('h2', {}, 'Les Sept Couronnes sont sauvées'),
+      h('p', {}, 'Le dragon gît dans la boue, l’ost du Prétendant reflue vers la mer. Ce soir, dans chaque auberge du royaume, on chantera votre nom — et dans chaque château, on se demandera ce que vous ferez ensuite.'),
+      h('p.sub', {}, `${lost} de vos hommes sont tombés. Récompenses : 2 000 or, 3 000 XP, 60 de renommée.`),
+      h('p.ok', {}, 'Fin de l’histoire principale. Le monde reste ouvert : contrats, voyages, batailles et secrets vous attendent.'),
+      h('button.btn-gold', { type: 'button', on: { click: () => ui.closePanel() } }, h('span', {}, 'Continuer l’aventure'))));
+  } }], 'res', 'Épilogue');
 }

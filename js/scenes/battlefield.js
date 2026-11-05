@@ -14,7 +14,7 @@ export async function build(ctx, id) {
   const trees = []; for (let i = 0; i < 160; i++) { const x = (rand() < .5 ? -1 : 1) * (80 + rand() * 120), z = -200 + rand() * 330; trees.push([x, z, 1 + rand()]); }
   ctx.trees(trees, 'pine', { leaf: t.leaf });
   const allyHouse = { couronne: 'baratheon', guet: 'baratheon', stark: 'stark', garde: 'garde' }[b.allies.faction] ?? 'stark';
-  for (const [z, house, cloth] of [[52, allyHouse, '#4a5a7a'], [-112, b.enemy.faction === 'greyjoy' ? 'garde' : 'lannister', '#6a3a2a']]) {
+  for (const [z, house, cloth] of [[52, allyHouse, '#4a5a7a'], [-112, { greyjoy: 'greyjoy', targaryen: 'targaryen' }[b.enemy.faction] ?? 'lannister', '#6a3a2a']]) {
     for (let i = 0; i < 5; i++) ctx.cone(3, 3.6, -30 + i * 15, h(-30 + i * 15, z + 8 * Math.sign(z)), z + 8 * Math.sign(z), mat(null, { color: cloth, flat: true }), { seg: 6, solid: true });
     for (const x of [-24, 0, 24]) P.standard(x, z, house, 8);
     for (let x = -40; x <= 40; x += 2.4) ctx.cyl(.22, 2.6, x, h(x, z + 4 * Math.sign(z)) - .3, z + 4 * Math.sign(z), mat('weathered_planks', { uv: 2, color: '#7a5a3a' }), { seg: 5 });

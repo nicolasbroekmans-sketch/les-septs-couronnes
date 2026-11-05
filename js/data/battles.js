@@ -8,6 +8,14 @@ export const BATTLES = {
     allies: { faction: 'couronne', name: 'L’ost du roi', units: { levee: 38, archer: 25, homme_armes: 22, cavalier: 15 } },
     reward: []
   },
+  finale: {
+    name: 'La bataille des Sept Couronnes', finale: true, dragon: true, region: 'kingslanding', theme: 'plaine', hdri: 'belfast_sunset_puresky',
+    desc: 'Un prétendant venu d’au-delà de la mer marche sur Port-Réal avec la plus grande armée du siècle — et un dragon. Tout ce que vous avez bâti se joue ici.',
+    requires: [{ level: 6 }, { flag: 'won:bataille_route' }, { flag: 'won:bataille_bois' }, { flag: 'won:bataille_mur' }], enemyHp: .9,
+    enemy: { faction: 'targaryen', name: 'L’ost du Prétendant', units: { levee: 48, archer: 26, homme_armes: 30, cavalier: 16 } },
+    allies: { faction: 'couronne', name: 'Les armées des Sept Couronnes', units: { levee: 40, archer: 26, homme_armes: 22, cavalier: 14 } },
+    reward: [{ gold: 2000 }, { xp: 3000 }, { renown: 60 }, { rep: { couronne: 40, stark: 20, garde: 20, guet: 30 } }, { flag: 'won:finale' }]
+  },
   bataille_route: {
     name: 'La bataille de la route royale', region: 'kingslanding', theme: 'plaine', hdri: 'qwantani_late_afternoon_puresky',
     desc: 'Les Chardons ont rallié trois bandes de pillards. Ils marchent sur la porte des Dieux.',

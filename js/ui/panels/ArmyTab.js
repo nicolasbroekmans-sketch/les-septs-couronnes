@@ -7,7 +7,7 @@ import { QUESTS } from '../../quests/QuestRegistry.js';
 import { check } from '../../core/Conditions.js';
 import { army, troopCount, capacity, followerSlots, strength, canRecruit, recruit, setFollowers } from '../../player/Army.js';
 
-const need = (c, s) => c.level ? `niveau ${c.level}` : `terminer « ${QUESTS[c.quest]?.title ?? c.quest} »`;
+const need = (c, s) => c.level ? `niveau ${c.level}` : c.flag ? `remporter « ${BATTLES[c.flag.slice(4)]?.name} »` : `terminer « ${QUESTS[c.quest]?.title ?? c.quest} »`;
 
 export function armyTab(G, hire = false) {
   return { id: 'army', label: 'Armée', render(el, rerender) {
