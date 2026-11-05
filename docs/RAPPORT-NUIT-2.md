@@ -56,7 +56,7 @@ Rechargez la page (Ctrl+Maj+R, ou Cmd+Maj+R sur Mac) pour être sûr d'avoir la 
 ## Vérifications
 - Les 53 tests automatiques réussissent après chaque étape.
 - Chaque ville modifiée a été vérifiée en image dans un vrai navigateur, sans erreur JavaScript.
-- Le scénario complet de bout en bout a réussi ses 12 étapes après la refonte de Winterfell. Le résultat du dernier passage figure dans le message du matin.
+- Le scénario complet de bout en bout (création du personnage, quête, combat, sauvegarde, rechargement) réussit ses 12 étapes sur 12, sans erreur JavaScript, sur la version finale de la nuit.
 
 ## Ce qui n'a pas été fait cette nuit
 - Les personnages sont toujours ceux du jeu, faits par le code (visages, capes, blasons). Je n'ai pas encore pu les remplacer par de vrais modèles 3D.
