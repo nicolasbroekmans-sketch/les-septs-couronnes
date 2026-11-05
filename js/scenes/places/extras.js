@@ -8,11 +8,22 @@ export default {
     village(ctx, 130, 20, { style: 'bief', houses: 30, radius: 30, banner: 'tyrell', wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }),
       tints: ['#fbf6ec', '#f4ead6', '#fff8ee'], roofTints: ['#7fa0a8', '#6a8a92', '#c08050'], windows: '#ffd890', name: 'Le bourg de Hautjardin', text: 'Des maisons blanches aux volets verts, des fontaines et des marchés de fleurs. Même les forgerons, ici, ont des rosiers devant la porte.', color: '#ffd0e0' });
     road(ctx, 0, 90, 100, 26, { w: 5, color: '#c8b890', lanterns: true });
+    // trois enceintes concentriques de murs blancs autour du château, et la Mander au sud
+    const white = mat('rough_plaster_03', { uv: 5, color: '#fbf6ec' }), slate = mat('grey_roof_01', { uv: 3, color: '#7fa0a8' });
+    for (const [x0, z0, x1, z1, h] of [[-52, -136, 52, -53, 9], [-64, -148, 64, -44, 7]]) ctx.ring(x0, z0, x1, z1, { h, t: 2.5, mat: white, gate: 'S', gateW: 7, round: true, towerW: 6, towerExtra: 5, towerRoof: slate });
+    ctx.water({ y: -.3, z: 185, w: 900, d: 40, color: '#3a6a6a' });
+    ctx.poi(0, -42, 'Les trois enceintes', 'Trois murs blancs, l’un dans l’autre, comme les pétales d’une rose. Aucune armée ne les a jamais franchis ; on les a toujours ouverts de l’intérieur, avec des sourires.');
+    ctx.poi(40, 170, 'La Mander', 'Le fleuve le plus doux du royaume. Il charrie des barges de blé, de vin et de roses vers Villevieille.');
     // lices : barrière centrale, tribunes, pavillons colorés, écus
     const LX = -95, LZ = 30, wood = mat('weathered_planks', { uv: 2, color: '#d8c8a0' });
     for (let k = -30; k <= 30; k += 2.5) ctx.box(.15, 1.3, .15, LX, g(LX, LZ + k), LZ + k, wood, { solid: false });
     ctx.box(.12, .12, 62, LX, g(LX, LZ) + 1.2, LZ, wood, { solid: false });
-    for (const s of [-1, 1]) { ctx.box(6, 3, 40, LX + s * 14, g(LX, LZ), LZ, wood); ctx.roof(7, 2, 41, LX + s * 14, g(LX, LZ) + 3, LZ, mat(null, { color: s < 0 ? '#3f6a34' : '#d8b040', flat: true }), { rotY: 0 }); }
+    for (const s of [-1, 1]) { // tribunes à gradins sous un dais de toile
+      for (let k = 0; k < 4; k++) ctx.box(1.4, .9 + k * .9, 38, LX + s * (12 + k * 1.4), g(LX, LZ), LZ, wood);
+      for (const z of [-19, 0, 19]) ctx.box(.2, 5.6, .2, LX + s * 17.5, g(LX, LZ), LZ + z, wood, { solid: false });
+      ctx.box(7, .12, 40, LX + s * 14.6, g(LX, LZ) + 5.5, LZ, mat(null, { color: s < 0 ? '#3f6a34' : '#d8b040', rough: 1 }), { solid: false });
+      for (let i = 0; i < 8; i++) P.banner(LX + s * 11.2, g(LX, LZ) + 4.6, LZ - 17 + i * 4.9, i % 2 ? 'tyrell' : 'baratheon', s > 0 ? -Math.PI / 2 : Math.PI / 2, .5);
+    }
     const cloth = ['#3f6a34', '#d8b040', '#8b0000', '#5a7aa8', '#f4f2ec', '#d97a2a'];
     for (let i = 0; i < 10; i++) { const x = LX - 34 + (i % 2) * 8, z = LZ - 30 + i * 7; ctx.cone(2.6, 4.2, x, g(x, z), z, mat(null, { color: cloth[i % cloth.length], flat: true }), { seg: 8, solid: true }); P.banner(x, g(x, z) + 6, z, ['tyrell', 'lannister', 'baratheon', 'arryn', 'stark', 'martell'][i % 6], Math.PI / 2, .8); }
     ctx.poi(LX, LZ + 36, 'Les lices', 'Chaque printemps, les chevaliers du royaume viennent y rompre des lances pour un sourire de la Reine des Roses. Les sourires coûtent plus cher que les lances.', { color: '#ffd0e0' });

@@ -73,8 +73,12 @@ try {
   }
   console.log('4. Récupérer la caisse');
   await walk(-103, -65.5, 1);
-  await until(`document.querySelector('#prompt').textContent.includes('caisse')`, 60000, 'invite caisse');
-  await press('KeyE');
+  // un ennemi rendu peut passer devant la caisse : si E ouvre son dialogue, on le referme et on réessaie
+  for (let i = 0; i < 4 && !(await G(`__game.core.state.player.inventory.some(s => s.id === 'caisse_fer')`)); i++) {
+    await until(`document.querySelector('#prompt').textContent.includes('caisse')`, 60000, 'invite caisse');
+    await press('KeyE');
+    if (await G(`document.querySelector('#dialogue').classList.contains('open')`)) { await G(`document.querySelector('#dialogue button:last-of-type')?.click()`); await page.waitForTimeout(600); }
+  }
   ok('Caisse récupérée, étape « retour »', await G(`__game.core.state.player.inventory.some(s => s.id === 'caisse_fer') && __game.core.state.quests.wf_iron.step === 'back'`));
 
   console.log('5. Retour chez Torvald et récompense');

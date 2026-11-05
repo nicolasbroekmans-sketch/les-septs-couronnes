@@ -71,7 +71,7 @@ export default {  // PEYREDRAGON : île volcanique, château aux gargouilles, lo
     roses.castShadow = true; ctx.add(roses);
     for (let r = 0; r < 12; r++) { ctx.collider(-61, 0, 19.5 + r * 3, -6, .9, 20.5 + r * 3, { noMap: true }); ctx.collider(6, 0, 19.5 + r * 3, 73, .9, 20.5 + r * 3, { noMap: true }); }
     ctx.poi(-5, 18, 'Les roseraies', 'Des roses d’or, de sang et de neige, rangées comme des armées. Ici, même la politique sent bon.', { color: '#ff7aa0' });
-    ctx.cyl(4, .8, 0, 0, -50, white, { seg: 20 }); ctx.emitter('spray', 0, .8, -50, { scale: 1.5 });
+    ctx.cyl(2.8, .8, 0, 0, -48.5, white, { seg: 20 }); ctx.emitter('spray', 0, .8, -48.5, { scale: 1.2 });
     const trees = []; for (let k = 0; k < 120; k++) { const a = rand() * 6.28, r = 110 + rand() * 150; trees.push([Math.cos(a) * r, Math.sin(a) * r, 1 + rand()]); }
     ctx.trees(trees, 'round', { leaf: '#4f7a3a' });
     ctx.poi(0, -54, 'La cour de la Rose', 'Les Tyrell ne gagnent pas les guerres : ils nourrissent ceux qui les gagnent. Et finissent toujours à la table du vainqueur.');

@@ -27,4 +27,14 @@ export function winterfellLore(ctx) {
   // Tour de la bibliothèque
   ctx.tower(32, -32, { w: 6, h: 20, mat: grey, round: true, roof: mat('grey_roof_tiles', { uv: 2, color: '#8a9298' }), roofH: 7 });
   ctx.poi(32, -27.5, 'La tour de la bibliothèque', 'Des rayonnages jusqu’au toit, des cartes du Nord et des chroniques que personne n’a lues depuis cent ans. Le mestre y monte chaque soir.');
+  // Grand Donjon : rangées de fenêtres, cheminées ; Grand Hall : contreforts et portail ; chemin de ronde en bois ; arches de la cour
+  const win = mat(null, { color: '#1a1612', emissive: '#ff9a3a', ei: .35 }), timber = mat('medieval_wood', { uv: 2, color: '#6a5440' });
+  for (let r = 0; r < 3; r++) for (let k = 0; k < 6; k++) ctx.box(1.1, 1.8, .25, -18.5 + k * 4.2, 4 + r * 4.8, -42.9, win, { solid: false });
+  for (const x of [-16, -2, 2]) ctx.box(1.4, 6, 1.4, x, 22, -52, grey);
+  for (let z = -52; z <= -28; z += 6) for (const s of [-1, 1]) ctx.box(1.2, 8, 2.4, 18 + s * 7.6, 0, z, grey);
+  ctx.box(5, 6, .8, 18, 0, -24.9, grey, { solid: false }); ctx.box(3.6, 4.6, .3, 18, 0, -24.4, mat('medieval_wood', { uv: 2, color: '#3a2a1c' }), { solid: false });
+  for (let x = -30; x <= 30; x += .9) { if (Math.abs(x) < 4.5) continue; ctx.box(.9, .15, 1.8, x, 9.6, 5.4, timber, { solid: false }); if (Math.round(x / .9) % 3 === 0) ctx.box(.12, 1.1, .12, x, 9.75, 4.6, timber, { solid: false }); }
+  for (let x = -30; x <= 30; x += 6) if (Math.abs(x) > 4.5) ctx.box(.25, 9.6, .25, x, 0, 6, timber, { solid: false });
+  for (const [x, z] of [[-14, -6], [14, -6]]) { ctx.box(1.2, 5, 1.2, x - 2.6, 0, z, grey); ctx.box(1.2, 5, 1.2, x + 2.6, 0, z, grey); ctx.box(6.4, 1.2, 1.2, x, 5, z, grey, { solid: false }); }
+  ctx.poi(0, -4, 'La cour d’honneur', 'Les arches de pierre, le chemin de ronde en bois au-dessus, les cris des écuyers à l’entraînement : le cœur de Winterfell bat ici.');
 }
