@@ -2,6 +2,7 @@
 import westeros from './light/westeros.js';
 import essos from './light/essos.js';
 import extras from './places/extras.js';
+import extrasEssos from './places/extrasEssos.js';
 const C = {
   dragonstone: { hdri: 'wasteland_clouds_puresky', exposure: .9, bg: .7, env: .7, fog: ['#5d6064', .0055], hemi: ['#b8bcc4', '#2a2420', .45], sun: ['#ffd2a8', 1.8, [-.4, .45, .6]], bloom: [.6, .5, .78], tint: '#eef0f2', bounds: [-140, -180, 140, 240], killY: -3 },
   casterly: { hdri: 'belfast_sunset_puresky', exposure: .85, bg: .75, env: 1, fog: ['#c89a70', .0024], hemi: ['#ffd9b0', '#5a3a20', .45], sun: ['#ffb46a', 3.2, [-.8, .3, .2]], bloom: [.35, .5, .9], tint: '#fff0dc', bounds: [-120, -150, 120, 150], skyRot: 2.2 },
@@ -18,5 +19,5 @@ const C = {
 export const config = id => C[id];
 
 
-export async function build(ctx, id) { await B[id](ctx); await extras[id]?.(ctx); }
+export async function build(ctx, id) { await B[id](ctx); await ({ ...extras, ...extrasEssos })[id]?.(ctx); }
 const B = { ...westeros, ...essos };
