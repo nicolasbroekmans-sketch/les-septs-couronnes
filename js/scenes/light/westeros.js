@@ -136,7 +136,14 @@ export default {  // PEYREDRAGON : île volcanique, château aux gargouilles, lo
     ctx.ground(() => -50);
     ctx.water({ reflect: true, y: 0, color: '#18262c', w: 1600, d: 1600, distortion: 6, speed: 1.2 });
     const isles = [[0, 40, 18], [-30, 0, 12], [12, -30, 12], [-10, -70, 14], [40, -60, 10]];
-    for (const [x, z, r] of isles) { ctx.cyl(r, 50, x, -26, z, rock, { seg: 9, rTop: r * .85 }); ctx.tower(x, z, { w: r * .8, h: 16, y: 24, mat: stone, round: true, roof: mat(null, { color: '#3a3e44' }) }); }
+    // pitons rocheux mousseux et hautes tours carrées crénelées (d'après la maquette de référence)
+    const moss = mat('rock_face', { uv: 5, color: '#7a8a4a' }), lichen = mat('rock_face', { uv: 4, color: '#a8a060' }), win = mat(null, { color: '#1a1612', emissive: '#ff9a3a', ei: .4 });
+    for (const [x, z, r] of isles) {
+      ctx.cyl(r, 50, x, -26, z, rock, { seg: 7, rTop: r * .85 });
+      ctx.cyl(r * 1.02, 12, x, 12, z, moss, { seg: 7, rTop: r * .87, solid: false }); ctx.cyl(r * .95, 6, x, 4, z, lichen, { seg: 7, rTop: r * .93, solid: false });
+      const w = r * .62, th = 22 + (r % 4) * 6; ctx.tower(x, z, { w, h: th, y: 24, mat: stone });
+      for (let f = 0; f < 4; f++) for (const s of [-1, 1]) ctx.box(.9, 1.6, .2, x + s * w * .2, 28 + f * 5, z + w / 2 + .05, win, { solid: false });
+    }
     for (let k = 0; k < isles.length - 1; k++) {
       const [ax, az, ar] = isles[k], [bx, bz, br] = isles[k + 1], dx = bx - ax, dz = bz - az, L = Math.hypot(dx, dz), ux = dx / L, uz = dz / L;
       const sx = ax + ux * ar * .82, sz = az + uz * ar * .82, ex = bx - ux * br * .82, ez = bz - uz * br * .82, len = Math.hypot(ex - sx, ez - sz), n = Math.ceil(len / .8);
