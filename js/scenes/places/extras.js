@@ -9,9 +9,15 @@ export default {
       tints: ['#fbf6ec', '#f4ead6', '#fff8ee'], roofTints: ['#7fa0a8', '#6a8a92', '#c08050'], windows: '#ffd890', name: 'Le bourg de Hautjardin', text: 'Des maisons blanches aux volets verts, des fontaines et des marchés de fleurs. Même les forgerons, ici, ont des rosiers devant la porte.', color: '#ffd0e0' });
     road(ctx, 0, 90, 100, 26, { w: 5, color: '#c8b890', lanterns: true });
     // trois enceintes concentriques de murs blancs autour du château, et la Mander au sud
-    const white = mat('rough_plaster_03', { uv: 5, color: '#fbf6ec' }), slate = mat('grey_roof_01', { uv: 3, color: '#7fa0a8' });
+    const white = mat('rough_plaster_03', { uv: 5, color: '#fbf6ec' }), slate = mat(null, { color: '#d8b040', metal: .45, rough: .35 });
     for (const [x0, z0, x1, z1, h] of [[-52, -136, 52, -53, 9], [-64, -148, 64, -44, 7]]) ctx.ring(x0, z0, x1, z1, { h, t: 2.5, mat: white, gate: 'S', gateW: 7, round: true, towerW: 6, towerExtra: 5, towerRoof: slate });
     ctx.water({ y: -.3, z: 185, w: 900, d: 40, color: '#3a6a6a' });
+    // tours élancées à toits coniques dorés et fanions verts, comme sur la peinture
+    for (const [x, z, w, h] of [[-26, -112, 5, 40], [26, -112, 5, 36], [-8, -84, 4, 44], [8, -84, 4, 40], [-34, -78, 4, 30], [34, -78, 4, 30], [0, -118, 6, 50]]) {
+      ctx.tower(x, z, { w, h, mat: white, round: true, roof: slate, roofH: w * 2.2 });
+      ctx.cyl(w * .6, 1, x, h * .7, z, white, { seg: 12, solid: false });
+      P.banner(x, h + w * 2.2 + .5, z, 'tyrell', rand() * 6, .7);
+    }
     ctx.poi(0, -42, 'Les trois enceintes', 'Trois murs blancs, l’un dans l’autre, comme les pétales d’une rose. Aucune armée ne les a jamais franchis ; on les a toujours ouverts de l’intérieur, avec des sourires.');
     ctx.poi(40, 170, 'La Mander', 'Le fleuve le plus doux du royaume. Il charrie des barges de blé, de vin et de roses vers Villevieille.');
     // lices : barrière centrale, tribunes, pavillons colorés, écus

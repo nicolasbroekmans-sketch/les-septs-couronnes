@@ -51,8 +51,15 @@ export async function build(ctx) {
   // --- LES EYRIÉ : sept tours blanches sur le sommet ---
   const [px, pz] = PEAK, y = TOP;
   ctx.box(56, .3, 56, px, y - .15, pz, mat('cobblestone_floor_01', { uv: 3, color: '#e0e2e6' }), { solid: false, cast: false });
-  ctx.tower(px, pz - 4, { w: 12, h: 34, y, mat: white, round: true, roof: blue, roofH: 12 });
-  for (let i = 0; i < 6; i++) { const a = i / 6 * 6.28 + .3; ctx.tower(px + Math.cos(a) * 17, pz + Math.sin(a) * 17, { w: 5.5, h: 20 + (i % 3) * 5, y, mat: white, round: true, roof: blue, roofH: 8 }); }
+  // sept tours élancées à étages, balcons et flèches (d'après la peinture) : la plus haute au centre
+  const spire = (x, z, r, h) => {
+    ctx.cyl(r, h, x, y, z, white, { seg: 16 }); ctx.cyl(r * 1.25, .8, x, y + h * .62, z, white, { seg: 16, solid: false });
+    ctx.cyl(r * .72, h * .35, x, y + h, z, white, { seg: 14 }); ctx.cyl(r * .95, .7, x, y + h * 1.35, z, white, { seg: 14, solid: false });
+    ctx.cone(r * .8, r * 4.5, x, y + h * 1.35 + .7, z, blue, { seg: 14, rotY: 0 });
+    for (let k = 0; k < 6; k++) { const a2 = k / 6 * 6.28; ctx.box(.5, 1.6, .2, x + Math.cos(a2) * r * .73, y + h * 1.15, z + Math.sin(a2) * r * .73, mat(null, { color: '#2a3a4a', emissive: '#ffd890', ei: .3 }), { rotY: -a2 + Math.PI / 2, solid: false }); }
+  };
+  spire(px, pz - 4, 5, 46);
+  for (let i = 0; i < 6; i++) { const a = i / 6 * 6.28 + .3; spire(px + Math.cos(a) * 18, pz + Math.sin(a) * 18, 2.6, 26 + (i % 3) * 8); }
   ctx.box(16, 10, 9, px - 6, y, pz + 8, white); ctx.roof(17, 4, 10, px - 6, y + 10, pz + 8, blue);
   for (let i = 0; i < 40; i++) { const a = i / 40 * 6.28; if (Math.abs(a - Math.PI / 2) < .2) continue; ctx.box(4.2, 1.2, .8, px + Math.cos(a) * 27, y, pz + Math.sin(a) * 27, white, { rotY: -a + Math.PI / 2 }); }
   for (const a of [.9, 2.2, 3.6, 5]) P.banner(px + Math.cos(a) * 8.6, y + 22, pz - 4 + Math.sin(a) * 8.6, 'arryn', -a + Math.PI / 2, 1.4);

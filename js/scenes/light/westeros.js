@@ -49,7 +49,7 @@ export default {  // PEYREDRAGON : île volcanique, château aux gargouilles, lo
   async highgarden(ctx) {
     const { THREE, mat, rand } = ctx;
     const grass = mat('grass_ground', { uv: 5, color: '#d8e0b0', rough: 1 }), white = mat('plastered_wall', { uv: 5, color: '#fbf6ec' });
-    const hedge = mat(null, { color: '#3f6a34', rough: 1 }), roofM = mat('grey_roof_tiles', { uv: 3, color: '#7fa0a8' });
+    const hedge = mat(null, { color: '#3f6a34', rough: 1 }), roofM = mat(null, { color: '#d8b040', metal: .45, rough: .35 });
     ctx.terrain({ size: 700, seg: 120, height: (x, z) => noise(x, z) * smooth(90, 160, Math.hypot(x, z)), mat: grass, splat: { slope: 'rocky_terrain_02' } });
     ctx.grass({ area: [-170, -110, 210, 150], count: 45000, avoid: (x, z) => (x > -45 && x < 45 && z > -125 && z < -55) || (x > -66 && x < 78 && z > -45 && z < 60) || Math.hypot(x - 130, z - 20) < 46 || Math.hypot(x + 95, z - 30) < 44 || (x > 48 && x < 112 && z > -128 && z < -76) || Math.abs(x) < 4 });
     ctx.ring(-40, -120, 40, -60, { h: 12, t: 3, mat: white, gate: 'S', round: true, towerRoof: roofM });
