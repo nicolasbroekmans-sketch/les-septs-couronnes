@@ -26,7 +26,7 @@ export class BattleRuntime {
     line(this.def.allies.units, 'A', 20, 1, 'allies');
     line(this.def.enemy.units, 'B', -60, -1, 'enemy');
     this.total = { A: this.count('A'), B: this.count('B') };
-    G.ui.battleHud?.(this);
+    G.ui.battleHud?.(this); G.ui.tutorial?.show('battle');
     G.ui.toast(`${this.def.name} — ${this.total.A} alliés contre ${this.total.B} ennemis. Touches : 1 charger · 2 tenir · 3 me suivre.`, 'quest');
     setTimeout(() => { this.started = true; audio.sfx('raven', .6, .6); G.ui.toast('L’ennemi avance !', 'warn'); }, 12000);
   }

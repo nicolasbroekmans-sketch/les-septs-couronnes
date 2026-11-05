@@ -9,6 +9,8 @@ const TIPS = {
   level: ['Niveau supérieur', 'Appuie sur K pour dépenser tes points de compétence, et sur R (ou T, I) pour ouvrir ton inventaire et équiper une meilleure arme ou armure.'],
   merchant: ['Marchands', 'Les noms en bleu sont des marchands. Parle-leur (E) puis « Voyons vos marchandises ». Les forgerons améliorent aussi tes armes et armures.'],
   gift: ['Cadeau mystère !', 'Toutes les 15 minutes de jeu, tu reçois un cadeau : teintures, capes, titres, or… Personnalise ton héros dans le menu Profil (touche P).'],
+  army: ['Lever une armée', 'Le recruteur (plaque « Recruteur ») engage des lanciers, des archers et plus tard des chevaliers. Choisis tes compagnons dans l’onglet Armée (touche B). Le capitaine de guerre te confiera les grandes batailles.'],
+  battle: ['Grande bataille', 'Touche 1 : tes hommes chargent. 2 : ils tiennent la ligne. 3 : ils te suivent. Quand l’ennemi perd sept hommes sur dix, il fuit. Reste en vie !'],
   beggar: ['Les petites gens', 'Les mendiants et les passants réagissent à ta générosité… et à ton insolence. Ce que tu fais se sait, et ta réputation en dépend.']
 };
 
@@ -21,7 +23,7 @@ export class Tutorial {
     on('player:levelup', 'level'); on('gift:opened', 'gift');
     setTimeout(() => this.show('start'), 1800);
   }
-  near(actor) { if (actor?.def.merchant) this.show('merchant'); if (actor?.def.role === 'beggar') this.show('beggar'); }
+  near(actor) { if (actor?.def.merchant) this.show('merchant'); if (actor?.def.role === 'beggar') this.show('beggar'); if (['recruiter', 'captain'].includes(actor?.def.role)) this.show('army'); }
   show(key) {
     const s = this.G?.core.state; if (!s || s.world.tips?.[key] || this.G.settings.tips === false) return;
     (s.world.tips ??= {})[key] = true;

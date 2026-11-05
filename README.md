@@ -34,7 +34,9 @@ Une connexion Internet est nécessaire pour les CDN (Three.js, GSAP, Howler.js) 
 | Esquive (roulade) | Espace |
 | Interagir (parler, fouiller, prendre) | E |
 | Se soigner | H |
-| Inventaire / Compétences / Journal / Factions | I / K / J / L |
+| Inventaire | I, R, T ou Tab |
+| Compétences / Journal / Factions / Carte / Guide / Profil / Armée | K / J / L / M / G / P / B |
+| Ordres en bataille : charger / tenir / me suivre | 1 / 2 / 3 |
 | Pause, sauvegarde, chargement, paramètres | Échap |
 | Choix dans les dialogues | clic ou touches 1 à 9 |
 
@@ -57,8 +59,14 @@ Une connexion Internet est nécessaire pour les CDN (Three.js, GSAP, Howler.js) 
 12. Factions et réputation (16 factions, propagation aux alliés et aux ennemis), crimes et primes, PNJ dotés de mémoire (relation et souvenirs datés).
 13. Sauvegardes : 3 emplacements, sauvegarde automatique, versionnage avec migrations, relecture de vérification. Mort : recharger la dernière sauvegarde ou se relever en perdant 20 % de son or.
 14. Mode découverte : visite libre des 16 lieux de la première version.
+15. Clarté : « ! » et « ? » au-dessus des PNJ à quête, colonne de lumière sur l'objectif suivi, rôle affiché sous chaque nom (marchand, garde, mendiant, recruteur…), conseils contextuels, onglet Guide (que faire maintenant) et carte de région légendée (M).
+16. Interactions : mendiants à qui donner 1 ou 10 pièces (karma, histoire, secret s'ils vous font confiance), passants qui donnent parfois une pièce ou refusent (« Ah non, je n'ai pas envie »), rumeurs propres à chaque ville.
+17. Quête « Personne » à Port-Réal : une pièce de fer, un étranger de Braavos, une cible à éliminer sans être vu (attaque furtive ×2), titre et cosmétique exclusifs.
+18. Rétention : un cadeau mystère toutes les 15 minutes de jeu (teintes d'armure, capes, tuniques, titres, blasons, de commune à légendaire), profil personnalisable (P), amélioration des armes et armures à la forge (+1 à +3).
+19. Armée : recruteurs et capitaines de guerre dans chaque ville, 4 types de troupes, capacité selon niveau/renommée/Commandement, jusqu'à 4 compagnons qui suivent et défendent le héros, et trois grandes batailles (≈ 100 combattants, rendu instancié) avec ordres, moral, déroute, récompenses et pertes définitives.
+20. Villes agrandies : Winterfell (douves, pont, tour de la cloche, Premier Donjon, jardins de verre, cryptes, Winter Town et son marché), Port-Réal (Fosse aux Dragons, porte des Dieux, Culpucier, quais, marché), Châteaunoir (palissade, tours, forge).
 
-**Pas encore développé** (phases suivantes) : voyages sur la carte du monde avec événements, régions d'Essos jouables, compagnons, armées, batailles, gestion de domaine et bâtiments.
+**Pas encore développé** (phases suivantes) : voyages sur la carte du monde avec événements, régions d'Essos jouables, gestion de domaine et bâtiments, cavalerie.
 
 ## Architecture
 
