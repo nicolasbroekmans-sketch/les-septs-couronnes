@@ -76,3 +76,14 @@ dl.guide dt { font-family: var(--f-sub); color: #6e3a10; margin-top: .6rem; } dl
 .help-list{list-style:none;padding:0;margin:.8rem 0;display:grid;gap:.6rem}.help-list li{display:flex;gap:.7rem;align-items:flex-start;background:rgba(255,250,235,.6);border-left:3px solid #8b5a10;padding:.5rem .7rem}
 .help-list i{font-style:normal;font-weight:700;color:#7a1408;min-width:1.2em;text-align:center}.help-list p{margin:.15rem 0 0}
 .panel button[disabled]{opacity:1!important;background:#a8987a!important;color:#4a3c28!important;border-color:#8a7a5a!important;cursor:not-allowed}
+
+/* Encart d'objectif (haut à droite) : panneau sombre opaque, police lisible, gros contraste */
+#tracker{top:236px;right:16px;width:min(310px,40vw);text-align:left;padding:.75rem .9rem .8rem;background:rgba(12,10,9,.88);border:1px solid rgba(201,162,39,.7);border-left:4px solid #c9a227;border-radius:6px;box-shadow:0 8px 24px rgba(0,0,0,.55);text-shadow:none;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;color:#f4ecd8}
+#tracker:empty{display:none}
+#tracker h4{font-family:'Cinzel',serif;font-size:1rem;font-weight:700;color:#ffd970;letter-spacing:.02em;margin:.1rem 0 .45rem;line-height:1.25}
+#tracker ul{font-size:.95rem;line-height:1.4}#tracker li{margin:.2rem 0;color:#f4ecd8}#tracker li::before{color:#ffd970}
+#tracker li.done{opacity:.55}#tracker .trk-tip{font-size:.92rem;line-height:1.45;color:#f4ecd8;margin:.1rem 0 .4rem}
+#tracker small{display:inline-block;margin-top:.45rem;padding:.2rem .6rem;border-radius:12px;background:#c9a227;color:#1a1208;font:700 .82rem system-ui,-apple-system,"Segoe UI",sans-serif}
+#tracker .trk-help{float:right;margin:-.1rem 0 .3rem .5rem;font-size:.78rem;background:#2a2014;color:#ffd970;border-color:#c9a227}
+#hud-clock{background:rgba(12,10,9,.75);padding:.2rem .55rem;border-radius:10px;font:600 .8rem system-ui,-apple-system,"Segoe UI",sans-serif;text-shadow:none}
+@media (max-width:760px){#tracker{top:170px;width:min(240px,60vw);font-size:.85rem}}
