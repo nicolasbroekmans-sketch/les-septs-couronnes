@@ -6,7 +6,7 @@ const stark = o => look({ tunic: '#5a5f66', cloak: '#3a3a3e', ...o });
 export default {
   id: 'winterfell', scene: 'winterfell', name: 'Winterfell', region: 'Le Nord', climate: 'nord', lawFaction: 'stark',
   prices: { weapon: .95, armor: 1, luxe: 1.3, vivres: 1.1, fourrure: .7, consumable: 1.1 },
-  spawn: { x: 0, z: 118, yaw: 0 }, bounds: [-160, -140, 120, 150],
+  spawn: { x: 0, z: 118, yaw: 0 }, bounds: [-160, -140, 130, 185],
   rumors: ['Torvald le forgeron s\u2019arrache les cheveux : des déserteurs lui ont volé du fer. Ils se cachent dans le Bois-aux-Loups, au nord-ouest.', 'Les sources chaudes du bois sacré ne gèlent jamais. Maege dit que les anciens dieux y dorment.', 'Le Nord se souvient. Surtout des dettes.', 'Torvald peut renforcer ta lame et ton armure, si tu as de quoi payer.', 'On recrute des hommes d\u2019armes à la porte de Winter Town.'],
   intro: 'Winter Town, au pied des remparts de Winterfell. Le froid mord, la neige tombe. Ici, on juge un homme à ses actes.',
   npcs: [

@@ -1,3 +1,6 @@
+import { kingslandingCity, avoidExtra } from './details/kingslandingCity.js';
+import { height } from './details/klTerrain.js';
+
 // PORT-RÉAL — ville en pente vers la baie, Donjon Rouge sur la colline, Septuaire à dôme, port.
 export const config = {
   hdri: 'qwantani_late_afternoon_puresky', exposure: 1, bg: 1, env: 1, skyRot: 1.2,
@@ -5,13 +8,7 @@ export const config = {
   bloom: [.4, .5, .88], tint: '#fff0dc', bounds: [-170, -175, 170, 120]
 };
 
-const hill = (x, z, cx, cz, r, h) => h * Math.exp(-((x - cx) ** 2 + (z - cz) ** 2) / (2 * r * r));
-export const height = (x, z) => {
-  const slope = 1.2 + Math.max(0, 60 - z) * .15;
-  const land = slope + hill(x, z, 55, -115, 32, 13) + hill(x, z, -70, -62, 30, 7) + Math.sin(x * .05) * Math.cos(z * .04) * 1.2;
-  const t = Math.min(1, Math.max(0, (z - 60) / 10));
-  return land * (1 - t) - 5 * t;
-};
+export { height };
 
 export async function build(ctx) {
   const { THREE, mat, rand } = ctx;
@@ -55,11 +52,11 @@ export async function build(ctx) {
   ctx.poi(-12, 68, 'La porte de la Rivière', 'Les marins l’appellent la porte de la Gadoue. Ici débarquent le vin d’Arbor, les épices d’Essos et les rumeurs de partout.', { y: 1 });
 
   // La ville : grille irrégulière, ruelles étroites, toits de tuiles ocre
-  const avoid = (x, z, w = 0, d = 0) => (Math.abs(x - kx) < 46 && z < kz + 40 && z > kz - 40) || Math.hypot(x - sx, z - sz) < 26 || (Math.abs(x - kx) < 7 && z > kz + 26 && z < kz + 90) || (Math.abs(x) < 6 && z > 20) || z > 56 || (Math.abs(z - 20) < 3 + d / 2 && x < 0);
+  const avoid = (x, z, w = 0, d = 0) => avoidExtra(x, z, w, d) || (Math.abs(x - kx) < 46 && z < kz + 40 && z > kz - 40) || Math.hypot(x - sx, z - sz) < 26 || (Math.abs(x - kx) < 7 && z > kz + 26 && z < kz + 90) || (Math.abs(x) < 6 && z > 20) || z > 56 || (Math.abs(z - 20) < 3 + d / 2 && x < 0);
   const city = ctx.cityGrid({ x0: -160, x1: 160, z0: -165, z1: 58, block: 13, street: 3.4, hMin: 4, hMax: 9, empty: .06, avoid });
   ctx.houses(city.lots, {
     wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }),
-    tints: ['#f2dfc0', '#e9cfa6', '#f6e7cf', '#e2c08f', '#f0d6b8'], roofTints: ['#ffffff', '#f0c8a8', '#e6b090'], roofH: .45, sink: 4
+    tints: ['#f2dfc0', '#e9cfa6', '#f6e7cf', '#e2c08f', '#f0d6b8'], roofTints: ['#ffffff', '#f0c8a8', '#e6b090'], roofH: .45, sink: 4, windows: '#3a2a1e'
   });
   ctx.poi(-20, -10, 'Culpucier', 'Le quartier des ruelles tordues, où l’odeur du ragoût de bol se mêle à celle du poisson. Ici, on vend de tout ; surtout ce qui n’appartient à personne.');
   ctx.poi(kx, kz + 92, 'Les escaliers du Roi', 'Trois volées de marches taillées pour les processions. Les petits gens les montent à genoux les jours de fête ; les seigneurs, à cheval.');
@@ -72,6 +69,7 @@ export async function build(ctx) {
   for (let z = 56; z > -60; z -= 22) ctx.torch(5, height(5, z) + 2.6, z, { light: z > 20, color: '#ffb36a' });
 
   ctx.particles('dust', { color: '#ffd9a0' });
+  kingslandingCity(ctx, [kx, kz, ky]);
   ctx.spawn(0, 58, 0);
   ctx.sound(
     { name: 'crowd', volume: .4 }, { name: 'waves', volume: .35, pos: [0, 0, 90], ref: 25 },

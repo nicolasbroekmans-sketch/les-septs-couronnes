@@ -35,6 +35,7 @@ export class CombatDirector {
   }
   onHit(h) {
     const G = this.game, { attacker: A, target: T, res } = h, wasHostile = G.hostile(A, T) || T.provoked;
+    if (!T.everHit) { T.everHit = true; T.ambushed = !!T.unaware && A.kind === 'player'; }
     G.ui.damage(T, res);
     if (res.dodged) return;
     if (res.parried || res.blocked) audio.sfx('anvil', res.parried ? .5 : .25, res.parried ? 1.3 : 1.7); else audio.sfx('seal', .4, .7 + G.rng() * .3);

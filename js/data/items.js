@@ -14,6 +14,7 @@ export const ITEMS = {
   epee_chateau: W('Épée en acier de château', 'sword', 23, 2.4, .28, .14, .32, 14, 420),
   hache_guerre: W('Hache de guerre', 'axe', 25, 2.3, .42, .14, .45, 20, 260, { weight: 6, heavy: 2 }),
   masse: W('Masse d’armes', 'mace', 21, 2.1, .38, .14, .4, 18, 200, { weight: 5, armorPierce: .5 }),
+  dague_fer: W('Dague de fer sans visage', 'dagger', 15, 1.6, .12, .1, .2, 7, 380, { weight: 1, crit: .22 }),
   lance: W('Lance', 'spear', 18, 3, .32, .14, .36, 14, 120, { weight: 4 }),
   arc_court: W('Arc court', 'bow', 14, 40, .55, .05, .35, 8, 70, { ranged: { speed: 38 }, weight: 1 }),
   arc_long: W('Arc long', 'bow', 21, 60, .8, .05, .4, 10, 240, { ranged: { speed: 52 }, weight: 2 }),
@@ -36,6 +37,7 @@ export const ITEMS = {
   insigne_bandit: { name: 'Insigne des Chardons', type: 'quest', value: 0, weight: .1 },
   lettre_scellee: { name: 'Lettre scellée', type: 'quest', value: 0, weight: .1 },
   caisse_fer: { name: 'Caisse de fer forgé', type: 'quest', value: 0, weight: 6 },
+  piece_fer: { name: 'Pièce de fer', type: 'quest', value: 0, weight: .05 },
   carte_sauvageon: { name: 'Carte des sentiers du Nord', type: 'quest', value: 0, weight: .1 }
 };
 export const item = id => ITEMS[id];

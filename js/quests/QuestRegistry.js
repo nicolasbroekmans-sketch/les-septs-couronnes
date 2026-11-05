@@ -2,8 +2,9 @@
 import kingslanding from '../data/quests/kingslanding.js';
 import winterfell from '../data/quests/winterfell.js';
 import wall from '../data/quests/wall.js';
+import noone from '../data/quests/noone.js';
 
-export const QUESTS = { ...kingslanding, ...winterfell, ...wall };
+export const QUESTS = { ...kingslanding, ...winterfell, ...wall, ...noone };
 
 export function validateQuests(quests = QUESTS) {
   const errors = [];

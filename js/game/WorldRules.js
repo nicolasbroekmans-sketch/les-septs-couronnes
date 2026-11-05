@@ -33,6 +33,7 @@ export function escaped(G, a) {
 export function onDeath(G, a, killer) {
   if (a.kind === 'player') return G.playerDied();
   defeated(G, a);
+  if (a.def.stealthTarget) G.core.effects([{ flag: a.def.stealthTarget, value: !!a.ambushed && !a.seen }]);
   G.core.bus.emit('npc:killed', { npc: a.id, group: a.group });
   G.region.dropLoot(a);
   if (killer?.kind === 'player') {
@@ -46,6 +47,7 @@ export function onDeath(G, a, killer) {
 export function crime(G, victim, type) {
   const s = G.core.state, law = G.region.def.lawFaction, witnesses = G.actors.filter(o => o.brain && o.alive && o !== victim && o.faction === law && dist(o.pos, victim.pos) < 30 && G.physics.sees(o.eye, victim.eye));
   remember(s, victim.id, 'attacked_by_player', type); npcRecord(s, victim.id).relation -= 50;
+  if (witnesses.length) victim.seen = true;
   if (victim.faction === law || witnesses.length) {
     const fine = type === 'meurtre' ? 150 : 50;
     s.player.bounty[law] = (s.player.bounty[law] ?? 0) + fine;

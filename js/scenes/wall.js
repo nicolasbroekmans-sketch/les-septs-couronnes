@@ -1,3 +1,5 @@
+import { castleBlack } from './details/castleBlack.js';
+
 // LE MUR — paroi de glace de 200 m (shader translucide), Châteaunoir, escalier en zigzag, cage d'ascenseur, aurores.
 export const config = {
   hdri: 'qwantani_night_puresky', exposure: 1.35, bg: 1.1, env: 1.2,
@@ -141,6 +143,7 @@ export async function build(ctx) {
   const pines = []; for (let i = 0; i < 200; i++) { const a = rand() * Math.PI, r = 90 + rand() * 180; pines.push([Math.cos(a) * r * 1.4, Math.sin(a) * r, 1 + rand()]); }
   ctx.trees(pines, 'pine', { leaf: '#1f2c2a' });
 
+  castleBlack(ctx);
   ctx.particles('blizzard');
   ctx.spawn(22, 62, .12);
   ctx.sound({ name: 'blizzard', volume: .65 }, { name: 'fire', volume: .6, pos: [0, 1, 22], ref: 3 }, { name: 'raven', volume: .45, every: [10, 20], randomPos: [0, 30, -30, 60], ref: 12 });

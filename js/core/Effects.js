@@ -4,6 +4,7 @@ import { addItem, removeItem } from '../player/Inventory.js';
 import { addXp } from '../player/Progression.js';
 import { changeRep } from '../factions/Reputation.js';
 import { npcRecord, remember } from '../ai/Memory.js';
+import { cosmetics } from '../player/Rewards.js';
 
 export function apply(effects, game, ctx = {}) {
   const { state, bus } = game, p = state.player, out = [];
@@ -18,6 +19,7 @@ export function apply(effects, game, ctx = {}) {
     if (e.flag) { state.world.flags[e.flag] = e.value ?? true; bus.emit('world:flag', { flag: e.flag }); }
     if (e.npcFlag) { npcRecord(state, e.npcFlag.npc).flags[e.npcFlag.flag] = e.npcFlag.value ?? true; bus.emit('npc:flag', e.npcFlag); }
     if ('renown' in e) p.renown += e.renown;
+    if (e.cosmetic) { const c = cosmetics(p); if (!c.owned.includes(e.cosmetic)) c.owned.push(e.cosmetic); bus.emit('gift:opened', { kind: 'cosmetic', id: e.cosmetic, rarity: 'legendaire', reward: true }); }
     if ('karma' in e) { p.karma = (p.karma ?? 0) + e.karma; bus.emit('player:karma', { value: p.karma }); }
     if (e.startQuest) game.quests.start(e.startQuest);
     if (e.signal) bus.emit('quest:signal', { quest: e.signal[0], signal: e.signal[1] });

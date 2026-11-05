@@ -22,6 +22,7 @@ export class NPCBrain {
     if (!a.alive || a.surrendered) return { x: 0, z: 0 };
     if (a.talking) { a.faceTo(W.player.pos, dt, 6); return { x: 0, z: 0 }; }
     this.callCd -= dt; this.actionT += dt;
+    a.unaware = !['combat', 'alert', 'flee'].includes(this.state);
     if ((this.perceiveT -= dt) <= 0) { this.perceiveT = .25; this.perceive(W); }
     if (this.state === 'combat') return this.combat(dt, W);
     if (this.state === 'flee') return this.flee(dt, W);

@@ -1,8 +1,11 @@
+import { winterfellCastle } from './details/winterfellCastle.js';
+import { winterfellTown } from './details/winterfellTown.js';
+
 // WINTERFELL — double enceinte, Grand Hall, forge, bois sacré, sources chaudes, Winter Town.
 export const config = {
   hdri: 'kloofendal_overcast_puresky', exposure: 1.05, bg: .9, env: 1.1,
   fog: ['#c3cad2', .0068], hemi: ['#dfe7f0', '#4a4440', .5], sun: ['#e6ecf5', 1.4, [.35, .55, .5]],
-  bloom: [.55, .6, .82], tint: '#eef3ff', bounds: [-110, -130, 110, 150]
+  bloom: [.55, .6, .82], tint: '#eef3ff', bounds: [-130, -130, 130, 185]
 };
 
 export async function build(ctx) {
@@ -17,8 +20,8 @@ export async function build(ctx) {
 
   // Terrain : plat dans la ville et le château, collines enneigées au-delà
   const n2 = (x, z) => Math.sin(x * .021) * Math.cos(z * .017) * 6 + Math.sin(x * .05 + z * .03) * 2;
-  const h = (x, z) => { const d = Math.max(0, Math.max(Math.abs(x) - 85, Math.abs(z - 10) - 125)); return n2(x, z) * Math.min(1, d / 40) + d * .08; };
-  ctx.terrain({ size: 700, seg: 140, height: h, mat: snow });
+  const h = (x, z) => { const d = Math.max(0, Math.max(Math.abs(x) - 120, Math.abs(z - 20) - 160)); return n2(x, z) * Math.min(1, d / 40) + d * .08; };
+  ctx.terrain({ size: 800, seg: 160, height: h, mat: snow });
 
   // Sol pavé/boue dans les enceintes
   ctx.box(76, .05, 76, 0, 0, -30, cobble, { solid: false, cast: false });
@@ -58,7 +61,7 @@ export async function build(ctx) {
   // Bois sacré : pins + barral au visage sculpté + source chaude
   const pines = [];
   for (let i = 0; i < 70; i++) { const x = -36 + rand() * 24, z = -64 + rand() * 58; if (Math.hypot(x + 24, z + 22) > 6 && Math.hypot(x + 18, z + 10) > 5.5 && !(x > -27 && z < -40) && Math.hypot(x + 30, z) > 5.5) pines.push([x, z, .9 + rand() * .6]); }
-  for (let i = 0; i < 160; i++) { const a = rand() * 6.28, r = 140 + rand() * 120; pines.push([Math.cos(a) * r, Math.sin(a) * r + 10, 1 + rand()]); }
+  for (let i = 0; i < 220; i++) { const a = rand() * 6.28, r = 190 + rand() * 140; pines.push([Math.cos(a) * r, Math.sin(a) * r + 10, 1 + rand()]); }
   ctx.trees(pines, 'pine', { leaf: '#2c3f33' });
   weirwood(ctx, -24, -22);
   ctx.poi(-24, -17.5, 'Le barral', 'Un arbre blanc aux feuilles couleur de sang. Le visage gravé dans son écorce pleure une sève rouge. On ne ment pas devant lui — pas longtemps.', { color: '#ff6a5a' });
@@ -72,20 +75,18 @@ export async function build(ctx) {
   for (let i = 0; i < 4; i++) { ctx.box(.3, 2, .3, -4 + i * 3, 0, -20, wood); ctx.box(1.4, .25, .25, -4 + i * 3, 1.5, -20, wood, { solid: false }); }
   for (const [x, z] of [[-4, 5], [4, 5], [-4, 24], [4, 24], [-6, -12], [6, -12]]) ctx.torch(x, 3, z, { light: Math.abs(z) < 20 });
 
-  // Entre les deux murs : écuries et chenil
-  ctx.box(14, 4, 7, -46, 0, -10, wood); ctx.roof(8, 2.5, 15, -46, 4, -10, roofM, { rotY: Math.PI / 2 });
-  ctx.box(7, 4, 20, 46, 0, -40, wood); ctx.roof(8, 2.5, 21, 46, 4, -40, roofM);
 
   // Winter Town : grille irrégulière de maisons en bois et pierre
-  const city = ctx.cityGrid({ x0: -80, x1: 80, z0: 36, z1: 135, block: 15, street: 4.5, hMin: 3.2, hMax: 5.5, avoid: (x, z) => Math.abs(x) < 7 });
+  const city = ctx.cityGrid({ x0: -110, x1: 110, z0: 36, z1: 172, block: 14, street: 4.5, hMin: 3.2, hMax: 6.5, avoid: (x, z, w = 0, d = 0) => Math.abs(x) < 7 + w / 2 || Math.hypot(x, z - 98) < 16 || x + w / 2 > 110 || z + d / 2 > 172 });
   ctx.houses(city.lots, {
     wall: mat('weathered_planks', { uv: 3, instanced: true }), roof: mat('grey_roof_tiles', { uv: 3, instanced: true }),
     tints: ['#e8d8c0', '#d8c6aa', '#f2e8d8', '#cbbfae'], roofTints: ['#e9eef2', '#dfe5ea', '#cfd6dc'], windows: '#ffb05a', roofH: .6
   });
   for (const st of city.streets) ctx.box(st.w, .04, st.d, st.x, .01, st.z, mud, { solid: false, cast: false });
-  ctx.box(9, .05, 110, 0, .02, 80, mud, { solid: false, cast: false });
+  ctx.box(9, .05, 140, 0, .02, 104, mud, { solid: false, cast: false });
+  winterfellCastle(ctx); winterfellTown(ctx, city.lots);
   // fumées de cheminées
-  for (let i = 0; i < 6; i++) { const l = city.lots[Math.floor(rand() * city.lots.length)]; ctx.emitter('smoke', l.x, l.h + 2, l.z, { count: 30, opacity: .12, box: [5, 22, 5] }); }
+  for (let i = 0; i < 10; i++) { const l = city.lots[Math.floor(rand() * city.lots.length)]; ctx.emitter('smoke', l.x, l.h + 2, l.z, { count: 30, opacity: .12, box: [5, 22, 5] }); }
   for (let z = 40; z < 130; z += 18) { ctx.torch(-5, 2.8, z, { light: z < 60 }); ctx.torch(5, 2.8, z + 9, { light: false }); }
   ctx.poi(0, 44, 'Winter Town', 'Quand l’hiver vient, les villages vident leurs granges et montent ici, sous la protection des murs. Les maisons attendent, à moitié vides, que la neige ramène leurs familles.');
 

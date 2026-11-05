@@ -27,7 +27,7 @@ export function resolveMelee(att, entities, rng = Math.random, opts = {}) {
     if (t.fighter.invulnerable) { hits.push({ attacker: att, target: t, res: { dodged: true, amount: 0 }, killed: false }); continue; }
     const facing = angleTo(t.pos, t.yaw, att.pos) < 1.2;
     const res = computeDamage(
-      { weapon: f.weapon, stats: att.stats, heavy: f.heavy, sneak: att.stats.sneak && t.unaware, allyBonus: opts.allyBonus?.(att) ?? 0 },
+      { weapon: f.weapon, stats: att.stats, heavy: f.heavy, sneak: (att.stats.sneak || att.sneaking) && t.unaware, allyBonus: opts.allyBonus?.(att) ?? 0 },
       { stats: t.stats, blocking: t.fighter.blocking, parrying: t.fighter.parrying, facing }, rng);
     if (res.parried) f.stagger(.9);
     const killed = t.fighter.takeHit(res);

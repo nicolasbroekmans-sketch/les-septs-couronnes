@@ -13,6 +13,7 @@ export default {
     { id: 'kl_beggar_1', name: 'Vieux Tobbin', role: 'beggar', faction: 'peuple', x: -3.5, z: 32, weapon: 'poings', hp: 30, sit: true, look: look({ tunic: '#4a4036', pants: '#3a3028' }), story: ['J’étais marin, avant. Puis la mer a gardé mes doigts.'], ai: {} },
     { id: 'kl_beggar_2', name: 'Mère Huppe', role: 'beggar', faction: 'peuple', x: -58, z: -28, weapon: 'poings', hp: 30, sit: true, look: look({ tunic: '#4a4036', pants: '#3a3028' }), story: ['Mes fils sont partis à la guerre du Roi. Aucun n’est revenu.'], ai: {} },
     { id: 'kl_beggar_3', name: 'Petit Pol', role: 'beggar', faction: 'peuple', x: -22, z: -4, weapon: 'poings', hp: 30, sit: true, look: look({ tunic: '#4a4036', pants: '#3a3028' }), story: ['Mes parents ? Culpucier les a mangés, comme il mange tout le monde.'], ai: {} },
+    { id: 'etranger', name: 'L\u2019étranger', role: 'faceless', faction: 'peuple', x: 72, z: 57, yaw: Math.PI, weapon: 'dague', hp: 400, look: look({ female: false, hair: '#a04a22', tunic: '#2a2a30', cloak: '#1a1a1e', beard: false }), ai: { face: Math.PI, noFlee: true } },
     { id: 'orwyn', name: 'Orwyn Pell', role: 'merchant', merchant: true, faction: 'peuple', x: -8, z: 52, yaw: Math.PI / 2, weapon: 'dague', hp: 50,
       stock: { onguent: 6, ration: 10, vin_arbor: 4, sel: 6, epices: 2, cuir: 2, epee_courte: 1, arc_court: 1 }, look: look({ female: false, tunic: '#6a3a5a', beard: true }), ai: { wander: 2 } },
     { id: 'dalla', name: 'Dalla l’armurière', role: 'merchant', merchant: true, smith: true, faction: 'peuple', x: 5, z: 44, yaw: -Math.PI / 2, weapon: 'masse', hp: 70,
@@ -27,6 +28,11 @@ export default {
       ['Les Manteaux d’or ? Des voleurs avec un uniforme.', 'On dit que la Main du Roi est malade…', 'Le pain a encore augmenté.', 'Attention aux coupe-bourses près du port.', 'Les Sept vous gardent, étranger.'])
   ],
   groups: [
+    { id: 'kl_morrec', faction: 'couronne', stance: 'neutral', when: { quest: 'kl_noone', state: ['none', 'active'] }, loot: { gold: [30, 60], items: ['vin_arbor'] },
+      members: [
+        { id: 'morrec', name: 'Ser Morrec, collecteur', weapon: 'epee_courte', armor: 'vetements_fins', hp: 60, x: -22, z: -8, look: look({ female: false, tunic: '#6a1a1a', cloak: '#c9a227', beard: true }), stealthTarget: 'noone_clean', ai: { wander: 3, sight: 14 } },
+        { id: 'morrec_1', name: 'Homme de main', weapon: 'gourdin', armor: 'cuir', hp: 70, x: -18, z: -4, ai: { patrol: [[-18, -4], [-27, -4], [-27, -13], [-18, -13]], sight: 16 } },
+        { id: 'morrec_2', name: 'Homme de main', weapon: 'hachette', armor: 'cuir', hp: 70, x: -26, z: -12, ai: { wander: 4, sight: 16 } }] },
     { id: 'kl_scouts', faction: 'bandits', when: [{ flag: 'kl_ambush' }, { quest: 'kl_bandits', state: 'active' }], stance: 'hostile', loot: { gold: [4, 14], items: ['onguent'] },
       members: [{ id: 'kl_scout_1', name: 'Guetteur des Chardons', weapon: 'dague', armor: 'cuir', hp: 55, x: -205, z: 34 }, { id: 'kl_scout_2', name: 'Guetteur des Chardons', weapon: 'arc_court', armor: 'cuir', hp: 50, x: -212, z: 8 }] },
     { id: 'kl_bandits', faction: 'bandits', canSurrender: true, loot: { gold: [8, 25], items: ['onguent', 'ration'] },

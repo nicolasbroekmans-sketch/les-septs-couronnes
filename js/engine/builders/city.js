@@ -27,7 +27,7 @@ export function cityBuilders(E, ctx) {
       const body = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1).translate(0, .5, 0), o.wall, n);
       const rs = new THREE.Shape(); rs.moveTo(-.5, 0); rs.lineTo(.5, 0); rs.lineTo(0, 1); rs.closePath();
       const roofs = o.flat ? null : new THREE.InstancedMesh(new THREE.ExtrudeGeometry(rs, { depth: 1, bevelEnabled: false }).translate(0, 0, -.5), o.roof, n);
-      const wins = o.windows ? new THREE.InstancedMesh(new THREE.BoxGeometry(.7, 1, .12), new THREE.MeshBasicMaterial({ color: o.windows, toneMapped: false, fog: true }), n * 2) : null;
+      const wins = o.windows ? new THREE.InstancedMesh(new THREE.BoxGeometry(.7, 1, .12), new THREE.MeshBasicMaterial({ color: o.windows, toneMapped: false, fog: true }), n * 6) : null;
       const doors = new THREE.InstancedMesh(new THREE.BoxGeometry(1.1, 2.1, .14).translate(0, 1.05, 0), ctx.mat('weathered_planks', { uv: 2, color: '#6a4a32' }), n);
       const M = new THREE.Matrix4(), Q = new THREE.Quaternion(), S = new THREE.Vector3(), P = new THREE.Vector3(), C = new THREE.Color(), up = new THREE.Vector3(0, 1, 0);
       let wi = 0;
@@ -43,9 +43,10 @@ export function cityBuilders(E, ctx) {
           roofs.setMatrixAt(i, M.compose(P.set(l.x, y + l.h, l.z), rq, S.set((along ? l.d : l.w) + .6, (o.roofH ?? .55) * Math.min(l.w, l.d), (along ? l.w : l.d) + .6)));
           roofs.setColorAt(i, C.set(o.roofTints?.[Math.floor(rand() * o.roofTints.length)] ?? '#ffffff'));
         }
-        if (wins) for (let k = 0; k < 2; k++) {
-          const sx = (rand() - .5) * l.w * .6, f2 = rand() < .5 ? 1 : -1;
-          wins.setMatrixAt(wi++, M.compose(P.set(l.x + sx, y + 1.6 + (k ? Math.min(2.6, l.h - 2.6) : 0), l.z + f2 * (l.d / 2 + .02)), Q, S.set(1, 1.1, 1)));
+        if (wins) for (let k = 0; k < 6; k++) {
+          const floor = Math.floor(k / 2) % 3, f2 = k % 2 ? 1 : -1, yy = y + 1.7 + floor * 2.7;
+          if (yy > y + l.h - 1) continue;
+          wins.setMatrixAt(wi++, M.compose(P.set(l.x + (rand() - .5) * l.w * .6, yy, l.z + f2 * (l.d / 2 + .02)), Q, S.set(1, 1.1, 1)));
         }
         ctx.collider(l.x - l.w / 2, y - sink, l.z - l.d / 2, l.x + l.w / 2, y + l.h + 1, l.z + l.d / 2);
       });
