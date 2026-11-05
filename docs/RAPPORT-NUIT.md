@@ -66,7 +66,10 @@ Jeu en ligne : https://nicolasbroekmans-sketch.github.io/les-septs-couronnes/
   - le combat a bien lieu, la victoire est enregistrée ;
   - retour à Winterfell avec 2 compagnons ;
   - 0 erreur JavaScript.
-- Le résultat du scénario complet (de la création du personnage à la sauvegarde) est donné plus bas.
+- Scénario complet joué par un bot dans un vrai navigateur : **12 vérifications sur 12 réussies, 0 erreur JavaScript**. Il enchaîne la création du personnage, la quête, le combat contre l'IA, l'ennemi épargné, la caisse, la récompense, la compétence apprise, la sauvegarde, le rechargement et la reprise à l'identique.
+- Deux défauts trouvés par ce scénario, puis corrigés :
+  - un ennemi blessé pouvait reculer sans fin ; il fuit désormais ou revient au combat ;
+  - l'invite « Prendre la caisse » était masquée par un ennemi rendu tout proche ; les objets de quête passent maintenant en priorité.
 
 ## Limites connues
 - Sur un ordinateur modeste, la bataille à 100 combattants peut ralentir. Le réglage « Qualité : basse » aide.
