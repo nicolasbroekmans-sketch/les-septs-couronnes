@@ -10,7 +10,7 @@ export const height = (x, z) => 1.2 + noise(x * .5, z * .5) * .4 * smooth(70, 12
 
 export async function build(ctx) {
   const { THREE, mat, props: P, rand } = ctx;
-  const sand = mat('brown_mud', { uv: 6, color: '#e8cfa0', rough: 1 }), pink = mat('plastered_wall', { uv: 5, color: '#f2d6c8' }), marble = mat('plastered_wall', { uv: 4, color: '#fbf2ea' });
+  const sand = mat('coast_sand_01', { uv: 6, color: '#f4e2c0', rough: 1 }), pink = mat('plastered_wall', { uv: 5, color: '#f2d6c8' }), marble = mat('plastered_wall', { uv: 4, color: '#fbf2ea' });
   const goldDome = mat(null, { color: '#e0b050', metal: .6, rough: .35 }), copper = mat(null, { color: '#5aa08a', metal: .5, rough: .4 }), tile = mat('cobblestone_floor_01', { uv: 2.5, color: '#f0dcc8' });
   ctx.terrain({ size: 800, seg: 180, height, mat: sand, splat: { slope: 'rocky_terrain_02', slopeTint: '#e8c090' } });
   ctx.water({ reflect: true, y: 0, color: '#1f6a7a', w: 1200, d: 500, z: 420, sun: '#fff1d8' });
@@ -36,9 +36,15 @@ export async function build(ctx) {
       const x = PX + s * 14;
       ctx.box(18, .5, 12, x, y - .2, z, marble, { solid: false });
       ctx.water({ x, z, y: y + .15, w: 16, d: 10, color: '#3aa0b0', opacity: .85 });
-      ctx.emitter('steam', x, y + .2, z, { box: [1, 3, 1], count: 25, opacity: .35 });
+      ctx.emitter('spray', x, y + .2, z, { scale: .9 });
     }
   }
+  // long bassin central à balustrade et jets d'eau (comme à l'Alcazar), haies taillées
+  const yb = height(PX, PZ + 56), balu = mat('marble_01', { uv: 2, color: '#f6efe4' }), hedge = mat(null, { color: '#3f6a34', rough: 1 });
+  ctx.box(9, .6, 64, PX, yb - .3, PZ + 56, balu, { solid: false }); ctx.water({ x: PX, z: PZ + 56, y: yb + .36, w: 7.4, d: 62, color: '#2a7a80', opacity: .92 });
+  for (const sx of [-1, 1]) { ctx.box(.35, 1, 64, PX + sx * 4.4, yb, PZ + 56, balu); for (let k = 0; k < 22; k++) ctx.cyl(.12, .9, PX + sx * 4.4, yb, PZ + 25 + k * 3, balu, { seg: 6, solid: false }); }
+  for (let k = 0; k < 5; k++) { ctx.cyl(.6, .8, PX, yb, PZ + 32 + k * 12, balu, { seg: 10 }); ctx.emitter('spray', PX, yb + .8, PZ + 32 + k * 12, { scale: 1 }); }
+  for (const sx of [-1, 1]) for (const off of [6, 22]) ctx.box(1.2, 1.1, 60, PX + sx * off, yb, PZ + 56, hedge, { solid: false });
   ctx.poi(PX, PZ + 40, 'Les bassins', 'Des bassins de marbre qui descendent en cascade vers la mer. Les enfants de toutes conditions s’y baignent ensemble : c’est la loi du palais, et la plus belle de Dorne.', { color: '#6ad0e0' });
   // orangers en allées, palmiers sur la plage
   const oranges = []; for (let k = 0; k < 8; k++) for (const s of [-1, 1]) oranges.push([PX + s * 30, PZ + 20 + k * 11, .8 + rand() * .2]);
