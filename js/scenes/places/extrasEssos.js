@@ -34,11 +34,5 @@ export default {
     for (const [x, z] of [[72, 67], [128, 67], [72, 123], [128, 123]]) ctx.fire(x, ctx.engine.groundFn(x, z), z, 1.6);
     ctx.poi(100, 64, 'Le temple rouge', 'Le plus grand temple du Maître de la Lumière : des marches de pierre rouge et des feux qui ne s’éteignent jamais. Ses prêtres promettent que la nuit est sombre et pleine de terreurs.', { color: '#ff6a3a' });
     await harbor(ctx, [[18, 120, 0], [-20, -140, Math.PI], [22, -220, .1]]);
-  },
-  async valyria(ctx) {
-    const { THREE, mat, rand } = ctx, g = ctx.engine.groundFn;
-    const lava = new THREE.MeshBasicMaterial({ color: '#ff5a10', toneMapped: false });
-    for (let i = 0; i < 14; i++) { const x = (rand() - .5) * 180, z = (rand() - .5) * 180, l = 6 + rand() * 18, c = new THREE.Mesh(new THREE.BoxGeometry(.6 + rand(), .1, l), lava); c.position.set(x, g(x, z) + .03, z); c.rotation.y = rand() * 3; ctx.add(c); ctx.emitter('smoke', x, g(x, z), z, { count: 18, opacity: .2, box: [3, 16, 3] }); }
-    ctx.poi(20, 20, 'Les failles', 'Le sol est fendu de veines de feu. Les marins qui reviennent de Valyria — il y en a peu — refusent d’en parler, et toussent jusqu’à la fin de leurs jours.', { color: '#ff6a3a' });
   }
 };

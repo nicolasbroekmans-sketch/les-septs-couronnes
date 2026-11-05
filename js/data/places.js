@@ -60,5 +60,5 @@ export const PLACES = [
   P('volantis', 'essos', 975, 815, 'Volantis', 'Cités libres', 'Les triarques', 'Chaleur humide, fleuve',
     'Le Mur Noir garde les vieilles familles ; le Long Pont garde tout le reste.'),
   P('valyria', 'essos', 1080, 965, 'Valyria', 'La Mer Fumeuse', 'Aucune — plus personne', 'Brume, fumées, soufre',
-    'Elle a régné sur le monde. La fumée est tout ce qui reste de son nom.')
+    'Elle a régné sur le monde. La fumée est tout ce qui reste de son nom.', 'places/valyria')
 ];
