@@ -38,7 +38,7 @@ export default {  // PEYREDRAGON : île volcanique, château aux gargouilles, lo
     const g = ctx.glow(-15, 3, 60, '#ffb030', 6); ctx.update(t => (g.material.opacity = .5 + Math.sin(t * 2) * .2));
     ctx.poi(-22, 60, 'Les mines d’or', 'Au fond des galeries, l’or brille dans la roche comme des veines. Les Lannister n’ont jamais eu besoin de marchander : il leur suffit de creuser.', { color: '#ffb030' });
     const lots = []; for (let k = 0; k < 18; k++) lots.push({ x: -37 + rand() * 2, z: -140 + k * 7, w: 5, d: 5.5, h: 4 + rand() * 3 });
-    ctx.houses(lots, { wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }), tints: ['#f2dfc0', '#e9cfa6'], roofTints: ['#ffffff', '#e0b090'] });
+    ctx.houses(lots, { style: 'ouest', wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }), tints: ['#f2dfc0', '#e9cfa6'], roofTints: ['#ffffff', '#e0b090'] });
     ctx.poi(-24, -100, 'Port-Lannis', 'La ville du port vit à l’ombre du Roc. Ses marchands jurent fidélité au lion, et vendent ses reflets dorés à tous les navires qui passent.');
     ctx.particles('dust', { color: '#ffd28a' });
     ctx.spawn(-24, 110, 0);

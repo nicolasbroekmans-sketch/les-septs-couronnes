@@ -19,7 +19,7 @@ export async function build(ctx, id) {
   const h = (x, z) => noise(x, z) * .5 + v.hills * smooth(70, 150, Math.hypot(x, z)) * (1 + noise(x * .3, z * .3) * .3) - (v.feature === 'port' ? 6 * smooth(40, 70, z) : 0) - (v.feature === 'river' ? 2.4 * (1 - smooth(4, 9, Math.abs(z - 45))) : 0);
   ctx.terrain({ size: 600, seg: 150, height: h, mat: mat(v.ground[0], { uv: 6, color: v.ground[1], rough: 1 }) });
   const wall = mat('plastered_wall', { uv: 4, instanced: true }), roof = mat(v.flat ? null : 'clay_roof_tiles', { uv: 2.5, instanced: true });
-  village(ctx, 0, 0, { houses: 22, radius: 22, banner: v.banner, wall, roof, tints: v.walls, roofTints: v.roofs, flat: v.flat, avoid: (x, z) => Math.abs(x) < 5 && z > 0 || (v.feature === 'port' && z > 36) || (v.feature === 'river' && Math.abs(z - 45) < 7) });
+  village(ctx, 0, 0, { style: { combegivre: 'nord', gue: 'nord', portsel: 'fer', mielbois: 'bief', sablerouge: 'dorne' }[id], houses: 22, radius: 22, banner: v.banner, wall, roof, tints: v.walls, roofTints: v.roofs, flat: v.flat, avoid: (x, z) => Math.abs(x) < 5 && z > 0 || (v.feature === 'port' && z > 36) || (v.feature === 'river' && Math.abs(z - 45) < 7) });
   road(ctx, 0, 140, 0, 8, { w: 4.5 });
   const warm = !!v.flat, style = warm ? { stone: '#c8a070', plaster: '#e8c49a', roofTex: 'clay_roof_tiles', roof: '#b0704a' } : { stone: '#9a9690', plaster: '#e6dcc8', roof: v.roofs[0] ?? '#7a6a5a' };
   walkHouse(ctx, -9, -56, 0, { ...style, house: v.banner, owner: 'La veuve du meunier', name: 'Une maison du village' }); walkHouse(ctx, 9, -56, 0, { ...style, owner: 'Le forgeron du village' }); road(ctx, -140, -10, -8, -4, { w: 4 });

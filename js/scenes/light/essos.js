@@ -82,13 +82,13 @@ export default {  // PENTOS : villa blanche en terrasses sur la mer
     for (const s of [-1, 1]) ctx.box(100, 1.1, .4, 0, 1.5, s * 4.3, stone);
     const lots = []; for (let k = 0; k < 12; k++) { if (k === 5 || k === 6) continue; lots.push({ x: -42 + k * 7.6, z: 6.5, w: 6.6, d: 4, h: 5 + rand() * 4, y: 1 }, { x: -42 + k * 7.6, z: -6.5, w: 6.6, d: 4, h: 5 + rand() * 4, y: 1 }); }
     for (const l of lots) ctx.box(l.w, 1, l.d + .2, l.x, -.2, l.z, stone, { solid: false });
-    ctx.houses(lots, { wall: mat('painted_plaster_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }), tints: ['#e8b48a', '#d98c6a', '#f0d8b0', '#b88a6a', '#a8c0b0'], roofTints: ['#ffffff', '#e0a080'], sink: 0 });
+    ctx.houses(lots, { style: 'essos', wall: mat('painted_plaster_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }), tints: ['#e8b48a', '#d98c6a', '#f0d8b0', '#b88a6a', '#a8c0b0'], roofTints: ['#ffffff', '#e0a080'], sink: 0 });
     ctx.poi(0, 0, 'Le Long Pont', 'Des boutiques, des auberges et des temples, tous bâtis sur le pont lui-même. On peut y naître, y vivre et y mourir sans jamais toucher la rive.');
     const black = mat('volcanic_rock_tiles', { uv: 6, color: '#2a2a2c', rough: .3, metal: .3 });
     for (let k = 0; k < 40; k++) { const a = k / 40 * 6.28, x = 130 + Math.cos(a) * 60, z = -40 + Math.sin(a) * 45; ctx.box(10, 50, 6, x, 0, z, black, { rotY: a + Math.PI / 2 }); }
     ctx.poi(64, -10, 'Le Mur Noir', 'Une muraille ovale de pierre fondue, sans joint ni fissure, si large que six chars y roulent de front. Seuls les descendants de l’ancien sang y ont leur place.', { color: '#c8a0ff' });
     const city = ctx.cityGrid({ x0: -150, x1: -55, z0: -130, z1: 130, block: 14, street: 4, hMin: 5, hMax: 10, avoid: (x, z, w) => x + w / 2 > -54 });
-    ctx.houses(city.lots, { wall: mat('painted_plaster_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }), tints: ['#e8b48a', '#d98c6a', '#f0d8b0', '#a8c0b0'], roofTints: ['#ffffff', '#e0a080'] });
+    ctx.houses(city.lots, { style: 'essos', wall: mat('painted_plaster_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }), tints: ['#e8b48a', '#d98c6a', '#f0d8b0', '#a8c0b0'], roofTints: ['#ffffff', '#e0a080'] });
     ctx.poi(-60, 20, 'La rive des marchands', 'Ici on vend des tatouages de larmes, des éléphants nains et des rumeurs de dragons à venir.');
     for (let k = -4; k <= 4; k += 2) ctx.torch(k * 10, 3.2, 4.4, { light: false });
     ctx.particles('dust', { color: '#ffe0b0', count: 900 });

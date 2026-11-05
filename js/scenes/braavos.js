@@ -54,7 +54,7 @@ export async function build(ctx) {
       }
     }
   }
-  ctx.houses(lots, {
+  ctx.houses(lots, { style: 'essos',
     wall: mat('painted_plaster_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }),
     tints: ['#c96f4a', '#d9a441', '#5d8a8c', '#a8574f', '#e2c9a4', '#7b8fb0', '#b9785a', '#e4b77a'], roofTints: ['#8a5040', '#6e4a3a', '#9a6a52'], windows: '#ffcf8a', sink: 0, roofH: .35
   });

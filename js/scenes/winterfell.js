@@ -82,7 +82,7 @@ export async function build(ctx) {
 
   // Winter Town : grille irrégulière de maisons en bois et pierre
   const city = ctx.cityGrid({ x0: -110, x1: 110, z0: 36, z1: 172, block: 14, street: 4.5, hMin: 3.2, hMax: 6.5, avoid: (x, z, w = 0, d = 0) => Math.abs(x) < 7 + w / 2 || Math.hypot(x, z - 98) < 16 || (Math.abs(z - 126) < 8 + d / 2 && Math.abs(x) < 25 + w / 2) || (Math.abs(x) < 20 + w / 2 && z > 36 - d / 2 && z < 86 + d / 2) || x + w / 2 > 110 || z + d / 2 > 172 });
-  ctx.houses(city.lots, {
+  ctx.houses(city.lots, { style: 'nord',
     wall: mat('weathered_planks', { uv: 3, instanced: true }), roof: mat('grey_roof_tiles', { uv: 3, instanced: true }),
     tints: ['#e8d8c0', '#d8c6aa', '#f2e8d8', '#cbbfae'], roofTints: ['#e9eef2', '#dfe5ea', '#cfd6dc'], windows: '#ffb05a', roofH: .6
   });

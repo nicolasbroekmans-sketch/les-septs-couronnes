@@ -50,7 +50,7 @@ export async function build(ctx) {
   // --- Lancehélion : ville d'Ombre (toits plats), tour du Soleil, tour de la Lance ---
   const SX = -140, avoid = (x, z, w = 0, d = 0) => Math.abs(z - 20) < 4 + d / 2 || Math.hypot(x - SX, z + 60) < 24 || Math.abs(x - SX) < 4 + w / 2;
   const city = ctx.cityGrid({ x0: -215, x1: -70, z0: -110, z1: 110, block: 13, street: 3.2, hMin: 3.5, hMax: 8, empty: .08, avoid });
-  ctx.houses(city.lots, { wall: mat('plastered_wall', { uv: 4, instanced: true }), tints: ['#e8cca0', '#dcb888', '#f0dcb8', '#d8a878'], flat: true, windows: '#3a2a1e', sink: 2 });
+  ctx.houses(city.lots, { style: 'dorne', wall: mat('plastered_wall', { uv: 4, instanced: true }), tints: ['#e8cca0', '#dcb888', '#f0dcb8', '#d8a878'], flat: true, windows: '#3a2a1e', sink: 2 });
   ctx.tower(SX, -60, { w: 14, h: 30, mat: pink, round: true }); dome(ctx, SX, 31, -60, 9, goldDome, { sy: 1.2, spire: goldDome });
   ctx.poi(SX, -40, 'La tour du Soleil', 'Sous son dôme de verre et d’or siègent les princes de Dorne. Au sol, une mosaïque du soleil percé d’une lance : on ne marche jamais sur la lance.', { color: '#ffb070' });
   ctx.tower(SX + 26, -70, { w: 6, h: 46, mat: pink, round: true }); ctx.cyl(.25, 10, SX + 26, 46, -70, goldDome, { seg: 6, solid: false });

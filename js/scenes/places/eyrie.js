@@ -30,7 +30,7 @@ export async function build(ctx) {
   ctx.poi(0, 50, 'La Porte de la Lune', 'Le château d’hiver des Arryn, au pied de la montagne. Quand la neige ferme la route, toute la cour descend ici — à dos de mule, en grommelant.', { color: '#a8c4ff' });
 
   // --- village au pied du château ---
-  village(ctx, 0, 100, { houses: 24, radius: 28, banner: 'arryn', wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('grey_roof_tiles', { uv: 3, instanced: true }),
+  village(ctx, 0, 100, { style: 'bief', houses: 24, radius: 28, banner: 'arryn', wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('grey_roof_tiles', { uv: 3, instanced: true }),
     tints: ['#f2ece0', '#e6dccb', '#ece6da'], roofTints: ['#7a94b4', '#8aa0bc', '#6a8098'], avoid: (x, z) => Math.abs(x) < 6, name: 'Le village de la Porte', text: 'Des fermiers du Val, des muletiers, une auberge qui sent le pain chaud. Tout ce qui monte aux Eyrié passe d’abord par ici.' });
   road(ctx, 0, 160, 0, 46, { w: 5, lanterns: true });
   const trees = [];

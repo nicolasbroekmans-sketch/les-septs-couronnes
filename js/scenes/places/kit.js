@@ -14,7 +14,7 @@ export function village(ctx, cx, cz, o = {}) {
     if (o.avoid?.(x, z)) continue;
     lots.push({ x, z, w: 5 + rand() * 3, d: 5 + rand() * 2, h: (o.hMin ?? 3.2) + rand() * (o.hVar ?? 2.5), rot: -a + Math.PI / 2 });
   }
-  ctx.houses(lots, { wall: o.wall, roof: o.roof, tints: o.tints ?? ['#e8d8c0', '#d8c6aa', '#cbbfae'], roofTints: o.roofTints ?? ['#8a6a4a', '#7a5a3a', '#9a7a5a'], windows: o.windows ?? '#ffb05a', roofH: o.roofH ?? .6, flat: o.flat });
+  ctx.houses(lots, { style: o.style, wall: o.wall, roof: o.roof, tints: o.tints ?? ['#e8d8c0', '#d8c6aa', '#cbbfae'], roofTints: o.roofTints ?? ['#8a6a4a', '#7a5a3a', '#9a7a5a'], windows: o.windows ?? '#ffb05a', roofH: o.roofH ?? .6, flat: o.flat });
   P.well(cx, cz);
   if (o.market !== false) P.market(cx + 9, cz, o.stalls ?? 4, 5, o.awnings ?? ['#6a2a2a', '#3a4a5a', '#6a5a3a', '#2a3a2a']);
   for (let i = 0; i < 6; i++) { const a = i / 6 * 6.28; P.lantern(cx + Math.cos(a) * (R - 8), cz + Math.sin(a) * (R - 8)); }

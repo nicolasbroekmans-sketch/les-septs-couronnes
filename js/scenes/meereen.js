@@ -41,7 +41,7 @@ export async function build(ctx) {
   // Ville de briques : maisons cubiques à toits plats
   const avoid = (x, z) => (Math.abs(x) < 64 && z > -205 && z < 66) || Math.hypot(x - 105, z - 20) < 42;
   const city = ctx.cityGrid({ x0: -170, x1: 170, z0: -200, z1: 110, block: 15, street: 4, hMin: 4, hMax: 11, avoid });
-  ctx.houses(city.lots, { wall: mat('large_sandstone_blocks', { uv: 4, instanced: true }), flat: true, tints: ['#f2d9ae', '#e9c891', '#f7e7c8', '#dcb383', '#e8b48a'], sink: 1 });
+  ctx.houses(city.lots, { style: 'dorne', wall: mat('large_sandstone_blocks', { uv: 4, instanced: true }), flat: true, tints: ['#f2d9ae', '#e9c891', '#f7e7c8', '#dcb383', '#e8b48a'], sink: 1 });
   for (const l of city.lots) if (rand() < .35) ctx.box(l.w + .4, .7, l.d + .4, l.x, l.h, l.z, blocks, { solid: false });
 
   // Arène de Daznak : gradins en ellipse

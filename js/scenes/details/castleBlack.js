@@ -10,7 +10,7 @@ export function castleBlack(ctx) {
   // bâtiments de bois instanciés (dortoirs, réserves, écuries)
   const lots = [[-58, -30, 8, 14], [-58, -8, 8, 12], [58, -30, 8, 14], [58, -6, 8, 12], [-20, 46, 12, 8], [22, 46, 12, 8], [-48, 32, 10, 8], [48, 32, 10, 8]]
     .map(([x, z, w, d]) => ({ x, z, w, d, h: 4 + (Math.abs(x) % 3) }));
-  ctx.houses(lots, { wall: mat('weathered_planks', { uv: 3, instanced: true }), roof: mat('grey_roof_tiles', { uv: 3, instanced: true }), tints: ['#6a5a4a', '#5a4a3a', '#7a6a58'], roofTints: ['#e9eef2', '#dfe5ea'], windows: '#ffb05a', roofH: .7 });
+  ctx.houses(lots, { style: 'garde', wall: mat('weathered_planks', { uv: 3, instanced: true }), roof: mat('grey_roof_tiles', { uv: 3, instanced: true }), tints: ['#6a5a4a', '#5a4a3a', '#7a6a58'], roofTints: ['#e9eef2', '#dfe5ea'], windows: '#ffb05a', roofH: .7 });
   // tour du Lord Commandant (pierre) et tour du Roi
   ctx.tower(-24, -40, { w: 9, h: 22, mat: stone, roof });
   ctx.tower(26, -46, { w: 7, h: 28, mat: stone, round: true });

@@ -1,5 +1,6 @@
 // Villes procédurales : grille irrégulière de parcelles et maisons instanciées (corps, toit, fenêtres).
 import * as THREE from 'three';
+import { styledHouses } from './houses.js';
 
 export function cityBuilders(E, ctx) {
   const { rand } = ctx;
@@ -24,6 +25,7 @@ export function cityBuilders(E, ctx) {
     },
     houses(lots, o) {
       const n = lots.length; if (!n) return;
+      if (o.style) return styledHouses(E, ctx, lots, o.style, o);
       const body = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1).translate(0, .5, 0), o.wall, n);
       const rs = new THREE.Shape(); rs.moveTo(-.5, 0); rs.lineTo(.5, 0); rs.lineTo(0, 1); rs.closePath();
       const roofs = o.flat ? null : new THREE.InstancedMesh(new THREE.ExtrudeGeometry(rs, { depth: 1, bevelEnabled: false }).translate(0, 0, -.5), o.roof, n);

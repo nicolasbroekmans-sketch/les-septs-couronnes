@@ -57,7 +57,7 @@ export async function build(ctx) {
   // La ville : grille irrégulière, ruelles étroites, toits de tuiles ocre
   const avoid = (x, z, w = 0, d = 0) => (Math.abs(x) < 19 + w / 2 && z > 30 - d / 2 && z < 50 + d / 2) || avoidExtra(x, z, w, d) || (Math.abs(x - kx) < 46 && z < kz + 40 && z > kz - 40) || Math.hypot(x - sx, z - sz) < 26 || (Math.abs(x - kx) < 7 && z > kz + 26 && z < kz + 90) || (Math.abs(x) < 6 && z > 20) || z > 56 || (Math.abs(z - 20) < 3 + d / 2 && x < 0);
   const city = ctx.cityGrid({ x0: -160, x1: 160, z0: -165, z1: 58, block: 13, street: 3.4, hMin: 4, hMax: 9, empty: .06, avoid });
-  ctx.houses(city.lots, {
+  ctx.houses(city.lots, { style: 'couronne',
     wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }),
     tints: ['#f2dfc0', '#e9cfa6', '#f6e7cf', '#e2c08f', '#f0d6b8'], roofTints: ['#ffffff', '#f0c8a8', '#e6b090'], roofH: .45, sink: 4, windows: '#3a2a1e'
   });

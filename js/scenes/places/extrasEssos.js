@@ -5,7 +5,7 @@ import { village, harbor, road } from './kit.js';
 export default {
   async pentos(ctx) {
     const { mat } = ctx;
-    village(ctx, 100, 4, { houses: 30, radius: 24, wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }), tints: ['#fbf4e6', '#f2e4c8', '#fff6ea'], roofTints: ['#e0a080', '#d08a60'], stalls: 6, awnings: ['#2f6b70', '#c9a227', '#7a3a6e', '#b0201a'],
+    village(ctx, 100, 4, { style: 'essos', houses: 30, radius: 24, wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }), tints: ['#fbf4e6', '#f2e4c8', '#fff6ea'], roofTints: ['#e0a080', '#d08a60'], stalls: 6, awnings: ['#2f6b70', '#c9a227', '#7a3a6e', '#b0201a'],
       avoid: (x, z) => z > 50, name: 'La ville basse', text: 'Des ruelles blanches qui descendent vers le port, des balcons fleuris et des marchands qui parlent six langues — surtout celle de l’or.' });
     road(ctx, 6, 24, 80, 8, { w: 5, color: '#e0d0b0', lanterns: true });
     await harbor(ctx, [[-40, 110, .4], [30, 120, -.3], [90, 140, 1.2]], { piers: [[-20, 76, 26, 0], [24, 76, 26, 0]] });

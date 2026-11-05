@@ -43,7 +43,7 @@ export async function build(ctx) {
   const SEPT = [-78, -55], MARKET = [-12, 40];
   const avoid = (x, z, w = 0, d = 0) => Math.abs(x + 45) < 5 + w / 2 || Math.abs(z - 100) < 4 + d / 2 || Math.hypot(x - SEPT[0], z - SEPT[1]) < 26 || Math.hypot(x - MARKET[0], z - MARKET[1]) < 18 || x + w / 2 > 14 || x - w / 2 < -104;
   const city = ctx.cityGrid({ x0: -104, x1: 14, z0: -100, z1: 150, block: 15, street: 3.6, hMin: 5, hMax: 11, empty: .05, avoid });
-  ctx.houses(city.lots, { wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }), tints: ['#f2dfc0', '#e9cfa6', '#f6e7cf', '#e2c08f'], roofTints: ['#ffffff', '#e8a080', '#d88a60'], windows: '#3a2a1e', roofH: .5, sink: 2 });
+  ctx.houses(city.lots, { style: 'ouest', wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }), tints: ['#f2dfc0', '#e9cfa6', '#f6e7cf', '#e2c08f'], roofTints: ['#ffffff', '#e8a080', '#d88a60'], windows: '#3a2a1e', roofH: .5, sink: 2 });
   ctx.cyl(15, 14, SEPT[0], 1, SEPT[1], sand, { seg: 7 }); dome(ctx, SEPT[0], 15, SEPT[1], 14, mat(null, { color: '#e8c060', metal: .6, rough: .35 }), { spire: mat(null, { color: '#ffd27a', metal: .8, rough: .3 }) });
   ctx.poi(SEPT[0], SEPT[1] + 18, 'Le Grand Septuaire de Port-Lannis', 'Un dôme doré que les marins voient de vingt lieues en mer. Les Lannister l’ont payé, et les Sept le savent.', { color: '#ffd27a' });
   P.market(MARKET[0], MARKET[1], 11, 8, ['#8b0000', '#c9a227', '#8b0000', '#d8b040', '#6a2a1a']);

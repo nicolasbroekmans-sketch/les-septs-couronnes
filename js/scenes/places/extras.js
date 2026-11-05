@@ -5,7 +5,7 @@ export default {
   // HAUTJARDIN : le bourg au pied du château, les lices de tournoi et leurs pavillons, les vignes, la route des roses
   async highgarden(ctx) {
     const { mat, props: P, rand } = ctx, g = ctx.engine.groundFn;
-    village(ctx, 130, 20, { houses: 30, radius: 30, banner: 'tyrell', wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }),
+    village(ctx, 130, 20, { style: 'bief', houses: 30, radius: 30, banner: 'tyrell', wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }),
       tints: ['#fbf6ec', '#f4ead6', '#fff8ee'], roofTints: ['#7fa0a8', '#6a8a92', '#c08050'], windows: '#ffd890', name: 'Le bourg de Hautjardin', text: 'Des maisons blanches aux volets verts, des fontaines et des marchés de fleurs. Même les forgerons, ici, ont des rosiers devant la porte.', color: '#ffd0e0' });
     road(ctx, 0, 90, 100, 26, { w: 5, color: '#c8b890', lanterns: true });
     // lices : barrière centrale, tribunes, pavillons colorés, écus
@@ -23,7 +23,7 @@ export default {
   // PEYREDRAGON : village de pêcheurs sur le plateau, dragons de pierre, étendards au dragon
   async dragonstone(ctx) {
     const { mat, props: P } = ctx, g = ctx.engine.groundFn, basalt = mat('volcanic_rock_tiles', { uv: 4, color: '#3e3c3c' });
-    village(ctx, 55, 20, { houses: 20, radius: 24, banner: 'targaryen', wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('grey_roof_tiles', { uv: 3, instanced: true }),
+    village(ctx, 55, 20, { style: 'fer', houses: 20, radius: 24, banner: 'targaryen', wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('grey_roof_tiles', { uv: 3, instanced: true }),
       tints: ['#9a9694', '#8a8682', '#a8a4a0'], roofTints: ['#4a4848', '#3a3838'], name: 'Le village des pêcheurs', text: 'Des maisons de pierre noire, des filets qui sèchent sur les rochers et des pêcheurs qui ne lèvent jamais les yeux vers le château.' });
     for (const [x, z, r] of [[-20, 6, .3], [20, 6, -.3], [-60, -10, .8], [60, -12, -.8]]) {
       const y = g(x, z); ctx.box(3, 2, 6, x, y, z, basalt); ctx.cone(1.4, 4, x, y + 2, z - 2.5, basalt, { seg: 5, rotY: r });
