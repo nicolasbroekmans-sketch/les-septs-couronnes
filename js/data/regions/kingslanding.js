@@ -26,7 +26,7 @@ export default {
       ai: { patrol: [[-20, 20], [-150, 20]], aggression: .7, morale: .8 } },
     { id: 'kl_guard_2', name: 'Manteau d’or', role: 'guard', faction: 'guet', x: -158, z: 24, yaw: Math.PI / 2, weapon: 'epee_longue', armor: 'maille', hp: 100, look: look({ female: false, tunic: '#c9a227', cloak: '#c9a227', house: 'baratheon', helmet: true }), ai: { face: Math.PI / 2 } },
     { id: 'hallis', name: 'Septon Hallis', role: 'priest', faction: 'couronne', x: -64, z: -26, weapon: 'poings', hp: 40, look: look({ female: false, tunic: '#e8e2d4', beard: true, hair: '#cfcfcf' }), ai: { wander: 3 } },
-    ...townsfolk('kl_folk', 8, [[0, 40], [2, 28], [-30, 58], [20, 58], [-60, 20], [-2, 0]], [[14, 30], [-14, 36], [-40, 40], [30, 40]],
+    ...townsfolk('kl_folk', 18, [[0, 40], [2, 28], [-30, 58], [20, 58], [-60, 20], [-2, 0]], [[14, 30], [-14, 36], [-40, 40], [30, 40]],
       ['Les Manteaux d’or ? Des voleurs avec un uniforme.', 'On dit que la Main du Roi est malade…', 'Le pain a encore augmenté.', 'Attention aux coupe-bourses près du port.', 'Les Sept vous gardent, étranger.'])
   ],
   groups: [

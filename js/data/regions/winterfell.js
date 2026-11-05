@@ -23,7 +23,7 @@ export default {
     { id: 'wf_guard_2', name: 'Garde de Winterfell', role: 'guard', faction: 'stark', x: 70, z: -9, yaw: -Math.PI / 2, weapon: 'epee_longue', armor: 'maille', hp: 110, look: stark({ helmet: true }), ai: { face: -Math.PI / 2 } },
     { id: 'wf_guard_3', name: 'Patrouilleur', role: 'guard', faction: 'stark', x: 0, z: -4, weapon: 'epee_longue', armor: 'brigandine', hp: 100, look: stark(), ai: { patrol: [[-4, -14], [16, -14], [16, 2], [-4, 2]] } },
     { id: 'wat', name: 'Wat, apprenti forgeron', role: 'villager', faction: 'stark', x: 3, z: 17, weapon: 'poings', hp: 50, when: [{ npcFlag: 'spared', npc: 'wat' }, { quest: 'wf_iron', state: 'completed' }], look: look({ female: false, tunic: '#4a3a2a', seed: 'wat' }), ai: { wander: 2 } },
-    ...townsfolk('wf_folk', 8, [[104, -14], [124, -34], [134, 4], [79, -14], [6, -4]], [[114, -44], [104, 16], [144, 1], [144, -39]],
+    ...townsfolk('wf_folk', 16, [[104, -14], [124, -34], [134, 4], [79, -14], [6, -4], [150, -40], [180, -14], [132, -24], [20, 0]], [[114, -44], [104, 16], [144, 1], [144, -39]],
       ['Le Nord se souvient.', 'L’hiver vient, comme ils disent là-haut.', 'Des déserteurs rôdent dans le Bois-aux-Loups.', 'Les sources chaudes ? Un miracle des anciens dieux.', 'Couvrez-vous, étranger, vous allez geler.'])
   ],
   groups: [
