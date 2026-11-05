@@ -42,7 +42,7 @@ export class CombatDirector {
     if (T.kind === 'player') { G.renderer.hitFlash(Math.min(1, res.amount / 30)); G.flashT = .35; G.rig.shake = .25; }
     if (A.kind === 'player') {
       practice(G.core.state.player, A.fighter.weapon.ranged ? 'tir' : 'combat', res.amount > 0 ? .5 : .2);
-      if (!wasHostile && !T.team && !T.def?.follower) G.crime(T, h.killed ? 'meurtre' : 'agression');
+      if (!wasHostile && !T.team && !T.def?.follower && !T.stolen) G.crime(T, h.killed ? 'meurtre' : 'agression');
       T.provoked = true;
       if (T.group) G.core.state.world.flags['provoked:' + T.group] = true;
     }

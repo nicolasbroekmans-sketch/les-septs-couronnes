@@ -3,7 +3,7 @@
 import { h } from './dom.js';
 import { advise } from '../game/Advisor.js';
 
-const ICON = { quest: '◆', offer: '!', battle: '⚔', gold: '⛁', explore: '✦' };
+const ICON = { contract: '✉', quest: '◆', offer: '!', battle: '⚔', gold: '⛁', explore: '✦' };
 
 export function helpPopup(ui, auto = false) {
   const G = ui.game; if (!G?.core || document.querySelector('#help')) return;

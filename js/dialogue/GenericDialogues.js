@@ -2,6 +2,7 @@
 // garde et amende, ennemi qui se rend. Les réactions varient et les PNJ se souviennent.
 import { attitude } from '../ai/Memory.js';
 import { armyNodes } from './ArmyDialogues.js';
+import { book } from '../world/Contracts.js';
 
 const REFUS = ['Ah non, je n’ai pas envie.', 'Va travailler, comme tout le monde !', 'Une pièce ? Et puis quoi encore, une maison ?', 'Les temps sont durs pour tout le monde, l’ami.', 'Je ne donne pas aux inconnus.'];
 const DON = ['Bon… tiens, une pièce. Ne la bois pas d’un coup.', 'Tiens. Les Sept voient tout, paraît-il.', 'Une seule, hein. Et file.'];
@@ -48,5 +49,8 @@ export function genericNodes(npc, game) {
     nodes.bounty = { text: `Halte ! Vous êtes recherché. L’amende est de ${bounty} pièces d’or.`, trade: false,
       options: [{ text: `Payer ${bounty} pièces d’or.`, when: { gold: bounty }, end: true, effects: [{ gold: -bounty }, { payBounty: npc.faction }] },
         { text: 'Jamais !', end: true, effects: [{ hostile: npc.id }] }] };
+  const pli = book(s).active.find(c => c.kind === 'deliver' && c.npc === npc.id);
+  if (pli) (nodes.default.options ??= []).unshift({ text: 'J’ai un pli pour vous (contrat).', next: 'pli', effects: [{ contract: pli.id }] });
+  nodes.pli = { text: ['Ah ! Enfin. Merci, et pas un mot de ceci à quiconque.', 'Parfait. Voilà pour ta peine.'] };
   return nodes;
 }

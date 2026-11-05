@@ -6,6 +6,7 @@ import { changeRep } from '../factions/Reputation.js';
 import { npcRecord, remember } from '../ai/Memory.js';
 import { cosmetics } from '../player/Rewards.js';
 
+import { turnIn } from '../world/Contracts.js';
 export function apply(effects, game, ctx = {}) {
   const { state, bus } = game, p = state.player, out = [];
   for (const e of [effects].flat().filter(Boolean)) {
@@ -30,6 +31,8 @@ export function apply(effects, game, ctx = {}) {
     if (e.trade) bus.emit('ui:trade', { npc: e.trade });
     if (e.troops) { const a = (p.army ??= { troops: {}, followers: [] }); for (const [u, n] of Object.entries(e.troops)) { a.troops[u] = (a.troops[u] ?? 0) + n; if (e.follow) for (let i = 0; i < n; i++) a.followers.push(u); } bus.emit('army:followers', {}); out.push('Nouvelles recrues'); }
     if (e.openArmy) bus.emit('ui:army', {});
+    if (e.openContracts) bus.emit('ui:contracts', {});
+    if (e.contract) turnIn(game, e.contract);
     if (e.startBattle) bus.emit('battle:start', { id: e.startBattle });
     if (e.heal) bus.emit('player:heal', { amount: e.heal });
     if (e.advanceTime) bus.emit('world:advance', { minutes: e.advanceTime });

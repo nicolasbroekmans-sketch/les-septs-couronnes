@@ -10,6 +10,7 @@ export function frame(G, dt) {
   if (!G.paused && G.player) {
     if (!ui.modal) G.controller.update(dt);
     if (!ui.modal && I.hit('KeyE')) G.interaction.use();
+    if (!ui.modal && I.hit('KeyF')) G.interaction.pick();
     G.world.pathBudget = 3;
     for (const a of G.actors) {
       if (a.kind === 'player') continue;

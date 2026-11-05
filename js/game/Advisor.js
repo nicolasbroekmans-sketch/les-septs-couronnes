@@ -14,6 +14,7 @@ export function advise(core, region) {
     const q = QUESTS[tracked], step = q.steps[s.quests[tracked].step];
     out.push({ kind: 'quest', title: q.title, text: step.text });
   }
+  for (const c of s.world.contracts?.active ?? []) if (c.region === p.region) out.push({ kind: 'contract', title: 'Contrat : ' + c.title, text: c.kind === 'hunt' ? `Vainquez les brigands (${c.have}/${c.count}) : suivez la colonne de lumière.` : c.kind === 'deliver' ? `Remettez le pli à ${c.npcName} (parlez-lui).` : `Apportez ${c.qty} × ${c.item} au tableau des contrats.`, npc: c.kind === 'deliver' ? c.npc : null, at: c.kind === 'hunt' ? c.at : null });
   for (const [id, q] of Object.entries(QUESTS)) if (q.region === p.region && core.quests.canStart(id)) out.push({ kind: 'offer', title: 'Une mission vous attend', text: `${npcName(q.giver)} a une mission pour vous (« ! » doré au-dessus de sa tête) : « ${q.title} ».`, npc: q.giver });
   for (const [id, b] of Object.entries(BATTLES)) {
     if (b.region !== p.region || b.prologue || s.world.flags['won:' + id]) continue;

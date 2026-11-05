@@ -21,7 +21,10 @@ function defeated(G, a) {
   if (a.defeated) return; a.defeated = true;
   if (a.group) G.core.bus.emit('npc:defeated', { group: a.group, npc: a.id });
 }
+/** Un voleur rattrapé rend l'or qu'il avait pris. */
+function refund(G, a) { if (!a.stolen) return; G.core.state.player.gold += a.stolen; G.ui.toast(`Vous récupérez votre bourse : +${a.stolen} or.`, 'loot'); a.stolen = 0; }
 export function surrender(G, a) {
+  refund(G, a);
   a.surrendered = true; a.fighter.block(false); a.brain.state = 'routine'; a.brain.target = null;
   defeated(G, a); G.core.state.stats.spared++;
   G.ui.bark(a, 'Pitié ! Je me rends !'); G.ui.toast(`${a.name} se rend. Approchez-vous (E) pour décider de son sort.`, 'info');
@@ -34,6 +37,7 @@ export function onDeath(G, a, killer) {
   if (a.kind === 'player') return G.playerDied();
   if (a.kind === 'crowd') { G.battle?.onDeath(a); if (killer?.kind === 'player') { addXp(G.core.state.player, 8, G.core.bus, 'combat'); G.core.state.stats.kills++; } return; }
   if (a.def.follower) return G.followers?.onDeath(a);
+  refund(G, a);
   defeated(G, a);
   if (a.def.stealthTarget) G.core.effects([{ flag: a.def.stealthTarget, value: !!a.ambushed && !a.seen }]);
   G.core.bus.emit('npc:killed', { npc: a.id, group: a.group });

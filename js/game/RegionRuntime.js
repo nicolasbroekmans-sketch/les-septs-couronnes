@@ -56,7 +56,7 @@ export class RegionRuntime {
         else { cur.def = n; cur.brain.home = { x: n.x, z: n.z }; }
       }
     }
-    for (const [id, a] of this.actors) if (!ids.has(id) && a.alive && !a.surrendered && a.brain?.state !== 'combat') this.remove(id);
+    for (const [id, a] of this.actors) if (!ids.has(id) && !a.def.extra && a.alive && !a.surrendered && a.brain?.state !== 'combat') this.remove(id);
   }
   remove(id) { const a = this.actors.get(id); if (!a) return; this.actors.delete(id); this.game.removeActor(a); }
   /** Les membres d'un groupe pacifié quittent les lieux. */

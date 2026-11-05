@@ -26,6 +26,8 @@ import { audio } from '../audio.js';
 import { Humanoid } from '../engine/Humanoid.js';
 import { lookFromCosmetics } from '../player/Rewards.js';
 import { Followers } from './Followers.js';
+import { ThiefBrain } from '../ai/ThiefBrain.js';
+import { ContractRuntime } from './ContractRuntime.js';
 import { BattleRuntime } from './BattleRuntime.js';
 import { BATTLES } from '../data/battles.js';
 import { pardon } from '../factions/Reputation.js';
@@ -54,7 +56,7 @@ export class Game {
   /** Démarre (ou reprend) une partie à partir d'un état complet. */
   async start(state) {
     this.stop(); this.clearBattle(); this.ui.battleHud?.(null); this.ui.skipButton?.(false);
-    this.core = new GameCore(state); wireEvents(this); this.ui.startTutorial(this);
+    this.core = new GameCore(state); wireEvents(this); this.ui.startTutorial(this); this.contracts = new ContractRuntime(this);
     await this.enterRegion(state.player.region, state.player.position);
     this.run();
   }
@@ -67,7 +69,7 @@ export class Game {
   async prologue(onDone) {
     this.stop(); this.clearBattle();
     const state = createGameState({ name: 'Écuyer', sex: 'homme', age: 19, origin: 'couronne', classId: 'guerrier', difficulty: 'facile', appearance: { cloak: '#2a3a5a' } }, 'kingslanding', 7);
-    state.explore = true; this.core = new GameCore(state); wireEvents(this); this.onPrologueEnd = onDone;
+    state.explore = true; this.core = new GameCore(state); wireEvents(this); this.contracts = new ContractRuntime(this); this.onPrologueEnd = onDone;
     const b = BATTLES.prologue;
     REGIONS['battle:prologue'] ??= { id: 'battle:prologue', battle: 'prologue', scene: 'battlefield', placeId: 'prologue', name: b.name, region: 'Le Conflans', climate: 'tempere', lawFaction: null, prices: {}, intro: b.desc, npcs: [], groups: [], markers: [], objects: [], rumors: [] };
     await this.enterRegion('battle:prologue');
@@ -92,7 +94,11 @@ export class Game {
     this.addActor(this.player); this.rig.yaw = this.player.yaw; this.player.lookKey = JSON.stringify(this.playerLook());
     this.region = new RegionRuntime(this, def); this.region.refresh();
     this.followers = new Followers(this); if (!def.battle && !st.explore) this.followers.spawn();
-    this.markers = new WorldMarkers(this);
+    if (def.lawFaction && !st.explore && this.rng() < .7) { // un tire-laine rôde dans les villes et les villages
+      const s = def.spawn, t = this.region.spawn({ id: 'tirelaine_' + id, name: 'Passant pressé', role: 'thief', extra: true, faction: 'peuple', x: s.x + 12, z: s.z - 22, weapon: 'dague', hp: 45, look: { tunic: '#3a3a30', cloak: '#2a2a24' } });
+      t.brain = new ThiefBrain(t, this);
+    }
+    this.markers = new WorldMarkers(this); this.contracts.enter(def);
     this.setWeather(st.world.time.weather ?? this.core.clock.rollWeather(def.climate));
     this.ui.loading(.9, def.name, 'Compilation des shaders…');
     await this.renderer.renderer.compileAsync(E.scene, this.renderer.camera);

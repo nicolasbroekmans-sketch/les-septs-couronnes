@@ -15,6 +15,7 @@ import { guideTab } from './panels/GuideTab.js';
 import { profileTab } from './panels/ProfileTab.js';
 import { armyTab } from './panels/ArmyTab.js';
 import { rankTab } from './panels/RankTab.js';
+import { contractsTab } from './panels/ContractsTab.js';
 import { battleHud, battleResult, skipButton } from './BattleView.js';
 import { helpPopup } from './HelpPopup.js';
 import { Tutorial } from './Tutorial.js';
@@ -49,7 +50,8 @@ export class UI {
     if (e.code === 'Escape' && this.panel.isOpen) return this.closePanel();
     if (e.code === 'Escape' && !G.input.locked && !this.modal) this.openPause();
   }
-  openCharacter(tab = 'inv') { const G = this.game; this.panel.open([inventoryTab(G), skillsTab(G), journalTab(G), mapTab(G), factionsTab(G), profileTab(G), armyTab(G), rankTab(G), guideTab(G)], tab, 'Personnage'); }
+  openCharacter(tab = 'inv') { const G = this.game; this.panel.open([inventoryTab(G), skillsTab(G), journalTab(G), mapTab(G), factionsTab(G), profileTab(G), armyTab(G), contractsTab(G), rankTab(G), guideTab(G)], tab, 'Personnage'); }
+  openContracts() { const G = this.game; this.panel.open([contractsTab(G), inventoryTab(G)], 'contracts', 'Contrats'); }
   openArmy(hire = false) { const G = this.game; this.panel.open([armyTab(G, hire), inventoryTab(G)], 'army', 'Armée'); }
   help(auto = false) { helpPopup(this, auto); }
   battleHud(b, a, e) { battleHud(b, a, e); }

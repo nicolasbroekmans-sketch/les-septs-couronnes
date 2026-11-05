@@ -3,8 +3,9 @@ import { advise } from '../../game/Advisor.js';
 export function objectiveTargets(G) {
   const id = G.core.state.world.tracked, out = [];
   if (!id || G.core.quests.status(id) !== 'active') { // pas de mission suivie : on désigne la prochaine personne conseillée
-    const tip = G.region && advise(G.core, G.region.def).find(a => a.npc), a = tip && G.region.actors.get(tip.npc);
+    const tip = G.region && advise(G.core, G.region.def).find(a => a.npc || a.at), a = tip?.npc && G.region.actors.get(tip.npc);
     if (a) out.push({ x: a.pos.x, z: a.pos.z, label: tip.title, advice: true });
+    else if (tip?.at) out.push({ x: tip.at[0], z: tip.at[1], label: tip.title, advice: true });
     return out;
   }
   const region = G.region, def = region.def;
