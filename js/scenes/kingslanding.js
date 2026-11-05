@@ -2,6 +2,7 @@ import { kingslandingCity, avoidExtra } from './details/kingslandingCity.js';
 import { height } from './details/klTerrain.js';
 import { room } from './places/rooms.js';
 import { walkHouse } from './places/houses.js';
+import { greatSept } from './details/klSept.js';
 
 // PORT-RÉAL — ville en pente vers la baie, Donjon Rouge sur la colline, Septuaire à dôme, port.
 export const config = {
@@ -35,15 +36,9 @@ export async function build(ctx) {
   let st = { x: kx, z: 58 };
   for (let i = 0; i < 3; i++) { const y = height(st.x, st.z) - .3; st = ctx.stairs(st.x, y, st.z, { dir: 'N', n: 12, rise: .32, run: .7, w: 7, mat: red }); }
 
-  // Grand Septuaire : tambour, dôme, sept tours
+  // Grand Septuaire (colline de Visenya)
   const sx = -70, sz = -62, sy = height(sx, sz);
-  ctx.cyl(16, 18, sx, sy - 4, sz, marble, { seg: 7 });
-  const dome = new THREE.Mesh(new THREE.SphereGeometry(15, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshStandardMaterial({ color: '#e9e2d4', metalness: .3, roughness: .35 }));
-  dome.position.set(sx, sy + 14, sz); dome.castShadow = true; ctx.add(dome);
-  const crys = ctx.glow(sx, sy + 31, sz, '#fff2c0', 6);
-  ctx.update(t => (crys.material.opacity = .7 + Math.sin(t * 1.5) * .3));
-  for (let i = 0; i < 7; i++) { const a = i / 7 * Math.PI * 2; ctx.tower(sx + Math.cos(a) * 18, sz + Math.sin(a) * 18, { w: 4, h: 28, y: sy - 4, mat: marble, round: true, roof: mat(null, { color: '#d9c27a', metal: .6, rough: .4 }), roofH: 8 }); }
-  ctx.poi(sx, sz + 24, 'Le Grand Septuaire', 'Sept tours, sept voix, un seul dôme de marbre. Les cloches y sonnent pour les mariages et pour les morts ; les habitants reconnaissent les deux sans regarder.');
+  greatSept(ctx, sx, sz, sy);
 
   // Port : quais en bois et navires (modèle GLTF)
   for (const x of [-70, -30, 10, 50]) { ctx.box(6, 1.6, 34, x, -.6, 78, wood); for (let z = 64; z < 96; z += 6) ctx.cyl(.3, 4, x + 3.2, -3, z, wood, { solid: false }); }
@@ -57,7 +52,7 @@ export async function build(ctx) {
   ctx.poi(-12, 68, 'La porte de la Rivière', 'Les marins l’appellent la porte de la Gadoue. Ici débarquent le vin d’Arbor, les épices d’Essos et les rumeurs de partout.', { y: 1 });
 
   // La ville : grille irrégulière, ruelles étroites, toits de tuiles ocre
-  const avoid = (x, z, w = 0, d = 0) => (Math.abs(x) < 19 + w / 2 && z > 30 - d / 2 && z < 50 + d / 2) || avoidExtra(x, z, w, d) || (Math.abs(x - kx) < 46 && z < kz + 40 && z > kz - 40) || Math.hypot(x - sx, z - sz) < 26 || (Math.abs(x - kx) < 7 && z > kz + 26 && z < kz + 90) || (Math.abs(x) < 6 && z > 20) || z > 56 || (Math.abs(z - 20) < 3 + d / 2 && x < 0);
+  const avoid = (x, z, w = 0, d = 0) => (Math.abs(x) < 19 + w / 2 && z > 30 - d / 2 && z < 50 + d / 2) || avoidExtra(x, z, w, d) || (Math.abs(x - kx) < 46 && z < kz + 40 && z > kz - 40) || Math.hypot(x - sx, z - sz) < 38 || (Math.abs(x - kx) < 7 && z > kz + 26 && z < kz + 90) || (Math.abs(x) < 6 && z > 20) || z > 56 || (Math.abs(z - 20) < 3 + d / 2 && x < 0);
   const city = ctx.cityGrid({ x0: -160, x1: 160, z0: -165, z1: 58, block: 13, street: 3.4, hMin: 4, hMax: 9, empty: .06, avoid });
   ctx.houses(city.lots, { style: 'couronne',
     wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }),

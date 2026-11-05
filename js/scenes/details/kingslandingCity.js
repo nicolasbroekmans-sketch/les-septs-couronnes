@@ -51,7 +51,7 @@ export function kingslandingCity(ctx, keep) {
   }
   ctx.poi(-48, 18, 'La rue de l’Acier', 'Le chant des marteaux du matin au soir. Les meilleurs forgerons du royaume ont leur échoppe ici — et leurs prix aussi.', { color: '#ff8a4a' });
   // Statue devant le Grand Septuaire
-  const sx = -70, sz = -40, sy = height(sx, sz), marble = ctx.mat('plastered_wall', { uv: 3, color: '#ece6d8' });
+  const sx = -70, sz = -22, sy = height(sx, sz), marble = ctx.mat('plastered_wall', { uv: 3, color: '#ece6d8' });
   ctx.box(3, 2, 3, sx, sy, sz, marble); ctx.cyl(.7, 3.6, sx, sy + 2, sz, marble, { seg: 10, rTop: .45 }); ctx.box(.5, .55, .5, sx, sy + 5.6, sz, marble);
   for (const s of [-1, 1]) ctx.box(.25, 1.4, .25, sx + s * .6, sy + 4.3, sz + .3, marble, { rotY: s * .3, solid: false });
   ctx.poi(sx, sz + 4, 'La statue de Baelor', 'Un roi en prière, les bras tendus vers la foule. Il jeûnait pour les Sept ; le peuple, lui, jeûnait sans le vouloir.');
@@ -65,4 +65,14 @@ export function kingslandingCity(ctx, keep) {
     ctx.box(12, 4, 3, gx, y + 9, -168, red, { solid: false }); for (const s of [-1, 1]) P.banner(gx + s * 8, y + 14, -164.4, 'baratheon', 0, 1.3);
     ctx.poi(gx, -160, name, txt);
   }
+  // Remparts blancs le long de la mer (à l'ouest du port et sous le Donjon Rouge) — comme sur la vue de la ville
+  const pale = ctx.mat('old_stone_wall', { uv: 5, color: '#e8dcc8' });
+  for (const [a, b] of [[-168, -84], [64, 164]]) for (let x = a; x < b; x += 21) { const y = Math.min(height(x, 60), height(x + 21, 60)) - 3; ctx.wall(x, 60, Math.min(b, x + 21), 60, { h: 11, t: 3, y, mat: pale, outward: [0, 1] }); ctx.tower(x, 60, { w: 6, h: 15, y, mat: pale, round: true }); }
+  // la baie de la Néra : galères, navires marchands, barques de pêcheurs
+  ctx.gltf('ship').then(ship => [[-140, 120, .3], [-100, 160, -.6], [60, 120, 1], [120, 170, .4], [-30, 200, 1.8], [160, 110, -.3], [-170, 230, .9], [90, 250, 2.4]].forEach(([x, z, r], i) => {
+    const s2 = ship.clone(); s2.position.set(x, -.9, z); s2.rotation.y = r; s2.scale.setScalar(i % 3 ? 1 : 1.4); ctx.add(s2);
+    ctx.update(t => { s2.position.y = -.9 + Math.sin(t * .7 + i) * .2; s2.rotation.z = Math.sin(t * .5 + i) * .04; });
+  }));
+  const hull = ctx.mat('medieval_wood', { uv: 2, color: '#6a5038' });
+  for (let i = 0; i < 14; i++) { const x = -150 + (i * 37) % 300, z = 100 + (i * 23) % 70, b = ctx.box(1.6, .7, 4.5, x, -.45, z, hull, { solid: false, merge: false, rotY: i * .7 }); ctx.update(t => (b.position.y = -.45 + Math.sin(t + i) * .12)); }
 }
