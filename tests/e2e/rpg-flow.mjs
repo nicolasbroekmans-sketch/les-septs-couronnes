@@ -39,7 +39,7 @@ try {
   await until(`document.querySelector('#map').classList.contains('zoomed') && document.querySelectorAll('.seal[visibility=visible]').length === 3`, 60000, 'carte de départ');
   await page.waitForTimeout(1500);
   for (let i = 0; i < 6 && !(await G(`document.querySelector('#start-card').classList.contains('open')`)); i++) {
-    await page.locator('.seal[aria-label^="Winterfell"]').click({ force: true }).catch(() => {});
+    await page.locator('.seal[aria-label^="Winterfell"] .wax').click({ force: true }).catch(() => {});
     await until(`document.querySelector('#start-card').classList.contains('open')`, 20000, 'fiche de départ').catch(() => {});
   }
   await until(`document.querySelector('#start-card').classList.contains('open')`, 5000, 'fiche de départ');
