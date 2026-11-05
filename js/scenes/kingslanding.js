@@ -20,9 +20,11 @@ export async function build(ctx) {
   const wood = mat('weathered_planks', { uv: 3, color: '#a0846a' });
   ctx.terrain({ size: 640, seg: 200, height, mat: ground, splat: { slope: 'rocky_terrain_02', slopeTint: '#e0c8a0' } });
   ctx.water({ reflect: true, y: 0, z: 260, w: 900, d: 400, color: '#1f4752', sun: '#ffd9a0', distortion: 2.6 });
+  ctx.water({ y: -.4, x: -250, z: 44, w: 160, d: 34, color: '#2a4a48' });
+  ctx.poi(-190, 40, 'La Néra', 'Le fleuve Noirécume se jette ici dans la baie. Ses eaux charrient la boue des Terres de la Couronne — et, dit-on, quelques secrets bien lestés.', { color: '#6aa0a8' });
 
   // Donjon Rouge
-  const kx = 55, kz = -118, ky = height(kx, kz);
+  const kx = 125, kz = 10, ky = height(kx, kz);
   ctx.ring(kx - 32, kz - 26, kx + 32, kz + 26, { y: ky - 10, h: 24, t: 4, mat: red, gate: 'S', gateW: 7, round: true, towerW: 11, towerExtra: 6 });
   ctx.box(26, 30, 22, kx + 2, ky - 4, kz - 6, red);
   ctx.tower(kx - 12, kz - 12, { w: 10, h: 40, y: ky - 4, mat: red, round: true });
@@ -30,7 +32,7 @@ export async function build(ctx) {
   room(ctx, 'throne', { x: kx, z: kz + 31, yaw: Math.PI }, { label: 'Entrer dans la salle du trône', banner: 'baratheon', wall: 'castle_brick_02_red', wallColor: '#a85a44', title: 'La salle du trône', text: 'Au bout de la salle, un trône hérissé de lames fondues. On dit qu’il n’est pas fait pour qu’on s’y assoie confortablement — et que c’est voulu.' });
   ctx.poi(kx, kz + 34, 'Le Donjon Rouge', 'Sept tours de brique sang-de-bœuf sur la plus haute colline. On dit que ses murs ont des oreilles ; à vrai dire, ce sont surtout des passages secrets.', { color: '#ff7a5a' });
   // Grand escalier vers la porte
-  let st = { x: kx, z: kz + 60 };
+  let st = { x: kx, z: 58 };
   for (let i = 0; i < 3; i++) { const y = height(st.x, st.z) - .3; st = ctx.stairs(st.x, y, st.z, { dir: 'N', n: 12, rise: .32, run: .7, w: 7, mat: red }); }
 
   // Grand Septuaire : tambour, dôme, sept tours
@@ -64,7 +66,7 @@ export async function build(ctx) {
   const kl = { stone: '#c8b89a', plaster: '#f2e2c8', roofTex: 'clay_roof_tiles', roof: '#c87a50' };
   walkHouse(ctx, 13, 40, 3, { ...kl, house: 'baratheon', owner: 'Maître Pell, drapier', name: 'Une maison de Port-Réal', text: 'Une maison de marchand : boutique en bas, chambre à l’étage. La porte est ouverte.' }); walkHouse(ctx, -13, 40, 1, { ...kl, house: 'lannister', owner: 'Dame Ysilla' });
   ctx.poi(-20, -10, 'Culpucier', 'Le quartier des ruelles tordues, où l’odeur du ragoût de bol se mêle à celle du poisson. Ici, on vend de tout ; surtout ce qui n’appartient à personne.');
-  ctx.poi(kx, kz + 92, 'Les escaliers du Roi', 'Trois volées de marches taillées pour les processions. Les petits gens les montent à genoux les jours de fête ; les seigneurs, à cheval.');
+  ctx.poi(kx - 7, 52, 'Les escaliers du Roi', 'Trois volées de marches taillées pour les processions. Les petits gens les montent à genoux les jours de fête ; les seigneurs, à cheval.');
 
   // Cyprès, torches de fin de journée
   const trees = [];

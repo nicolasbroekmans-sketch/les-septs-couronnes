@@ -2,7 +2,7 @@
 // place du marché, étendards lion et cerf, quais encombrés, lanternes, charrettes.
 import { height } from './klTerrain.js';
 
-export const PLAZA = [-32, 38], PIT = [112, -72], FLEA = [-22, -8];
+export const PLAZA = [-32, 38], PIT = [95, -118], FLEA = [-22, -8];
 export const avoidExtra = (x, z, w = 0, d = 0) => Math.hypot(x - PLAZA[0], z - PLAZA[1]) < 14 + Math.max(w, d) / 2 || Math.hypot(x - PIT[0], z - PIT[1]) < 34 + Math.max(w, d) / 2 || Math.hypot(x - FLEA[0], z - FLEA[1]) < 9 + Math.max(w, d) / 2 || x - w / 2 < -158;
 
 export function kingslandingCity(ctx, keep) {
@@ -40,9 +40,9 @@ export function kingslandingCity(ctx, keep) {
   P.cart(-38, 54, 1.4); P.cart(24, 54, -1.3); P.cart(PLAZA[0] + 14, PLAZA[1] + 6, .3);
   // Tour de la Main, dans l'enceinte du Donjon Rouge
   const brick = red;
-  ctx.tower(kx - 24, kz + 18, { w: 9, h: 30, y: ky - 4, mat: brick, roof: ctx.mat('clay_roof_tiles', { uv: 2, color: '#b0603a' }), roofH: 8 });
-  P.banner(kx - 24, ky + 20, kz + 22.6, 'baratheon', 0, 1.6);
-  ctx.poi(kx - 24, kz + 26, 'La tour de la Main', 'Ici vit la Main du Roi, celle qui gouverne pendant que le roi chasse. On dit que ses occupants meurent rarement de vieillesse.');
+  ctx.tower(kx - 20, kz - 14, { w: 9, h: 30, y: ky - 4, mat: brick, roof: ctx.mat('clay_roof_tiles', { uv: 2, color: '#b0603a' }), roofH: 8 });
+  P.banner(kx - 20, ky + 20, kz - 9.4, 'baratheon', 0, 1.6);
+  ctx.poi(kx - 20, kz - 6, 'La tour de la Main', 'Ici vit la Main du Roi, celle qui gouverne pendant que le roi chasse. On dit que ses occupants meurent rarement de vieillesse.');
   // Rue de l'Acier : forges en bord de rue, enclumes, braises
   const coal = ctx.mat(null, { color: '#ff5a10', emissive: '#ff4a00', ei: 2.5 }), dark = ctx.mat(null, { color: '#2b2b2e', metal: .8, rough: .4 }), st = ctx.mat('castle_wall_slates', { uv: 2, color: '#7a7a7a' });
   for (const x of [-30, -48, -66, -84]) {
@@ -55,4 +55,14 @@ export function kingslandingCity(ctx, keep) {
   ctx.box(3, 2, 3, sx, sy, sz, marble); ctx.cyl(.7, 3.6, sx, sy + 2, sz, marble, { seg: 10, rTop: .45 }); ctx.box(.5, .55, .5, sx, sy + 5.6, sz, marble);
   for (const s of [-1, 1]) ctx.box(.25, 1.4, .25, sx + s * .6, sy + 4.3, sz + .3, marble, { rotY: s * .3, solid: false });
   ctx.poi(sx, sz + 4, 'La statue de Baelor', 'Un roi en prière, les bras tendus vers la foule. Il jeûnait pour les Sept ; le peuple, lui, jeûnait sans le vouloir.');
+  // Rempart nord : la Vieille Porte et la porte des Dieux (on sort vers la route royale et le Bois-du-Roi)
+  for (let x = -165; x < 160; x += 20) {
+    if (Math.abs(x + 10 - -30) < 12 || Math.abs(x + 10 - 60) < 12) continue;
+    const y = Math.min(height(x, -168), height(x + 20, -168)) - 3; ctx.wall(x, -168, x + 20, -168, { h: height(x + 10, -168) - y + 9, t: 3, y, mat: red, outward: [0, -1] });
+  }
+  for (const [gx, name, txt] of [[-30, 'La Vieille Porte', 'La plus ancienne porte de la ville. Elle ouvre sur la route royale, qui monte vers le Nord : mille lieues jusqu’au Mur.'], [60, 'La porte des Dieux', 'Ses statues des Sept regardent passer les voyageurs. Au-delà commencent les collines et le Bois-du-Roi.']]) {
+    const y = height(gx, -168) - 2; for (const s of [-1, 1]) ctx.tower(gx + s * 8, -168, { w: 7, h: 16, y, mat: red, round: true });
+    ctx.box(12, 4, 3, gx, y + 9, -168, red, { solid: false }); for (const s of [-1, 1]) P.banner(gx + s * 8, y + 14, -164.4, 'baratheon', 0, 1.3);
+    ctx.poi(gx, -160, name, txt);
+  }
 }
