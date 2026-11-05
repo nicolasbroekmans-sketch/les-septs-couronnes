@@ -46,10 +46,10 @@ export class Hud {
       const next = Object.entries(G.core.state.quests).find(([, q]) => q.state === 'active');
       if (next) { G.core.state.world.tracked = next[0]; return; }
       const tip = advise(G.core, G.region.def)[0], t = targets[0], P = G.player.pos;
-      const html = tip ? `<h4>${tip.title}</h4><p class="trk-tip">${tip.text}</p>${t ? `<small>◆ ${Math.round(Math.hypot(t.x - P.x, t.z - P.z))} m, ${direction(t.x - P.x, t.z - P.z)}</small>` : ''}<button class="trk-help" type="button">? Que faire</button>` : '';
+      const html = tip ? `<h4>${tip.title}</h4><p class="trk-tip">${tip.text}</p>${t && P.x < 2500 ? `<small>◆ ${Math.round(Math.hypot(t.x - P.x, t.z - P.z))} m, ${direction(t.x - P.x, t.z - P.z)}</small>` : ''}<button class="trk-help" type="button">? Que faire</button>` : '';
       return this.set('trk', el, html, (e, v) => (e.innerHTML = v));
     }
-    const P = G.player.pos, near = targets[0], dist = near ? Math.round(Math.hypot(near.x - P.x, near.z - P.z)) : null;
+    const P = G.player.pos, near = P.x < 2500 ? targets[0] : null, dist = near ? Math.round(Math.hypot(near.x - P.x, near.z - P.z)) : null;
     const objs = G.core.quests.objectives(id).filter(o => o.label);
     const html = `<button class="trk-help" type="button">? Que faire</button><h4>${QUESTS[id].title}</h4><ul>${objs.map(o => `<li class="${o.done ? 'done' : ''}">${o.label}${o.count > 1 ? ` (${Math.min(o.have, o.count)}/${o.count})` : ''}</li>`).join('')}</ul>${dist !== null ? `<small>◆ ${dist} m, ${direction(near.x - P.x, near.z - P.z)}</small>` : ''}`;
     this.set('trk', el, html, (e, v) => (e.innerHTML = v));

@@ -1,5 +1,6 @@
 import { kingslandingCity, avoidExtra } from './details/kingslandingCity.js';
 import { height } from './details/klTerrain.js';
+import { room } from './places/rooms.js';
 
 // PORT-RÉAL — ville en pente vers la baie, Donjon Rouge sur la colline, Septuaire à dôme, port.
 export const config = {
@@ -25,6 +26,7 @@ export async function build(ctx) {
   ctx.box(26, 30, 22, kx + 2, ky - 4, kz - 6, red);
   ctx.tower(kx - 12, kz - 12, { w: 10, h: 40, y: ky - 4, mat: red, round: true });
   ctx.tower(kx + 18, kz + 4, { w: 8, h: 34, y: ky - 4, mat: red, round: true });
+  room(ctx, 'throne', { x: kx, z: kz + 31, yaw: Math.PI }, { label: 'Entrer dans la salle du trône', banner: 'baratheon', wall: 'castle_brick_02_red', wallColor: '#a85a44', title: 'La salle du trône', text: 'Au bout de la salle, un trône hérissé de lames fondues. On dit qu’il n’est pas fait pour qu’on s’y assoie confortablement — et que c’est voulu.' });
   ctx.poi(kx, kz + 34, 'Le Donjon Rouge', 'Sept tours de brique sang-de-bœuf sur la plus haute colline. On dit que ses murs ont des oreilles ; à vrai dire, ce sont surtout des passages secrets.', { color: '#ff7a5a' });
   // Grand escalier vers la porte
   let st = { x: kx, z: kz + 60 };

@@ -4,6 +4,7 @@
 import { smooth, noise } from '../light/util.js';
 import { dome, harbor, road } from './kit.js';
 
+import { room } from './rooms.js';
 export const config = { hdri: 'belfast_sunset_puresky', exposure: .9, bg: .8, env: 1, fog: ['#c89a70', .0018], hemi: ['#ffd9b0', '#5a3a20', .5], sun: ['#ffb46a', 3.2, [-.8, .3, .2]], bloom: [.35, .5, .9], tint: '#fff0dc', bounds: [-150, -170, 230, 190], skyRot: 2.2 };
 
 const rockH = (x, z) => 150 * smooth(28, 80, x + Math.sin(z * .03) * 10) * smooth(-190, -110, z) * (1 - smooth(70, 150, z)) + noise(x, z) * 5 * smooth(30, 60, x);
@@ -31,6 +32,7 @@ export async function build(ctx) {
   ctx.box(8, 6, 28, 27, 16, 0, sand, { solid: false });
   const eye = ctx.glow(26, 19, 0, '#ffd27a', 6); ctx.update(t => (eye.material.opacity = .55 + Math.sin(t) * .2));
   P.standard(20, -9, 'lannister', 9); P.standard(20, 9, 'lannister', 9);
+  room(ctx, 'hall', { x: 21, z: 0, yaw: Math.PI / 2 }, { label: 'Entrer dans le Roc', banner: 'lannister', wall: 'yellow_stone_wall', wallColor: '#e8cc98', title: 'Les galeries du Roc', text: 'Des salles taillées dans la montagne, éclairées à la torche. L’or brille dans la pierre des murs.' });
   ctx.poi(18, 0, 'La porte du Lion', 'Une gueule ouverte dans la roche, assez large pour huit cavaliers de front. Derrière, des lieues de couloirs ; les Lannister jurent qu’ils les connaissent tous.', { color: '#ffcf5a' });
   ctx.box(5, 6, 4, 34, 0, 92, black, { solid: false }); const mine = ctx.glow(32, 3, 92, '#ffb030', 5); ctx.update(t => (mine.material.opacity = .45 + Math.sin(t * 2) * .2));
   for (let i = 0; i < 3; i++) P.cart(24 - i * 4, 92 + i, .3);

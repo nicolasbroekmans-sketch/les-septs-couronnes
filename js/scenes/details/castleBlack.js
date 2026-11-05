@@ -1,3 +1,4 @@
+import { room } from '../places/rooms.js';
 // Châteaunoir, détails : palissade, bâtiments de bois supplémentaires, forge de l'armurier, tour du
 // Lord Commandant, cour d'entraînement, braseros, bannières noires au corbeau, réserves de bois.
 export function castleBlack(ctx) {
@@ -13,6 +14,8 @@ export function castleBlack(ctx) {
   // tour du Lord Commandant (pierre) et tour du Roi
   ctx.tower(-24, -40, { w: 9, h: 22, mat: stone, roof });
   ctx.tower(26, -46, { w: 7, h: 28, mat: stone, round: true });
+  room(ctx, 'hall', { x: -24, z: -34.2, yaw: Math.PI }, { label: 'Entrer dans la tour du Lord Commandant', banner: 'garde', wall: 'castle_wall_slates', wallColor: '#6a6e74', title: 'La salle du Lord Commandant', text: 'Des registres, une carte du Nord couverte de croix, et le froid qui passe sous la porte.' });
+  room(ctx, 'inn', { x: -20, z: 51.2, yaw: Math.PI }, { label: 'Entrer au réfectoire', keeper: 'Le frère cuisinier', title: 'Le réfectoire', text: 'Ragoût d’orge, pain dur, bière tiède : on ne vient pas au Mur pour la cuisine.' });
   ctx.poi(-24, -33, 'La tour du Lord Commandant', 'On y garde le corbeau qui parle et les registres de mille ans de patrouilles. La porte n’est jamais fermée ; on n’entre pourtant jamais sans frapper.');
   // forge de l'armurier
   ctx.box(9, 4, .5, 44, 0, 14, wood); ctx.roof(10, 2, 7, 44, 4, 17, roof);

@@ -10,6 +10,7 @@ const V = {
   mielbois: { hdri: 'kloppenheim_06_puresky', ground: ['brown_mud', '#9fbf6a'], fog: ['#e0e8d8', .004], sun: ['#fff4dc', 3], tree: ['round', '#5a8a3a'], walls: ['#fbf2e2', '#f0e2c8'], roofs: ['#c08050', '#a86a40'], banner: 'tyrell', particles: 'petals', sound: 'wind', feature: 'orchard', hills: 5 },
   sablerouge: { hdri: 'qwantani_noon_puresky', ground: ['brown_mud', '#d8a070'], fog: ['#f0d0a8', .004], sun: ['#fff1d8', 4], tree: ['palm', '#4a7a3a'], walls: ['#e0b080', '#d8a070', '#e8c49a'], roofs: [], flat: true, banner: 'martell', particles: 'dust', sound: 'wind', feature: 'oasis', hills: 10 }
 };
+import { room } from './rooms.js';
 export const config = id => { const v = V[id]; return { hdri: v.hdri, exposure: 1, bg: 1, env: 1, fog: v.fog, hemi: ['#f4f0e8', '#5a4a3a', .55], sun: [v.sun[0], v.sun[1], [.4, .6, .3]], bloom: [.4, .5, .88], tint: '#fff8f0', bounds: [-150, -150, 150, 150] }; };
 
 export async function build(ctx, id) {
@@ -23,6 +24,7 @@ export async function build(ctx, id) {
   const inn = mat('weathered_planks', { uv: 3, color: '#b09070' });
   ctx.box(12, 7, 9, -14, h(-14, 8) - .5, 8, inn); ctx.roof(13, 3.5, 10, -14, h(-14, 8) + 6.5, 8, mat('grey_roof_tiles', { uv: 3, color: '#7a6a5a' }));
   ctx.box(1.6, 1, .1, -14, h(-14, 8) + 3.4, 12.6, mat(null, { color: '#c9a227' }), { solid: false }); P.bench(-10, 14); P.bench(-18, 14); ctx.torch(-9.5, h(-14, 8) + 2.8, 12.8, { light: true });
+  room(ctx, 'inn', { x: -14, z: 14.4, yaw: Math.PI }, { label: 'Entrer dans l’auberge', title: 'Dans l’auberge', text: 'Une salle basse, enfumée, chaude. Les habitués lèvent à peine les yeux ; l’aubergiste, lui, vous a déjà jaugé.' });
   ctx.poi(-14, 16, 'L’auberge', 'Un feu, une soupe, des rumeurs et un lit qui ne grince pas trop. Le patron connaît tout le monde, et surtout leurs dettes.');
   const F = v.feature, wood = mat('weathered_planks', { uv: 2, color: '#8a6a4a' });
   if (F === 'mill') { ctx.tower(30, -30, { w: 6, h: 10, mat: inn, roof: mat(null, { color: '#5a4a3a' }), roofH: 4 }); const blades = ctx.box(.4, 14, 1, 30, h(30, -30) + 8, -26.8, wood, { solid: false }); ctx.update(t => (blades.rotation.z = t * .4)); ctx.poi(30, -24, 'Le moulin', 'Ses ailes tournent même quand tout gèle. Le meunier dit que c’est le vent du Nord qui lui doit une faveur.'); }

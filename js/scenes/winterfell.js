@@ -1,6 +1,7 @@
 import { winterfellCastle } from './details/winterfellCastle.js';
 import { winterfellTown } from './details/winterfellTown.js';
 import { winterfellLore } from './details/winterfellLore.js';
+import { room } from './places/rooms.js';
 
 // WINTERFELL — double enceinte, Grand Hall, forge, bois sacré, sources chaudes, Winter Town.
 export const config = {
@@ -44,6 +45,7 @@ export async function build(ctx) {
   ctx.roof(15, 7, 31, 18, 11, -40, roofM);
   ctx.box(4, 5, .6, 18, 0, -24.7, wood, { solid: false });
   ctx.torch(15.5, 3.4, -24.4); ctx.torch(20.5, 3.4, -24.4, { light: false });
+  room(ctx, 'hall', { x: 18, z: -22.6, yaw: Math.PI }, { label: 'Entrer dans le Grand Hall', banner: 'stark', wall: 'castle_wall_slates', wallColor: '#8d9298', title: 'Le Grand Hall', text: 'Des tables de bois noirci, le feu au fond, les bannières au loup. Ici on mange, on juge et on se souvient.' });
   ctx.poi(18, -21, 'Le Grand Hall', 'Sous ses poutres noircies, on a mangé, juré et pleuré des rois. Les bancs sont usés en creux, à la place exacte où chaque famille s’assoit depuis des siècles.');
   // Tour brisée (ronde, sans toit)
   ctx.tower(-30, 0, { w: 8, h: 22, mat: darkStone, round: true });

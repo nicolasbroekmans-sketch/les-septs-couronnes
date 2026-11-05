@@ -4,6 +4,7 @@
 import { smooth, noise } from '../light/util.js';
 import { village, road } from './kit.js';
 
+import { room } from './rooms.js';
 export const config = { hdri: 'kloppenheim_06_puresky', exposure: 1.05, bg: 1, env: 1, fog: ['#dfe8f0', .0022], hemi: ['#f0f6ff', '#56606a', .55], sun: ['#ffffff', 3, [.5, .7, .3]], bloom: [.4, .5, .88], tint: '#f6faff', bounds: [-200, -260, 200, 200] };
 
 const PEAK = [0, -150], TOP = 180;
@@ -57,6 +58,7 @@ export async function build(ctx) {
   // la Porte de la Lune (trappe sur le vide), le jardin et la statue
   const hole = new THREE.Mesh(new THREE.CircleGeometry(2.2, 32), new THREE.MeshBasicMaterial({ color: '#cfe4ff', transparent: true, opacity: .55 })); hole.rotation.x = -Math.PI / 2; hole.position.set(px - 6, y + .05, pz + 15); ctx.add(hole);
   ctx.update(t => (hole.material.opacity = .45 + Math.sin(t * 1.4) * .15));
+  room(ctx, 'hall', { x: px, z: pz + 3.4, yaw: Math.PI }, { label: 'Entrer dans la Grande Salle', banner: 'arryn', wall: 'plastered_wall', wallColor: '#f0eee8', floorColor: '#d8dce2', title: 'La Grande Salle des Eyrié', text: 'Marbre blanc veiné de bleu, des colonnes fines comme des lances, et la lumière froide du ciel.' });
   ctx.poi(px - 6, pz + 18, 'La Porte de la Lune', 'Dans la salle haute, une porte de barral ouverte… sur rien. Six cents mètres de vide. Les Arryn y rendent la justice ; personne n’a jamais fait appel.', { color: '#cfe4ff' });
   ctx.box(10, .3, 8, px + 10, y, pz + 12, mat('brown_mud', { uv: 2, color: '#8fae6a' }), { solid: false }); ctx.box(1.2, 4.5, 1.2, px + 10, y, pz + 12, white);
   ctx.poi(px + 10, pz + 17, 'Le jardin des Eyrié', 'Un carré d’herbe et une statue de pleureuse, au cœur du château. Les enfants Arryn y apprennent à marcher sans jamais regarder par-dessus le mur.');

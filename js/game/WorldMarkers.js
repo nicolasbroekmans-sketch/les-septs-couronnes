@@ -40,7 +40,7 @@ export class WorldMarkers {
       a.plate.set(color, hostile || hurt ? a.fighter.hp / a.fighter.maxHp : null, show, mark, a.def?.title ?? a.def?.roleLabel);
     }
     const t = objectiveTargets(G)[0];
-    this.beam.visible = !!t && Math.hypot(t.x - P.x, t.z - P.z) > 8;
+    this.beam.visible = !!t && Math.hypot(t.x - P.x, t.z - P.z) > 8 && P.x < 2500; // pas de colonne quand on est dans une salle
     if (t) this.beam.position.set(t.x, G.physics.groundFn(t.x, t.z) + 30, t.z);
   }
 }

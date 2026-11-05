@@ -4,6 +4,7 @@
 import { smooth, noise } from '../light/util.js';
 import { dome, road } from './kit.js';
 
+import { room } from './rooms.js';
 export const config = { hdri: 'qwantani_noon_puresky', exposure: 1.02, bg: 1.6, env: 1, fog: ['#f0dcc0', .0022], hemi: ['#fff4e0', '#a07a5a', .55], sun: ['#fff1d8', 4, [.3, 1, .2]], bloom: [.35, .5, .9], tint: '#fff4e8', bounds: [-230, -160, 150, 190] };
 export const height = (x, z) => 1.2 + noise(x * .5, z * .5) * .4 * smooth(70, 120, Math.hypot(x + 40, z)) - 7 * smooth(130, 175, z) + 14 * smooth(150, 260, -z);
 
@@ -25,6 +26,7 @@ export async function build(ctx) {
   for (let i = 0; i < 13; i++) { const x = PX - 30 + i * 5; ctx.cyl(.45, 6, x, 1, PZ + 9, marble, { seg: 10 }); }
   ctx.box(64, 1, 3, PX, 7, PZ + 9, marble, { solid: false });
   for (const x of [-20, -10, 0, 10, 20]) P.banner(PX + x, 11.5, PZ + 5.2, 'martell', 0, 1.2);
+  room(ctx, 'hall', { x: PX, z: PZ + 7, yaw: Math.PI }, { label: 'Entrer dans le palais', banner: 'martell', wall: 'plastered_wall', wallColor: '#f2d6c8', floorColor: '#f0dcc8', title: 'La salle des fontaines', text: 'Des arcades ouvertes sur la mer, des coussins, des oranges sanguines dans des coupes d’argent.' });
   ctx.poi(PX, PZ + 14, 'Le palais des Jardins Aquatiques', 'Marbre rose, coupoles d’or, colonnades où le vent de la mer passe comme une caresse. Un prince de Dorne l’a bâti pour sa femme, venue d’un pays sans pluie.', { color: '#ffb070' });
 
   // --- bassins en terrasses ---

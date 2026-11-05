@@ -18,7 +18,7 @@ export function placeRegion(p) {
     { id: p.id + '_garde2', name: 'Garde', role: 'guard', faction: law, dx: 4, dz: -14, weapon: 'epee_longue', armor: 'maille', hp: 110, look: guard({ helmet: true }), ai: { patrol: [[-12, -8], [12, -8], [12, -24], [-12, -24]] } },
     { id: p.id + '_mendiant', name: 'Mendiant', role: 'beggar', faction: 'peuple', dx: -3, dz: -3, weapon: 'poings', hp: 30, sit: true, look: look({ tunic: '#4a4036', pants: '#3a3028' }), story: ['La guerre m’a pris ma terre. L’hiver prendra le reste.'], ai: {} },
     { id: p.id + '_recruteur', name: 'Sergent recruteur', role: 'recruiter', faction: law, dx: 7, dz: 2, yaw: Math.PI / 2, weapon: 'lance', armor: 'cuir', hp: 90, look: guard({}), ai: {} },
-    ...townsfolk(p.id, 6, [[-6, -16], [6, -20], [0, -26]], [[-6, -16], [6, -20]], LINES)
+    ...townsfolk(p.id, 12, [[-6, -16], [6, -20], [0, -26], [-14, -8], [12, -10], [0, -38]], [[-6, -16], [6, -20]], LINES)
   ];
   return {
     id: p.id, scene: p.scene === 'generic' ? 'generic' : p.scene, placeId: p.id, name: p.name, region: p.region, climate: CLIMATE[p.id] ?? 'tempere', lawFaction: law,
