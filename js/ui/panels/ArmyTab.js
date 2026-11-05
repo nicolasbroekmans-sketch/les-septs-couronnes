@@ -20,7 +20,7 @@ export function armyTab(G, hire = false) {
       const buy = q => () => { const r = recruit(G.core, id, q); G.ui.toast(r.ok ? `${q} × ${u.name} engagé(s) (−${r.cost} or)` : r.reason, r.ok ? 'loot' : 'warn'); rerender(); };
       const toggle = add => () => { const list = add ? [...A.followers, id] : A.followers.filter((f, i) => i !== A.followers.lastIndexOf(id));
         if (!setFollowers(p, list)) return G.ui.toast(add ? `Pas plus de ${slots} compagnons pour l’instant.` : 'Impossible.', 'warn');
-        G.ui.toast(add ? `Un ${u.name.toLowerCase()} vous suivra (à partir du prochain lieu).` : 'Compagnon renvoyé au camp.', 'info'); rerender(); };
+        G.followers?.refresh(); G.ui.toast(add ? `Un ${u.name.toLowerCase().replace(/s$/, '')} vous suit désormais.` : 'Compagnon renvoyé au camp.', 'info'); rerender(); };
       return h('div.army-unit', {}, h('div', {}, h('b', {}, u.name), h('p.sub', {}, `${n} engagé(s) · ${u.hp} PV · puissance ${u.power} · ${u.cost} or`),
         u.minLevel || u.minRenown ? h('p.sub', {}, `Requiert niveau ${u.minLevel ?? 1}${u.minRenown ? ` et renommée ${u.minRenown}` : ''}`) : null),
         h('div.army-actions', {},

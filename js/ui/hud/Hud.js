@@ -4,6 +4,7 @@ import { $, h } from '../dom.js';
 import { ICONS } from '../Icons.js';
 import { Minimap } from './Minimap.js';
 import { objectiveTargets } from './Targets.js';
+import { advise } from '../../game/Advisor.js';
 import { xpForLevel } from '../../player/Progression.js';
 import { QUESTS } from '../../quests/QuestRegistry.js';
 import { secondsToGift } from '../../player/Rewards.js';
@@ -43,12 +44,14 @@ export class Hud {
     const id = G.core.state.world.tracked, el = $('#tracker');
     if (!id || G.core.quests.status(id) !== 'active') {
       const next = Object.entries(G.core.state.quests).find(([, q]) => q.state === 'active');
-      if (next) G.core.state.world.tracked = next[0];
-      return this.set('trk', el, '', e => (e.innerHTML = ''));
+      if (next) { G.core.state.world.tracked = next[0]; return; }
+      const tip = advise(G.core, G.region.def)[0], t = targets[0], P = G.player.pos;
+      const html = tip ? `<h4>${tip.title}</h4><p class="trk-tip">${tip.text}</p>${t ? `<small>◆ ${Math.round(Math.hypot(t.x - P.x, t.z - P.z))} m, ${direction(t.x - P.x, t.z - P.z)}</small>` : ''}<button class="trk-help" type="button">? Que faire</button>` : '';
+      return this.set('trk', el, html, (e, v) => (e.innerHTML = v));
     }
     const P = G.player.pos, near = targets[0], dist = near ? Math.round(Math.hypot(near.x - P.x, near.z - P.z)) : null;
     const objs = G.core.quests.objectives(id).filter(o => o.label);
-    const html = `<h4>${QUESTS[id].title}</h4><ul>${objs.map(o => `<li class="${o.done ? 'done' : ''}">${o.label}${o.count > 1 ? ` (${Math.min(o.have, o.count)}/${o.count})` : ''}</li>`).join('')}</ul>${dist !== null ? `<small>◆ ${dist} m, ${direction(near.x - P.x, near.z - P.z)}</small>` : ''}`;
+    const html = `<button class="trk-help" type="button">? Que faire</button><h4>${QUESTS[id].title}</h4><ul>${objs.map(o => `<li class="${o.done ? 'done' : ''}">${o.label}${o.count > 1 ? ` (${Math.min(o.have, o.count)}/${o.count})` : ''}</li>`).join('')}</ul>${dist !== null ? `<small>◆ ${dist} m, ${direction(near.x - P.x, near.z - P.z)}</small>` : ''}`;
     this.set('trk', el, html, (e, v) => (e.innerHTML = v));
   }
   prompt(text) { this.set('prompt', $('#prompt'), text ?? '', (e, v) => { e.innerHTML = v ? `<kbd>E</kbd> ${v}` : ''; e.classList.toggle('on', !!v); }); }

@@ -16,6 +16,7 @@ import { profileTab } from './panels/ProfileTab.js';
 import { armyTab } from './panels/ArmyTab.js';
 import { rankTab } from './panels/RankTab.js';
 import { battleHud, battleResult, skipButton } from './BattleView.js';
+import { helpPopup } from './HelpPopup.js';
 import { Tutorial } from './Tutorial.js';
 import { revealGift } from './GiftReveal.js';
 import { equipCosmetic } from '../player/Rewards.js';
@@ -29,6 +30,7 @@ export class UI {
     this.dlg = new DialogueView(this); this.panel = new Panel(this);
     addEventListener('keydown', e => this.key(e));
     $('#lock-hint').addEventListener('click', () => this.game?.input.lock());
+    $('#tracker').addEventListener('click', e => e.target.closest('.trk-help') && this.help());
   }
   attach(G) { this.game = G; this.panel.onClose = () => { this.lockHint(true); if (G.battle?.ended) G.endBattle(); }; }
   startTutorial(G) { this.tutorial = new Tutorial(); this.tutorial.attach(G); }
@@ -43,11 +45,13 @@ export class UI {
     if (this.modals.has('dialogue') || this.modals.has('dead')) return;
     const tabs = { KeyI: 'inv', KeyR: 'inv', KeyT: 'inv', Tab: 'inv', KeyK: 'skills', KeyJ: 'journal', KeyL: 'factions', KeyM: 'map', KeyG: 'guide', KeyP: 'profile', KeyB: 'army', KeyO: 'rank' };
     if (tabs[e.code]) { e.preventDefault(); if (this.panel.isOpen && this.panel.active === tabs[e.code]) return this.closePanel(); return this.openCharacter(tabs[e.code]); }
+    if (e.code === 'F1' || e.key === '?') { e.preventDefault(); return this.help(); }
     if (e.code === 'Escape' && this.panel.isOpen) return this.closePanel();
     if (e.code === 'Escape' && !G.input.locked && !this.modal) this.openPause();
   }
   openCharacter(tab = 'inv') { const G = this.game; this.panel.open([inventoryTab(G), skillsTab(G), journalTab(G), mapTab(G), factionsTab(G), profileTab(G), armyTab(G), rankTab(G), guideTab(G)], tab, 'Personnage'); }
   openArmy(hire = false) { const G = this.game; this.panel.open([armyTab(G, hire), inventoryTab(G)], 'army', 'Armée'); }
+  help(auto = false) { helpPopup(this, auto); }
   battleHud(b, a, e) { battleHud(b, a, e); }
   battleResult(b, win) { skipButton(false); battleResult(this, b, win); }
   skipButton(on, fn) { skipButton(on, fn); }

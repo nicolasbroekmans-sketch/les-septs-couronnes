@@ -101,3 +101,16 @@ test('prologue : environ 100 contre 100, avec archers et cavaliers', () => {
   const c = new Soldier('cavalier', 'A', 0, 0, 0, 0), l = new Soldier('levee', 'A', 0, 0, 0, 0);
   assert.ok(c.stats.moveSpeed > l.stats.moveSpeed * 1.5, 'les cavaliers vont plus vite');
 });
+
+test('conseiller : explique quoi faire pour débloquer la bataille, puis désigne le recruteur et le capitaine', async () => {
+  const { advise } = await import('../js/game/Advisor.js');
+  const { REGIONS } = await import('../js/data/regions/index.js');
+  const g = newGame('winterfell'), R = REGIONS.winterfell, battle = () => advise(g, R).find(a => a.kind === 'battle');
+  assert.match(battle().text, /niveau 3/); assert.match(battle().text, /Le fer volé/);
+  assert.ok(advise(g, R).some(a => a.kind === 'offer' && a.npc === 'torvald'), 'Torvald a une mission');
+  g.state.player.level = 3; g.state.quests.wf_iron = { state: 'completed', step: null, log: [] };
+  assert.equal(battle().npc, 'wf_recruteur', 'sans troupes : aller voir le recruteur');
+  g.state.player.army = { troops: { levee: 10 }, followers: [] };
+  assert.equal(battle().npc, 'wf_capitaine', 'avec une armée : aller voir le capitaine');
+  assert.match(talk(g, { id: 'wf_capitaine', role: 'captain', faction: 'stark' }).options.map(o => o.text).join('|'), /je suis prêt/);
+});

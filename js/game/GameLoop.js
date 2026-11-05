@@ -27,6 +27,7 @@ export function frame(G, dt) {
     discover(G);
     if (!G.core.state.explore) { const gift = checkGift(G.core); if (gift) G.ui.gift(gift); }
     if ((G.autoT += dt) > 120) { G.autoT = 0; G.autosave(); }
+    if (!G.battle && !ui.modal && !G.core.state.explore && (G.idleT = (G.idleT ?? 0) + dt) > 240) { G.idleT = 0; ui.help(true); } // 4 min sans progrès : un conseil
     if (G.flashT > 0) { G.flashT -= dt; G.renderer.hitFlash(Math.max(0, G.flashT * 2)); }
   }
   daylight(G);

@@ -1,6 +1,9 @@
 // Recruteur (engager des hommes) et capitaine de guerre (lancer les grandes batailles de la région).
 import { BATTLES } from '../data/battles.js';
 import { UNITS } from '../data/units.js';
+import { check } from '../core/Conditions.js';
+import { QUESTS } from '../quests/QuestRegistry.js';
+import { xpForLevel } from '../player/Progression.js';
 
 export function armyNodes(npc, game) {
   const region = game.state.player.region, nodes = {};
@@ -15,8 +18,11 @@ export function armyNodes(npc, game) {
     const list = Object.entries(BATTLES).filter(([, b]) => b.region === region);
     nodes.default = { text: ['Les éclaireurs ne parlent que de ça : ça va saigner. Il me faut quelqu’un pour mener les hommes.', 'Un vrai chef ne compte pas ses ennemis. Il compte ses lances.'], options: [
       ...list.map(([id, b]) => ({ text: `${b.name} : je suis prêt.`, when: b.requires, end: true, effects: [{ startBattle: id }] })),
+      ...list.map(([id, b]) => ({ text: `${b.name} : que me manque-t-il ?`, when: { not: { all: b.requires } }, next: 'missing_' + id })),
       ...list.map(([id, b]) => ({ text: `${b.name} : de quoi s’agit-il ?`, next: 'brief_' + id })),
       { text: 'Comment commander ?', next: 'orders' }] };
+    const s = game.state, p = s.player;
+    for (const [id, b] of list) nodes['missing_' + id] = { text: ['Pas encore. ' + b.requires.filter(c => !check(c, s)).map(c => c.level ? `Il te faut le niveau ${c.level} — tu es niveau ${p.level}, encore ${xpForLevel(p.level) - p.xp} XP avant le prochain. Les missions, les contrats et les combats en rapportent.` : `Il faut d’abord régler l’affaire « ${QUESTS[c.quest]?.title} ». Sans ça, la région n’est pas sûre.`).join(' ') + ' Et engage au moins huit hommes chez le recruteur, juste à côté.'], options: [{ text: 'Compris.', next: 'default' }] };
     for (const [id, b] of list) nodes['brief_' + id] = { text: [`${b.desc} En face : ${b.enemy.name}. Je fournis ${Object.values(b.allies.units).reduce((a, c) => a + c, 0)} hommes ; à toi d’amener les tiens. Reviens quand tu auras le niveau ${b.requires.find(c => c.level)?.level ?? 1} et que la région sera sûre.`], options: [{ text: 'Je reviendrai.', next: 'default' }] };
     nodes.orders = { text: ['Sur le champ, touche 1 : on charge. 2 : on tient la ligne. 3 : tout le monde sur toi. Si l’ennemi perd sept hommes sur dix, il fuit. Si c’est nous… ne pense même pas à ça.'], options: [{ text: 'Bien.', next: 'default' }] };
   }
