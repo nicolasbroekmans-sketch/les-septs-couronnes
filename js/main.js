@@ -50,7 +50,17 @@ function toMenu() {
   mainMenu({ saves, onNew: newGame, onLoad: loadSlot, onDiscover: discover, onSettings: openSettings });
   audio.music(true);
 }
-function newGame() {
+/** Nouvelle partie : prologue (grande bataille gagnée) → « Bienvenue à Westeros » → création du personnage. */
+async function newGame() {
+  audio.music(false); await clouds('in'); await ensureGame();
+  only(null); fxState.paused = true; $('#ui').classList.add('ingame');
+  let done = false;
+  const next = () => { if (done) return; done = true; ui.skipButton(false); game.stop(); game.clearBattle(); ui.closePanel(); ui.battleHud(null); ui.showHud(false); $('#ui').classList.remove('ingame'); fxState.paused = false; createCharacter(); };
+  try { await game.prologue(next); ui.skipButton(true, next); }
+  catch (e) { console.warn(e); next(); }
+  clearClouds();
+}
+function createCharacter() {
   only('#create'); fxState.mode = 'dust';
   characterCreation({ onBack: toMenu, onDone: creation => {
     only(null); $('#map').classList.add('active');

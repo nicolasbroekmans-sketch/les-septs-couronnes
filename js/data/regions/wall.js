@@ -3,7 +3,7 @@ import { look, camp } from './common.js';
 
 const GROVE = [-40, -205];
 const crow = o => look({ tunic: '#1e1e20', cloak: '#141416', pants: '#1a1a1a', ...o });
-const onPatrol = { quest: 'wall_patrol', step: ['grove', 'ambush', 'choice'] };
+const onPatrol = { quest: 'wall_patrol', step: ['tunnel', 'grove', 'ambush', 'choice'] };
 export default {
   id: 'wall', scene: 'wall', name: 'Le Mur — Châteaunoir', region: 'Au bord du monde', climate: 'glace', lawFaction: 'garde',
   prices: { weapon: 1.2, armor: 1.2, vivres: 1.5, fourrure: .6, luxe: 1.8, consumable: 1.4 },
@@ -33,7 +33,7 @@ export default {
         { id: 'wall_wild_2', name: 'Sauvageonne à la lance', weapon: 'lance', armor: 'cuir', hp: 75, x: GROVE[0] + 12, z: GROVE[1] - 16, look: look({ female: true, tunic: '#5a4a3a', cloak: '#7a6a5a' }) },
         { id: 'wall_wild_3', name: 'Archer sauvageon', weapon: 'arc_long', armor: 'cuir', hp: 60, x: GROVE[0], z: GROVE[1] - 24, look: look({ tunic: '#4a4a3a', cloak: '#6a6a5a' }) }] }
   ],
-  markers: [{ id: 'wall_grove', x: GROVE[0], z: GROVE[1], r: 16, label: 'Bosquet du barral' }],
+  markers: [{ id: 'wall_grove', x: GROVE[0], z: GROVE[1], r: 16, label: 'Bosquet du barral' }, { id: 'wall_tunnel', x: -40, z: -64, r: 7, label: 'Tunnel sous le Mur' }],
   objects: [],
   build(ctx) {
     const { mat, THREE } = ctx, g = ctx.engine.groundFn, wood = mat('weathered_planks', { uv: 2, color: '#6a5444' });

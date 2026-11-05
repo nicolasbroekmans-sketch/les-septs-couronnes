@@ -28,6 +28,7 @@ import { lookFromCosmetics } from '../player/Rewards.js';
 import { Followers } from './Followers.js';
 import { BattleRuntime } from './BattleRuntime.js';
 import { BATTLES } from '../data/battles.js';
+import { pardon } from '../factions/Reputation.js';
 
 export class Game {
   constructor(ui, settings, storage) {
@@ -53,9 +54,23 @@ export class Game {
     this.stop(); this.clearBattle();
     this.core = new GameCore(state); wireEvents(this); this.ui.startTutorial(this);
     await this.enterRegion(state.player.region, state.player.position);
+    this.run();
+  }
+  run() {
     this.running = true; this.input.enabled = true; this.lastT = performance.now(); this.autoT = 0;
     this.renderer.renderer.setAnimationLoop(() => { const now = performance.now(), dt = Math.min(.05, (now - this.lastT) / 1000); this.lastT = now; if (!this.loadingRegion) frame(this, dt); });
     this.ui.showHud(true); this.ui.lockHint(true);
+  }
+  /** Prologue : un écuyer anonyme dans une bataille de 200 soldats, gagnée d'avance. onDone() → création du personnage. */
+  async prologue(onDone) {
+    this.stop(); this.clearBattle();
+    const state = createGameState({ name: 'Écuyer', sex: 'homme', age: 19, origin: 'couronne', classId: 'guerrier', difficulty: 'facile', appearance: { cloak: '#2a3a5a' } }, 'kingslanding', 7);
+    state.explore = true; this.core = new GameCore(state); wireEvents(this); this.onPrologueEnd = onDone;
+    const b = BATTLES.prologue;
+    REGIONS['battle:prologue'] ??= { id: 'battle:prologue', battle: 'prologue', scene: 'battlefield', placeId: 'prologue', name: b.name, region: 'Le Conflans', climate: 'tempere', lawFaction: null, prices: {}, intro: b.desc, npcs: [], groups: [], markers: [], objects: [], rumors: [] };
+    await this.enterRegion('battle:prologue');
+    this.battle = new BattleRuntime(this, 'prologue');
+    this.run();
   }
   async enterRegion(id, position = null) {
     const def = REGIONS[id]; if (!def) throw new Error('Région inconnue : ' + id);
@@ -137,6 +152,7 @@ export class Game {
   }
   async endBattle() {
     const b = this.battle; if (!b || this.leavingBattle) return;
+    if (b.def.prologue) { this.clearBattle(); this.ui.battleHud(null); this.stop(); this.ui.showHud(false); return this.onPrologueEnd?.(); }
     this.leavingBattle = true; const back = this.returnTo, p = this.core.state.player;
     if (!b.won) p.hp = Math.max(p.hp, derive(p).maxHp * .4);
     this.clearBattle(); this.ui.battleHud(null);
@@ -145,6 +161,7 @@ export class Game {
   clearBattle() { this.battle?.dispose(); this.battle = null; }
   async respawn() {
     const s = this.core.state; s.player.gold = Math.floor(s.player.gold * .8); s.player.hp = derive(s.player).maxHp; s.player.position = null;
+    pardon(s); this.ui.toast('Vous reprenez connaissance. On vous a soigné ; les gardes ont passé l’éponge.', 'info');
     await this.enterRegion(s.player.region, null);
   }
   /** Mode découverte : un des 16 lieux, sans quêtes ni PNJ, avec un personnage prêt-à-jouer. */

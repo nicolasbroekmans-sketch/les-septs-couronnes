@@ -21,7 +21,7 @@ test('dégâts : base, lourd, critique, armure', () => {
 test('parade, garde et garde brisée', () => {
   const base = computeDamage(atk(), def(), never).amount;
   const blocked = computeDamage(atk(), def({ blocking: true }), never);
-  assert.ok(blocked.blocked && blocked.amount < base * .5 && !blocked.guardBreak);
+  assert.ok(blocked.blocked && blocked.amount < base * .7 && !blocked.guardBreak);
   assert.ok(computeDamage(atk({ heavy: true }), def({ blocking: true }), never).guardBreak);
   const parried = computeDamage(atk(), def({ blocking: true, parrying: true }), never);
   assert.ok(parried.parried && parried.amount === 0);

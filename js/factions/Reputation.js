@@ -25,5 +25,13 @@ export function changeRep(state, faction, amount, bus) {
 /** Un membre de la faction attaque-t-il le joueur à vue ? */
 export function hostileToPlayer(state, faction) {
   if (FACTIONS[faction]?.outlaw) return true;
-  return (state.factions[faction] ?? 0) <= -60 || (state.player.bounty?.[faction] ?? 0) > 0;
+  return (state.factions[faction] ?? 0) <= -60 || (state.player.bounty?.[faction] ?? 0) >= 150; // petite prime : le garde vient vous parler au lieu d'attaquer
+}
+
+/** Après une mort : primes effacées, provocations oubliées, rancunes plafonnées (on ne se réveille pas au milieu des gardes). */
+export function pardon(state) {
+  state.player.bounty = {};
+  for (const k of Object.keys(state.world.flags)) if (k.startsWith('provoked:')) delete state.world.flags[k];
+  for (const f of Object.keys(state.factions)) if (!FACTIONS[f]?.outlaw) state.factions[f] = Math.max(state.factions[f], -40);
+  for (const r of Object.values(state.npcs)) { r.relation = Math.max(r.relation ?? 0, -30); if (r.flags) r.flags.hostile = false; }
 }

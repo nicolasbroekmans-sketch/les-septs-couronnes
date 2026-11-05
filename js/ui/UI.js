@@ -14,7 +14,7 @@ import { mapTab } from './panels/MapTab.js';
 import { guideTab } from './panels/GuideTab.js';
 import { profileTab } from './panels/ProfileTab.js';
 import { armyTab } from './panels/ArmyTab.js';
-import { battleHud, battleResult } from './BattleView.js';
+import { battleHud, battleResult, skipButton } from './BattleView.js';
 import { Tutorial } from './Tutorial.js';
 import { revealGift } from './GiftReveal.js';
 import { equipCosmetic } from '../player/Rewards.js';
@@ -48,7 +48,8 @@ export class UI {
   openCharacter(tab = 'inv') { const G = this.game; this.panel.open([inventoryTab(G), skillsTab(G), journalTab(G), mapTab(G), factionsTab(G), profileTab(G), armyTab(G), guideTab(G)], tab, 'Personnage'); }
   openArmy(hire = false) { const G = this.game; this.panel.open([armyTab(G, hire), inventoryTab(G)], 'army', 'Armée'); }
   battleHud(b, a, e) { battleHud(b, a, e); }
-  battleResult(b, win) { battleResult(this, b, win); }
+  battleResult(b, win) { skipButton(false); battleResult(this, b, win); }
+  skipButton(on, fn) { skipButton(on, fn); }
   openPause() { this.panel.open(pauseTabs(this.game, this.handlers), 'pause', 'Pause'); }
   openTrade(actor) { if (actor) this.panel.open([tradeTab(this.game, actor), inventoryTab(this.game)], 'trade', 'Commerce'); }
   closePanel() { this.panel.close(); }

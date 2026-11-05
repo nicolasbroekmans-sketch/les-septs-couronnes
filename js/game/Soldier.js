@@ -12,7 +12,8 @@ export class Soldier {
     const u = UNITS[unit], armor = ITEMS[u.armor];
     Object.assign(this, { id: 'soldat' + next++, kind: 'crowd', unit, team, owner, name: u.name, def: {}, faction: team, radius: .38, yaw, vy: 0, speed: 0, onGround: true });
     this.pos = { x, y, z }; this.weaponId = u.weapon; this.tint = u.tint;
-    this.stats = { ...npcStats({ hp: u.hp, force: 5 + (u.power > 2 ? 2 : 0), armor: armor.armor }), moveSpeed: armor.speed ?? 1 };
+    this.stats = { ...npcStats({ hp: u.hp, force: 5 + (u.power > 2 ? 2 : 0), armor: armor.armor }), moveSpeed: (armor.speed ?? 1) * (u.mounted ? 1.9 : 1) };
+    this.mounted = !!u.mounted; if (u.mounted) this.radius = .7;
     this.fighter = new Fighter({ maxHp: u.hp, maxStamina: 80, weapon: ITEMS[u.weapon], stats: this.stats });
     this.phase = Math.random() * 6; this.deadT = 0;
   }

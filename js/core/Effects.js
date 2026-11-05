@@ -28,6 +28,7 @@ export function apply(effects, game, ctx = {}) {
     if (e.payBounty) { delete p.bounty[e.payBounty]; bus.emit('player:bounty', { faction: e.payBounty, value: 0 }); }
     if (e.pacify) bus.emit('group:pacified', { group: e.pacify });
     if (e.trade) bus.emit('ui:trade', { npc: e.trade });
+    if (e.troops) { const a = (p.army ??= { troops: {}, followers: [] }); for (const [u, n] of Object.entries(e.troops)) { a.troops[u] = (a.troops[u] ?? 0) + n; if (e.follow) for (let i = 0; i < n; i++) a.followers.push(u); } bus.emit('army:followers', {}); out.push('Nouvelles recrues'); }
     if (e.openArmy) bus.emit('ui:army', {});
     if (e.startBattle) bus.emit('battle:start', { id: e.startBattle });
     if (e.heal) bus.emit('player:heal', { amount: e.heal });

@@ -74,6 +74,9 @@ test('Le Mur — choix moral et échec si le donneur meurt', () => {
   for (const [frag, outcome] of [['Pars', 'free'], ['Tu viens avec nous', 'prisoner'], ['La loi du Mur', 'execute']]) {
     const g = newGame('wall');
     talk(g, 'aldous', 'Je viens avec vous');
+    talk(g, { id: 'wall_recruteur', role: 'recruiter', faction: 'garde' }, 'Ils viennent avec moi');
+    assert.equal(g.state.player.army.followers.length, 2, 'deux patrouilleurs suivent le héros');
+    g.bus.emit('marker:reached', { marker: 'wall_tunnel' });
     g.bus.emit('marker:reached', { marker: 'wall_grove' });
     for (let i = 0; i < 3; i++) g.bus.emit('npc:defeated', { group: 'wall_wildlings' });
     talk(g, 'ygra', frag);

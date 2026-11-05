@@ -2,10 +2,14 @@
 export default {
   wall_patrol: {
     title: 'Une nuit au Mur', region: 'wall', giver: 'aldous', category: 'Principale — Garde de Nuit',
-    desc: 'Accompagner une patrouille au-delà du Mur.', start: 'grove',
+    desc: 'Accompagner une patrouille au-delà du Mur.', start: 'muster',
     failOn: [{ event: 'npc:killed', npc: 'aldous', text: 'Frère Aldous est tombé. La patrouille est perdue.' }],
     steps: {
-      grove: { text: 'Frère Aldous mène la patrouille. Passez le tunnel sous le Mur et rejoignez le bosquet du barral, au nord.',
+      muster: { text: 'On ne sort pas seul au-delà du Mur. Frère Mullin, l’intendant (près de l’entrée du camp), vous confiera deux patrouilleurs — gratuitement.',
+        objectives: [{ type: 'signal', signal: 'muster', label: 'Recruter deux patrouilleurs auprès de Frère Mullin' }], next: 'tunnel' },
+      tunnel: { text: 'Vos patrouilleurs vous suivent. Le tunnel sous le Mur est au nord-ouest du camp : suivez la colonne de lumière dorée.',
+        objectives: [{ type: 'reach', marker: 'wall_tunnel', label: 'Entrer dans le tunnel sous le Mur' }], next: 'grove' },
+      grove: { text: 'De l’autre côté du Mur, marchez droit vers le nord en suivant les pierres levées : Frère Aldous vous attend au barral blanc aux feuilles rouges.',
         objectives: [{ type: 'reach', marker: 'wall_grove', label: 'Rejoindre le bosquet du barral (au-delà du Mur)' }], next: 'ambush' },
       ambush: { text: 'Des sauvageons sortent de la brume ! Défendez la patrouille.', enter: [{ flag: 'wall_ambush' }],
         objectives: [{ type: 'defeat', group: 'wall_wildlings', count: 3, label: 'Repousser les sauvageons' }], next: 'choice' },

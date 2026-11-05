@@ -8,7 +8,7 @@ export class SoldierBrain extends NPCBrain {
   perceive(W) {
     const a = this.actor; if (this.battle.ended) return;
     if (this.target?.alive && !this.target.surrendered && this.state === 'combat' && Math.hypot(this.target.pos.x - a.pos.x, this.target.pos.z - a.pos.z) < 6) return;
-    const range = this.order === 'charge' && this.battle.started ? 500 : 14;
+    const range = this.order === 'charge' && this.battle.started ? 500 : a.fighter.weapon.ranged && this.battle.started ? 60 : 14;
     let best = null, bd = range;
     for (const o of W.actors) {
       if (o === a || !o.alive || o.surrendered || !W.hostile(a, o)) continue;
@@ -16,6 +16,17 @@ export class SoldierBrain extends NPCBrain {
       if (d < bd) { bd = d; best = o; }
     }
     if (best) { this.target = best; this.state = 'combat'; } else if (this.state === 'combat') { this.state = 'routine'; this.target = null; this.actor.fighter.block(false); }
+  }
+  /** Archers : restent à distance et tirent des salves (portée ~55 m) ; les autres combattent normalement. */
+  combat(dt, W) {
+    const a = this.actor, f = a.fighter, t = this.target;
+    if (!f.weapon.ranged || !t?.alive || this.battle.routed[a.team]) return super.combat(dt, W);
+    const dx = t.pos.x - a.pos.x, dz = t.pos.z - a.pos.z, d = Math.hypot(dx, dz);
+    a.faceTo(t.pos, dt, 8);
+    if (d < 4) return super.combat(dt, W);
+    if (d > 55) return { x: dx / d * 3.4, z: dz / d * 3.4 };
+    if (!f.busy && Math.abs(Math.atan2(Math.sin(Math.atan2(-dx, -dz) - a.yaw), Math.cos(Math.atan2(-dx, -dz) - a.yaw))) < .25) f.attack(false);
+    return { x: 0, z: 0 };
   }
   startFlee(W) {
     const a = this.actor; if (this.battle.routed[a.team] || a.fighter.hp / a.fighter.maxHp < .25) { this.state = 'flee'; this.fleeT = 0; return { x: 0, z: 0 }; }
@@ -35,7 +46,7 @@ export class SoldierBrain extends NPCBrain {
     if (this.order === 'charge' && b.started) goal = { x: a.pos.x, z: a.pos.z + (a.team === 'A' ? -20 : 20) };
     const dx = goal.x - a.pos.x, dz = goal.z - a.pos.z, d = Math.hypot(dx, dz);
     if (d < 1.2) { a.turnTo(a.team === 'A' ? 0 : Math.PI, dt, 3); return { x: 0, z: 0 }; }
-    const sp = Math.min(d, this.order === 'charge' ? 4.4 : 3.6);
+    const sp = Math.min(d, (this.order === 'charge' ? 4.4 : 3.6) * (a.stats.moveSpeed ?? 1));
     a.turnTo(Math.atan2(-dx, -dz), dt, 6);
     return { x: dx / d * sp, z: dz / d * sp };
   }

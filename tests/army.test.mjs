@@ -28,6 +28,7 @@ test('compagnons : pris dans les troupes, limités par les places', () => {
 
 test('batailles : ~100 combattants, conditions de déblocage valides', () => {
   for (const [id, b] of Object.entries(BATTLES)) {
+    if (b.prologue) continue;
     const n = Object.values(b.enemy.units).reduce((a, x) => a + x, 0) + Object.values(b.allies.units).reduce((a, x) => a + x, 0);
     assert.ok(n >= 60 && n <= 80, `${id} : ${n} soldats PNJ (+ armée du joueur jusqu’à ~30)`);
     for (const u of [...Object.keys(b.enemy.units), ...Object.keys(b.allies.units)]) assert.ok(UNITS[u]);
@@ -90,4 +91,13 @@ test('dialogues : le recruteur ouvre l’armée, le capitaine ne lance la batail
   g.state.player.level = 3; g.state.quests.wf_iron = { state: 'completed', step: null, log: [] };
   talk(g, { id: 'wf_capitaine', role: 'captain', faction: 'stark' }, 'je suis prêt');
   assert.deepEqual(seen, ['army', 'bataille_bois']);
+});
+
+test('prologue : environ 100 contre 100, avec archers et cavaliers', () => {
+  const b = BATTLES.prologue, sum = u => Object.values(u).reduce((a, x) => a + x, 0);
+  assert.ok(sum(b.allies.units) >= 95 && sum(b.enemy.units) >= 95, `${sum(b.allies.units)} contre ${sum(b.enemy.units)}`);
+  for (const side of [b.allies, b.enemy]) { assert.ok(side.units.archer > 0); assert.ok(side.units.cavalier > 0); }
+  assert.ok(UNITS.cavalier.mounted);
+  const c = new Soldier('cavalier', 'A', 0, 0, 0, 0), l = new Soldier('levee', 'A', 0, 0, 0, 0);
+  assert.ok(c.stats.moveSpeed > l.stats.moveSpeed * 1.5, 'les cavaliers vont plus vite');
 });

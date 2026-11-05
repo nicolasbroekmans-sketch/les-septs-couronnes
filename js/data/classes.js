@@ -38,8 +38,8 @@ export const ORIGINS = {
 };
 
 export const DIFFICULTIES = {
-  facile: { name: 'Écuyer (facile)', taken: .6, dealt: 1.25, xp: 1.2 },
-  normal: { name: 'Chevalier (normal)', taken: 1, dealt: 1, xp: 1 },
-  difficile: { name: 'Seigneur (difficile)', taken: 1.4, dealt: .85, xp: .9 },
+  facile: { name: 'Écuyer (facile)', taken: .45, dealt: 1.6, xp: 1.2 },
+  normal: { name: 'Chevalier (normal)', taken: .7, dealt: 1.3, xp: 1 },
+  difficile: { name: 'Seigneur (difficile)', taken: 1.2, dealt: .95, xp: .9 },
   legende: { name: 'Légende (impitoyable)', taken: 1.9, dealt: .75, xp: .85 }
 };

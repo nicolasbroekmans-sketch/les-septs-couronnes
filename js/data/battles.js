@@ -1,5 +1,13 @@
 // Grandes batailles (milieu de jeu) : ~100 combattants. Débloquées par le niveau et la quête principale de la région.
 export const BATTLES = {
+  prologue: {
+    name: 'La bataille du Gué-aux-Corbeaux', prologue: true, region: 'prologue', theme: 'plaine', hdri: 'belfast_sunset_puresky',
+    desc: 'Un seigneur félon s’est soulevé contre le Trône de fer. Vous n’êtes qu’un écuyer dans l’ost du roi — mais ce soir, on se souviendra de vous.',
+    requires: [], enemyHp: .7,
+    enemy: { faction: 'bandits', name: 'L’ost du seigneur félon', units: { levee: 45, archer: 25, homme_armes: 22, cavalier: 8 } },
+    allies: { faction: 'couronne', name: 'L’ost du roi', units: { levee: 38, archer: 25, homme_armes: 22, cavalier: 15 } },
+    reward: []
+  },
   bataille_route: {
     name: 'La bataille de la route royale', region: 'kingslanding', theme: 'plaine', hdri: 'qwantani_late_afternoon_puresky',
     desc: 'Les Chardons ont rallié trois bandes de pillards. Ils marchent sur la porte des Dieux.',

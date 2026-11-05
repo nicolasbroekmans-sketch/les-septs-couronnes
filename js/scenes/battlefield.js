@@ -13,7 +13,7 @@ export async function build(ctx, id) {
   ctx.terrain({ size: 500, seg: 120, height: h, mat: mat(t.ground[0], { uv: 6, color: t.ground[1], rough: 1 }) });
   const trees = []; for (let i = 0; i < 160; i++) { const x = (rand() < .5 ? -1 : 1) * (80 + rand() * 120), z = -200 + rand() * 330; trees.push([x, z, 1 + rand()]); }
   ctx.trees(trees, 'pine', { leaf: t.leaf });
-  const allyHouse = { guet: 'baratheon', stark: 'stark', garde: 'garde' }[b.allies.faction] ?? 'stark';
+  const allyHouse = { couronne: 'baratheon', guet: 'baratheon', stark: 'stark', garde: 'garde' }[b.allies.faction] ?? 'stark';
   for (const [z, house, cloth] of [[52, allyHouse, '#4a5a7a'], [-112, b.enemy.faction === 'greyjoy' ? 'garde' : 'lannister', '#6a3a2a']]) {
     for (let i = 0; i < 5; i++) ctx.cone(3, 3.6, -30 + i * 15, h(-30 + i * 15, z + 8 * Math.sign(z)), z + 8 * Math.sign(z), mat(null, { color: cloth, flat: true }), { seg: 6, solid: true });
     for (const x of [-24, 0, 24]) P.standard(x, z, house, 8);

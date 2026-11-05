@@ -22,6 +22,7 @@ export function wireEvents(G) {
   bus.on('dialogue:check', ({ ok, label }) => ui.toast(`${label} : ${ok ? 'réussite' : 'échec'}`, ok ? 'rep' : 'warn'));
   bus.on('ui:army', () => setTimeout(() => ui.openArmy(true), 50));
   bus.on('battle:start', ({ id }) => setTimeout(() => G.startBattle(id), 300));
+  bus.on('army:followers', () => G.followers?.refresh());
   bus.on('army:recruited', ({ unit, qty }) => { audio.sfx('anvil', .3, 1.1); ui.refresh(); });
   bus.on('ui:trade', ({ npc }) => ui.openTrade(G.region.actors.get(npc)));
   bus.on('player:heal', ({ amount }) => { G.player.fighter.hp = Math.min(G.player.fighter.maxHp, G.player.fighter.hp + amount); });

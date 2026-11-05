@@ -11,9 +11,16 @@ export default {
       default: { text: ['La nuit est sombre, et le froid ne pardonne pas.', 'Garde ton feu allumé, et ta lame à portée de main.'] },
       offer: { text: 'Toi. Tu n’as pas froid aux yeux, on dirait. Une patrouille part cette nuit au-delà du Mur, jusqu’au bosquet du barral. Il me manque une épée.',
         options: [{ text: 'Je viens avec vous.', end: true, effects: [{ startQuest: Q }, { rep: { garde: 3 } }] }, { text: 'Je ne suis pas encore prêt.', end: true }] },
-      progress: { text: 'Le tunnel est au pied du Mur, derrière le réfectoire. Au nord, suis les pierres levées jusqu’au barral.', bye: true },
+      progress: { text: 'D’abord, va voir Frère Mullin à l’entrée du camp : il te donnera deux patrouilleurs. Ensuite le tunnel, au nord-ouest, puis tout droit vers le nord jusqu’au barral. Je t’y attendrai.', bye: true },
       report: { text: 'Va voir l’intendant Corwen au réfectoire. Il voudra ton rapport, mot pour mot.',
         options: [{ text: 'J’y vais.', end: true, effects: [{ startQuest: 'wall_report' }] }] }
+    }
+  },
+  wall_recruteur: {
+    entries: [{ when: { quest: Q, step: 'muster' }, node: 'muster' }],
+    nodes: {
+      muster: { text: 'Aldous t’envoie ? Alors prends Pyp et Grenn — enfin, deux gars qui leur ressemblent. Ils connaissent la forêt. Ramène-les vivants.',
+        options: [{ text: 'Merci, frère. Ils viennent avec moi.', end: true, effects: [{ troops: { patrouilleur: 2 }, follow: true }, { signal: [Q, 'muster'] }] }] }
     }
   },
   ygra: {

@@ -17,6 +17,7 @@ export function battleHud(b, a, e) {
 }
 
 export function battleResult(ui, b, win) {
+  if (b.def.prologue) return welcome(ui);
   const lost = Object.entries(b.losses).map(([u, n]) => `${n} × ${UNITS[u].name}`).join(', ') || 'aucune';
   ui.panel.open([{ id: 'res', label: win ? 'Victoire' : 'Défaite', render(c) {
     c.append(h('div.battle-res' + (win ? '.win' : '.loss'), {}, h('h2', {}, win ? 'Victoire !' : 'Défaite…'),
@@ -25,4 +26,19 @@ export function battleResult(ui, b, win) {
       win ? h('p.ok', {}, 'Récompenses : or, expérience, renommée, réputation et une cape d’exception (voir Profil).') : h('p.sub', {}, 'Recrutez davantage et revenez quand vous serez prêt.'),
       h('button.btn-gold', { type: 'button', on: { click: () => ui.closePanel() } }, h('span', {}, 'Quitter le champ de bataille'))));
   } }], 'res', 'Bataille');
+}
+
+/** Fin du prologue : « Bienvenue à Westeros », puis création du personnage. */
+function welcome(ui) {
+  ui.panel.open([{ id: 'res', label: 'Victoire', render(c) {
+    c.append(h('div.battle-res.win.welcome', {}, h('p.kicker', {}, 'Victoire !'), h('h2', {}, 'Bienvenue à Westeros'),
+      h('p', {}, 'Le seigneur félon est en fuite. Sur le champ de bataille, un vieux chevalier vous tend la main : « Bien combattu, petit. Mais qui es-tu, au juste ? »'),
+      h('p.sub', {}, 'Choisissez maintenant qui vous êtes : votre nom, votre maison, votre métier — et l’endroit où commence votre histoire.'),
+      h('button.btn-gold', { type: 'button', on: { click: () => ui.closePanel() } }, h('span', {}, 'Créer mon personnage'))));
+  } }], 'res', 'Prologue');
+}
+/** Bouton « Passer le prologue » (visible tant que le prologue dure). */
+export function skipButton(on, onSkip) {
+  $('#skip-prologue')?.remove(); if (!on) return;
+  document.body.append(h('button#skip-prologue.btn-ui', { type: 'button', on: { click: onSkip } }, 'Passer le prologue ›'));
 }

@@ -32,3 +32,14 @@ test('aumône aux mendiants : or, karma, gratitude, puis un secret', () => {
   assert.equal(p.gold, before + 35, 'la cache révélée rapporte de l’or');
   assert.ok(!talk(g, beggar).options.some(o => o.text.includes('en savoir long')), 'le secret ne se donne qu’une fois');
 });
+
+test('se relever après la mort : primes effacées, gardes apaisés', async () => {
+  const { pardon, hostileToPlayer } = await import('../js/factions/Reputation.js');
+  const g = newGame('kingslanding'), s = g.state;
+  s.player.bounty = { guet: 200 }; s.world.flags['provoked:kl_guards'] = true; s.factions.guet = -80;
+  assert.ok(hostileToPlayer(s, 'guet'));
+  pardon(s);
+  assert.ok(!hostileToPlayer(s, 'guet')); assert.equal(s.world.flags['provoked:kl_guards'], undefined);
+  s.player.bounty = { guet: 50 };
+  assert.ok(!hostileToPlayer(s, 'guet'), 'une petite prime ne déclenche pas l’attaque à vue');
+});

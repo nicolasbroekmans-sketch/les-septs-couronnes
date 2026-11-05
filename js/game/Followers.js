@@ -25,6 +25,7 @@ export class Followers {
       G.addActor(a); this.list.push(a);
     });
   }
+  refresh() { for (const a of this.list) if (this.G.actors.includes(a)) this.G.removeActor(a); this.list = []; if (!this.G.region?.def.battle) this.spawn(); }
   update() {
     const G = this.G, P = G.player.pos;
     for (const a of this.list) if (a.alive && a.brain.state !== 'combat' && Math.hypot(a.pos.x - P.x, a.pos.z - P.z) > 40) {

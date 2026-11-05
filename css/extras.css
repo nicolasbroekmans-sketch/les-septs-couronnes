@@ -47,3 +47,5 @@ dl.guide dt { font-family: var(--f-sub); color: #6e3a10; margin-top: .6rem; } dl
 .bh-bars{display:flex;align-items:center;gap:.5em;margin-top:.3em;font-size:.85em}.bh-bar{flex:1;height:8px;background:#0008;border-radius:4px;overflow:hidden;display:block}
 .bh-fa,.bh-fe{display:block;height:100%;transition:width .4s}.bh-fa{background:#5a8ad0}.bh-fe{background:#c0442a;margin-left:auto}.bh-a{color:#8fb4ea}.bh-e{color:#e08a6a}
 .battle-res{text-align:center;padding:1.5em}.battle-res h2{font-family:'Cinzel Decorative',serif;font-size:2.4em;margin:.2em 0}.battle-res.win h2{color:#e8c86a}.battle-res.loss h2{color:#c0442a}.battle-res .btn-gold{margin-top:1em}
+#skip-prologue{position:fixed;right:18px;bottom:18px;z-index:60}
+.battle-res.welcome h2{font-size:clamp(2rem,6vw,3.6rem);color:#e8c86a;text-shadow:0 0 30px #c9a22766}.battle-res .kicker{letter-spacing:.3em;text-transform:uppercase;color:#9fd06a;margin:0}

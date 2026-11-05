@@ -36,7 +36,7 @@ export function computeDamage(a, d, rng = Math.random) {
 export function npcStats(n) {
   return {
     melee: 1 + (n.force ?? 5) * .06, ranged: 1 + (n.agilite ?? 5) * .05, crit: .04, heavyBonus: 0,
-    block: n.block ?? .6, parryWindow: .15, armor: n.armor ?? .1, taken: 1, attackSpeed: n.speed ?? 1, dodgeCost: 20,
+    block: n.block ?? .4, parryWindow: .07, armor: n.armor ?? .1, taken: 1, attackSpeed: n.speed ?? 1, dodgeCost: 20,
     staminaRegen: 16, maxHp: n.hp ?? 60, maxStamina: n.stamina ?? 80
   };
 }

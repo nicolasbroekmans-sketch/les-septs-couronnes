@@ -28,6 +28,10 @@ try {
   await G('gsap.ticker.lagSmoothing(0)');
   await page.click('#enter'); await until(`document.querySelector('#menu').classList.contains('active')`, 30000, 'menu');
   await page.click('text=Nouvelle partie', { timeout: 60000 });
+  await until(`document.querySelector('#skip-prologue') && window.__game?.battle`, 240000, 'prologue (bataille d’ouverture)');
+  ok('Prologue : grande bataille lancée', await G(`__game.actors.filter(a => a.kind === 'crowd').length >= 190`));
+  await page.click('#skip-prologue');
+  await until(`document.querySelector('#create').classList.contains('active')`, 30000, 'création');
   await page.fill('#create input[type=text]', 'Aelor Mainferme');
   await page.click('.class-card[data-id=guerrier]');
   await page.selectOption('#create select', 'nord');
