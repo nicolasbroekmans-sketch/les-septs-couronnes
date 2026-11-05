@@ -35,7 +35,7 @@ Une connexion Internet est nécessaire pour les CDN (Three.js, GSAP, Howler.js) 
 | Interagir (parler, fouiller, prendre) | E |
 | Se soigner | H |
 | Inventaire | I, R, T ou Tab |
-| Compétences / Journal / Factions / Carte / Guide / Profil / Armée | K / J / L / M / G / P / B |
+| Compétences / Journal / Factions / Carte et voyages / Guide / Profil / Armée / Classement | K / J / L / M / G / P / B / O |
 | Ordres en bataille : charger / tenir / me suivre | 1 / 2 / 3 |
 | Pause, sauvegarde, chargement, paramètres | Échap |
 | Choix dans les dialogues | clic ou touches 1 à 9 |

@@ -30,10 +30,11 @@ import { BattleRuntime } from './BattleRuntime.js';
 import { BATTLES } from '../data/battles.js';
 import { pardon } from '../factions/Reputation.js';
 import { travelCost } from './Travel.js';
+import { submitScore } from '../online/Leaderboard.js';
 
 export class Game {
   constructor(ui, settings, storage) {
-    this.ui = ui; this.settings = settings;
+    this.ui = ui; this.settings = settings; this.storage = storage;
     this.renderer = new Renderer(document.getElementById('three'), settings.quality);
     this.input = new Input(this.renderer.canvas); this.rig = new CameraRig(this.renderer.camera);
     this.saves = new SaveManager(storage); this.rng = createRng(Date.now() % 1e9);
@@ -137,7 +138,7 @@ export class Game {
     if (map[w] && !(cfg.hdri.includes('noon') && w === 'snow')) this.weatherFx = this.ctx.particles(map[w], { count: w === 'rain' ? 6000 : 3000 });
     this.ui.refresh();
   }
-  autosave() { if (!this.core || this.battle || this.region?.def.battle || !this.player?.alive || this.core.state.explore) return; this.persistPosition(); this.saves.save('auto', this.core.state, 'Sauvegarde auto'); this.ui.saved?.(); }
+  autosave() { if (!this.core || this.battle || this.region?.def.battle || !this.player?.alive || this.core.state.explore) return; this.persistPosition(); this.saves.save('auto', this.core.state, 'Sauvegarde auto'); this.ui.saved?.(); submitScore(this.storage, this.core.state).catch(() => {}); }
   save(slot) { if (this.battle) { this.ui.toast('Impossible de sauvegarder pendant une bataille.', 'warn'); return false; } this.persistPosition(); return this.saves.save(slot, this.core.state, slot); }
   persistPosition() { const p = this.core.state.player, A = this.player; if (A) { p.position = [A.pos.x, A.pos.y, A.pos.z]; p.yaw = A.yaw; p.hp = A.fighter.hp; p.stamina = A.fighter.stamina; } }
   playerDied() { if (this.battle) return this.battle.finish(false); this.input.unlock(); this.ui.gameOver(); }

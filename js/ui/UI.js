@@ -14,6 +14,7 @@ import { mapTab } from './panels/MapTab.js';
 import { guideTab } from './panels/GuideTab.js';
 import { profileTab } from './panels/ProfileTab.js';
 import { armyTab } from './panels/ArmyTab.js';
+import { rankTab } from './panels/RankTab.js';
 import { battleHud, battleResult, skipButton } from './BattleView.js';
 import { Tutorial } from './Tutorial.js';
 import { revealGift } from './GiftReveal.js';
@@ -40,12 +41,12 @@ export class UI {
   key(e) {
     const G = this.game; if (!G?.running || e.target.closest?.('input, textarea, select')) return;
     if (this.modals.has('dialogue') || this.modals.has('dead')) return;
-    const tabs = { KeyI: 'inv', KeyR: 'inv', KeyT: 'inv', Tab: 'inv', KeyK: 'skills', KeyJ: 'journal', KeyL: 'factions', KeyM: 'map', KeyG: 'guide', KeyP: 'profile', KeyB: 'army' };
+    const tabs = { KeyI: 'inv', KeyR: 'inv', KeyT: 'inv', Tab: 'inv', KeyK: 'skills', KeyJ: 'journal', KeyL: 'factions', KeyM: 'map', KeyG: 'guide', KeyP: 'profile', KeyB: 'army', KeyO: 'rank' };
     if (tabs[e.code]) { e.preventDefault(); if (this.panel.isOpen && this.panel.active === tabs[e.code]) return this.closePanel(); return this.openCharacter(tabs[e.code]); }
     if (e.code === 'Escape' && this.panel.isOpen) return this.closePanel();
     if (e.code === 'Escape' && !G.input.locked && !this.modal) this.openPause();
   }
-  openCharacter(tab = 'inv') { const G = this.game; this.panel.open([inventoryTab(G), skillsTab(G), journalTab(G), mapTab(G), factionsTab(G), profileTab(G), armyTab(G), guideTab(G)], tab, 'Personnage'); }
+  openCharacter(tab = 'inv') { const G = this.game; this.panel.open([inventoryTab(G), skillsTab(G), journalTab(G), mapTab(G), factionsTab(G), profileTab(G), armyTab(G), rankTab(G), guideTab(G)], tab, 'Personnage'); }
   openArmy(hire = false) { const G = this.game; this.panel.open([armyTab(G, hire), inventoryTab(G)], 'army', 'Armée'); }
   battleHud(b, a, e) { battleHud(b, a, e); }
   battleResult(b, win) { skipButton(false); battleResult(this, b, win); }

@@ -53,3 +53,6 @@ dl.guide dt { font-family: var(--f-sub); color: #6e3a10; margin-top: .6rem; } dl
 .travel-dest{display:flex;flex-direction:column;align-items:flex-start;gap:.15em;padding:.6em .8em;text-align:left;background:rgba(0,0,0,.3);border:1px solid #c9a22755;border-radius:4px;color:#efe4c9;cursor:pointer;font:inherit}
 .travel-dest:hover:not(:disabled){border-color:#c9a227;background:rgba(201,162,39,.12)}.travel-dest:disabled{opacity:.45;cursor:not-allowed}.travel-dest.seen b::after{content:' ✓';color:#9fd06a}
 .travel-dest span{font-size:.8em;opacity:.75}.travel-dest em{font-size:.85em;color:#e8c86a;font-style:normal}
+.rank-claim{display:flex;gap:.5em;margin:.6em 0}.rank-claim input{flex:1;padding:.5em .7em;background:#0006;border:1px solid #c9a22766;color:#efe4c9;font:inherit;border-radius:3px}
+.rank-list{list-style:none;padding:0;margin:.8em 0;display:grid;gap:.3em}.rank-list li{display:flex;justify-content:space-between;gap:1em;padding:.45em .8em;background:#0004;border-left:3px solid #c9a22755}
+.rank-list li.me{border-color:#9fd06a;background:#9fd06a18}.rank-list li span{opacity:.8;font-size:.9em}.rank .warn{color:#e0a06a}
