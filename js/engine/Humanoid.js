@@ -57,7 +57,7 @@ export class Humanoid {
     for (const h of [this.j.handR, this.j.handL]) for (const c of [...h.children]) if (c.userData.weapon) h.remove(c);
     if (!cls || cls === 'fist') return;
     const w = weaponMesh(cls, id); w.userData.weapon = true;
-    (cls === 'bow' ? this.j.handL : this.j.handR).add(w);
+    (cls === 'bow' ? this.j.handL : this.j.handR).add(w); this.bowMesh = cls === 'bow' ? w : null;
     if (cls !== 'bow') w.rotation.x = -Math.PI / 2; // lame vers l'avant quand le bras pend
     this.weaponCls = cls;
   }
@@ -69,6 +69,7 @@ export class Humanoid {
       if (name === 'rootX') { this.root.rotation.x += (rot - this.root.rotation.x) * k; continue; }
       const o = J[name]; o.rotation.x += ((rot[0] ?? 0) - o.rotation.x) * k; o.rotation.y += ((rot[1] ?? 0) - o.rotation.y) * k; o.rotation.z += ((rot[2] ?? 0) - o.rotation.z) * k;
     }
+    if (this.bowMesh) { const u = Math.min(1, (a.t ?? 0) / Math.max(.01, a.dur ?? .3)); this.bowMesh.userData.setDraw?.(a.draw > 0 ? a.draw : a.state === 'windup' ? u : 0); const up = a.aim || a.state === 'windup' || a.state === 'active'; this.bowMesh.rotation.x += ((up ? 0 : -Math.PI / 2) - this.bowMesh.rotation.x) * Math.min(1, dt * 10); }
     if (this.cloak) { const back = a.dead ? 0 : a.sit ? .9 : -.08 - Math.min(.55, (a.speed ?? 0) * .1) - Math.abs(Math.sin(this.phase)) * .05 * Math.min(1, (a.speed ?? 0) / 3); this.cloak.rotation.x += (back - this.cloak.rotation.x) * Math.min(1, dt * 8); }
   }
 }

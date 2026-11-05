@@ -27,7 +27,7 @@ export class PlayerController {
     let vx = wx * speed, vz = wz * speed;
     if (f.state === 'dodge') { const k = f.t < .35 ? 8 : 2; vx = this.dodgeDir.x * k; vz = this.dodgeDir.z * k; }
     A.move(vx * dt, vz * dt, dt, G.physics);
-    A.sneaking = this.sneak; A.aiming = f.weapon.ranged && (this.holdT >= 0 || f.attacking); A.pitch = rig.pitch;
+    A.sneaking = this.sneak; A.aiming = f.weapon.ranged && (this.holdT >= 0 || f.attacking); A.pitch = rig.pitch; A.drawK = f.weapon.ranged && this.holdT >= 0 ? Math.min(1, this.holdT / .6) : 0;
     // combat
     const ui = G.ui.modal;
     if (!ui && (I.locked || G.testMode)) {
