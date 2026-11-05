@@ -7,6 +7,7 @@ const AR = (name, armor, value, weight, speed = 1) => ({ name, type: 'armor', ar
 export const ITEMS = {
   poings: W('Poings', 'fist', 4, 1.3, .18, .1, .25, 6, 0),
   dague: W('Dague', 'dagger', 9, 1.5, .14, .1, .22, 8, 25, { weight: 1, crit: .1 }),
+  dague_verre_dragon: W('Dague de verredragon', 'dagger', 15, 1.5, .13, .1, .2, 8, 400, { weight: .8, crit: .18 }),
   gourdin: W('Gourdin', 'mace', 10, 1.8, .3, .12, .35, 12, 12),
   hachette: W('Hachette', 'axe', 12, 1.8, .28, .12, .35, 12, 20),
   epee_courte: W('Épée courte', 'sword', 13, 2, .24, .12, .3, 11, 60),

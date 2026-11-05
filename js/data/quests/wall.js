@@ -36,5 +36,21 @@ export default {
     desc: 'Rendre compte de la patrouille à l’intendant Corwen.', requires: { flag: 'unlocked:wall_report' }, start: 'report',
     steps: { report: { text: 'Allez faire votre rapport à l’intendant Corwen, au réfectoire.', objectives: [{ type: 'talk', npc: 'corwen', label: 'Faire votre rapport à l’intendant Corwen' }], complete: 'done' } },
     outcomes: { done: { text: 'Corwen consigne votre nom dans le registre des patrouilles.', rewards: [{ xp: 80 }, { gold: 40 }, { rep: { garde: 8 } }, { renown: 2 }] } }
+  },
+  wall_fist: {
+    title: 'Le Poing des Premiers Hommes', region: 'wall', giver: 'aldous', category: 'Principale — Garde de Nuit',
+    desc: 'Une grande expédition loin au nord du Mur, là où plus aucun frère ne va.', requires: { quest: 'wall_report', state: 'completed' }, start: 'trek',
+    steps: {
+      trek: { text: 'Traversez le tunnel sous le Mur, puis suivez le sentier de la patrouille vers le nord, à travers la forêt hantée, jusqu’au ruisseau gelé.',
+        objectives: [{ type: 'reach', marker: 'wall_creek', label: 'Atteindre le ruisseau gelé (loin au nord)' }], next: 'fist' },
+      fist: { text: 'Plus au nord encore, une colline plate couronnée de pierres : le Poing des Premiers Hommes. Montez-y.',
+        objectives: [{ type: 'reach', marker: 'wall_fist', label: 'Monter au Poing des Premiers Hommes' }], next: 'cache' },
+      cache: { text: 'Le dernier frère parti d’ici parlait d’une cachette sous les pierres, près du vieux feu. Fouillez-la.',
+        objectives: [{ type: 'interact', object: 'wall_cache', label: 'Fouiller la cachette sous les pierres' }], next: 'dead' },
+      dead: { text: 'Le vent tombe d’un coup. Entre les arbres, des silhouettes pâles aux yeux bleus avancent sans bruit. Le verredragon les blesse mieux que l’acier : tenez le Poing !', enter: [{ flag: 'fist_dead' }],
+        objectives: [{ type: 'defeat', group: 'wall_wights', count: 5, label: 'Repousser les morts qui marchent' }], next: 'back' },
+      back: { text: 'Personne ne vous croira. Rentrez quand même à Châteaunoir et dites tout à Frère Aldous.', objectives: [{ type: 'talk', npc: 'aldous', label: 'Faire votre rapport à Frère Aldous' }], complete: 'done' }
+    },
+    outcomes: { done: { text: 'Aldous regarde longtemps la lame noire. « Alors c’est vrai. » Il envoie un corbeau à chaque château du Nord.', rewards: [{ xp: 450 }, { gold: 150 }, { rep: { garde: 30, stark: 10 } }, { renown: 12 }] } }
   }
 };

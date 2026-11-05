@@ -88,3 +88,18 @@ test('Le Mur — choix moral et échec si le donneur meurt', () => {
   g.bus.emit('npc:killed', { npc: 'aldous' });
   assert.equal(g.quests.status('wall_patrol'), 'failed');
 });
+
+test('Le Mur — expédition au Poing des Premiers Hommes, loin au nord', () => {
+  const g = newGame('wall');
+  g.state.quests.wall_patrol = { state: 'completed', step: null, log: [] }; g.state.quests.wall_report = { state: 'completed', step: null, log: [] };
+  talk(g, 'aldous', 'J’irai au Poing');
+  assert.equal(g.quests.status('wall_fist'), 'active');
+  g.bus.emit('marker:reached', { marker: 'wall_creek' });
+  g.bus.emit('marker:reached', { marker: 'wall_fist' });
+  assert.equal(g.state.quests.wall_fist.step, 'cache');
+  g.bus.emit('object:used', { object: 'wall_cache' });
+  assert.equal(g.state.quests.wall_fist.step, 'dead'); assert.ok(g.state.world.flags.fist_dead, 'les morts se lèvent');
+  for (let i = 0; i < 5; i++) g.bus.emit('npc:defeated', { group: 'wall_wights' });
+  talk(g, 'aldous');
+  assert.equal(g.quests.status('wall_fist'), 'completed');
+});

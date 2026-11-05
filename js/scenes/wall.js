@@ -57,13 +57,20 @@ void main(){
   gl_FragColor = vec4(col * a * .9, a * .55);
 }`;
 
+/** Sol : Châteaunoir au sud, tunnel plat, puis collines boisées jusqu'au Poing des Premiers Hommes (40, −470). */
+export function wallHeight(x, z) {
+  if (z > -55) return Math.sin(x * .04) * Math.cos(z * .05) * 1.5 * Math.min(1, Math.max(0, (Math.hypot(x, z - 10) - 60) / 40));
+  const k = Math.min(1, Math.max(0, (-150 - z) / 50)), d = Math.hypot(x - 40, z + 470);
+  return k * (Math.sin(x * .03) * Math.cos(z * .025) * 4 + Math.sin(x * .011 + z * .007) * 3 + 3) + 22 * Math.min(1, Math.max(0, (48 - d) / 18));
+}
+
 export async function build(ctx) {
   const { THREE, mat, rand } = ctx;
   const snow = mat('snow_02', { uv: 6, color: '#c9d6e4', rough: .8 });
   const stone = mat('castle_wall_slates', { normal: 'castle_wall_slates_nor', uv: 5, color: '#8f969e' });
   const wood = mat('weathered_planks', { uv: 3, color: '#8d7660' });
   const roofM = mat('grey_roof_tiles', { uv: 3, color: '#c5ced6' });
-  ctx.terrain({ size: 700, seg: 120, height: (x, z) => z > -55 ? Math.sin(x * .04) * Math.cos(z * .05) * 1.5 * Math.min(1, Math.max(0, (Math.hypot(x, z - 10) - 60) / 40)) : 0, mat: snow, splat: { slope: 'rocky_terrain_02', slopeTint: '#c8ccd0' } });
+  ctx.terrain({ size: 1200, seg: 220, height: wallHeight, mat: snow, splat: { slope: 'rocky_terrain_02', slopeTint: '#c8ccd0' } });
 
   // La paroi de glace
   const ice = new THREE.ShaderMaterial({ vertexShader: ICE_VS, fragmentShader: ICE_FS, fog: true,

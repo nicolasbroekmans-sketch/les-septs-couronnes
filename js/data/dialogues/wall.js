@@ -5,13 +5,18 @@ export default {
     entries: [
       { when: { quest: Q, state: 'none' }, node: 'offer' },
       { when: { quest: Q, state: 'active' }, node: 'progress' },
-      { when: [{ quest: 'wall_report', state: 'none' }, { flag: 'unlocked:wall_report' }], node: 'report' }
+      { when: [{ quest: 'wall_report', state: 'none' }, { flag: 'unlocked:wall_report' }], node: 'report' },
+      { when: [{ quest: 'wall_report', state: 'completed' }, { quest: 'wall_fist', state: 'none' }], node: 'fist_offer' },
+      { when: { quest: 'wall_fist', step: ['trek', 'fist', 'cache', 'dead'] }, node: 'fist_progress' }
     ],
     nodes: {
       default: { text: ['La nuit est sombre, et le froid ne pardonne pas.', 'Garde ton feu allumé, et ta lame à portée de main.'] },
       offer: { text: 'Toi. Tu n’as pas froid aux yeux, on dirait. Une patrouille part cette nuit au-delà du Mur, jusqu’au bosquet du barral. Il me manque une épée.',
         options: [{ text: 'Je viens avec vous.', end: true, effects: [{ startQuest: Q }, { rep: { garde: 3 } }] }, { text: 'Je ne suis pas encore prêt.', end: true }] },
       progress: { text: 'D’abord, va voir Frère Mullin à l’entrée du camp : il te donnera deux patrouilleurs. Ensuite le tunnel, au nord-ouest, puis tout droit vers le nord jusqu’au barral. Je t’y attendrai.', bye: true },
+      fist_offer: { text: 'Un frère est parti vers le Poing des Premiers Hommes il y a une lune. Il n’est pas revenu. C’est loin, très loin au nord, après le ruisseau gelé. J’ai besoin de quelqu’un qui revienne — avec des réponses.',
+        options: [{ text: 'J’irai au Poing.', end: true, effects: [{ startQuest: 'wall_fist' }, { rep: { garde: 3 } }] }, { text: 'Pas encore.', end: true }] },
+      fist_progress: { text: 'Suis le sentier : le tunnel, le barral, puis plein nord jusqu’au ruisseau gelé, et encore au nord jusqu’à la colline aux pierres. Emmène des hommes — Mullin t’en donnera. Et garde un feu allumé.', bye: true },
       report: { text: 'Va voir l’intendant Corwen au réfectoire. Il voudra ton rapport, mot pour mot.',
         options: [{ text: 'J’y vais.', end: true, effects: [{ startQuest: 'wall_report' }] }] }
     }

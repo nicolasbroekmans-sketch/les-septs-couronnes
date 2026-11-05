@@ -16,6 +16,7 @@ export const FACTIONS = {
   banque: { name: 'La Banque de Fer', seat: 'Braavos', color: '#6a6a72' },
   bandits: { name: 'Les Chardons (bandits)', seat: '—', color: '#5a4030', outlaw: true },
   deserteurs: { name: 'Déserteurs', seat: '—', color: '#5a5040', outlaw: true },
+  morts: { name: 'Les morts qui marchent', seat: 'Au-delà du Mur', color: '#a8c8e0', outlaw: true },
   peuple: { name: 'Petites gens', seat: '—', color: '#a08a6a' }
 };
 // Relations entre factions (−100 à 100) ; absentes = 0. Symétriques.
