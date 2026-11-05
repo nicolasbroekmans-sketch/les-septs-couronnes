@@ -1,8 +1,9 @@
+import { meereenMap, avoidPyr } from './details/meereenMap.js';
 // MEEREEN — Grande Pyramide à degrés, harpie de bronze, ville de briques sable, palmiers, lumière écrasante.
 export const config = {
   hdri: 'qwantani_noon_puresky', exposure: 1.02, bg: 1.7, env: 1,
   fog: ['#e6cfa3', .0032], hemi: ['#fff1d6', '#8a6a44', .55], sun: ['#fff0d2', 4.2, [.25, 1, .35]],
-  bloom: [.35, .5, .9], tint: '#fff3e2', bounds: [-160, -200, 160, 110]
+  bloom: [.35, .5, .9], tint: '#fff3e2', sat: .85, bounds: [-175, -215, 175, 115]
 };
 
 export async function build(ctx) {
@@ -25,7 +26,7 @@ export async function build(ctx) {
   ctx.poi(px, pz + 74, 'La Grande Pyramide', 'Trente-trois degrés de briques de toutes les couleurs, dit la légende ; personne n’a jamais eu le courage de les recompter sous ce soleil.');
   harpy(ctx, px, y, pz, 3.2, bronze);
   // Pyramides secondaires
-  for (const [x, z, s] of [[-210, -180, .6], [220, -150, .5], [-260, 40, .45], [250, 70, .55]]) {
+  for (const [x, z, s] of [[-300, -320, .6], [260, -330, .5]]) {
     let ww = 120 * s, yy = 0; for (let t = 0; t < 8; t++) { ctx.box(ww, 6 * s, ww, x, yy, z, blocks, { solid: false }); yy += 6 * s; ww -= 13 * s; }
   }
 
@@ -39,8 +40,9 @@ export async function build(ctx) {
   ctx.poi(0, 20, 'La fontaine de la Harpie', 'Une harpie de bronze, ailes déployées, chaînes dans les serres. Les enfants y jettent des pièces ; les anciens maîtres, des malédictions.');
 
   // Ville de briques : maisons cubiques à toits plats
-  const avoid = (x, z) => (Math.abs(x) < 64 && z > -205 && z < 66) || Math.hypot(x - 105, z - 20) < 42;
-  const city = ctx.cityGrid({ x0: -170, x1: 170, z0: -200, z1: 110, block: 15, street: 4, hMin: 4, hMax: 11, avoid });
+  const avoid = (x, z, w = 0) => (Math.abs(x) < 64 && z > -205 && z < 66) || Math.hypot(x - 105, z - 20) < 42 || avoidPyr(x, z, w) || (Math.abs(x + 20) < 40 && Math.abs(z - 47) < 16);
+  meereenMap(ctx);
+  const city = ctx.cityGrid({ x0: -172, x1: 172, z0: -212, z1: 112, block: 15, street: 4, hMin: 4, hMax: 11, avoid });
   ctx.houses(city.lots, { style: 'dorne', wall: mat('large_sandstone_blocks', { uv: 4, instanced: true }), flat: true, tints: ['#f2d9ae', '#e9c891', '#f7e7c8', '#dcb383', '#e8b48a'], sink: 1 });
   for (const l of city.lots) if (rand() < .35) ctx.box(l.w + .4, .7, l.d + .4, l.x, l.h, l.z, blocks, { solid: false });
 
