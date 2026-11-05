@@ -7,8 +7,12 @@ export default {
   id: 'kingslanding', scene: 'kingslanding', name: 'Port-Réal', region: 'Terres de la Couronne', climate: 'tempere', lawFaction: 'guet',
   prices: { weapon: 1, armor: 1.1, luxe: .9, vivres: 1.15, consumable: 1 },
   spawn: { x: 0, z: 54, yaw: 0 }, bounds: [-320, -200, 200, 120],
+  rumors: ['Orwyn Pell, le marchand de la porte de la Rivière, cherche quelqu\u2019un de courageux pour la route de l\u2019ouest.', 'On dit qu\u2019un étranger aux yeux de deux couleurs paie en pièces de fer, près des quais. Il ne dit jamais son nom.', 'Dalla, rue de l\u2019Acier, forge les meilleures lames de la ville — et elle les améliore, si on y met le prix.', 'Les Manteaux d\u2019or ? Plus chers que l\u2019or qu\u2019ils portent.', 'Un collecteur d\u2019impôts, Ser Morrec, rançonne tout Culpucier. Personne n\u2019ose rien dire.', 'Des recruteurs engagent des épées au Fort Rouge. Paraît qu\u2019une guerre se prépare.'],
   intro: 'Port-Réal, an 298. La ville sent le poisson, l’encens et l’ambition. Vous n’avez que quelques pièces et une lame.',
   npcs: [
+    { id: 'kl_beggar_1', name: 'Vieux Tobbin', role: 'beggar', faction: 'peuple', x: -3.5, z: 32, weapon: 'poings', hp: 30, sit: true, look: look({ tunic: '#4a4036', pants: '#3a3028' }), story: ['J’étais marin, avant. Puis la mer a gardé mes doigts.'], ai: {} },
+    { id: 'kl_beggar_2', name: 'Mère Huppe', role: 'beggar', faction: 'peuple', x: -58, z: -28, weapon: 'poings', hp: 30, sit: true, look: look({ tunic: '#4a4036', pants: '#3a3028' }), story: ['Mes fils sont partis à la guerre du Roi. Aucun n’est revenu.'], ai: {} },
+    { id: 'kl_beggar_3', name: 'Petit Pol', role: 'beggar', faction: 'peuple', x: -22, z: -4, weapon: 'poings', hp: 30, sit: true, look: look({ tunic: '#4a4036', pants: '#3a3028' }), story: ['Mes parents ? Culpucier les a mangés, comme il mange tout le monde.'], ai: {} },
     { id: 'orwyn', name: 'Orwyn Pell', role: 'merchant', merchant: true, faction: 'peuple', x: -8, z: 52, yaw: Math.PI / 2, weapon: 'dague', hp: 50,
       stock: { onguent: 6, ration: 10, vin_arbor: 4, sel: 6, epices: 2, cuir: 2, epee_courte: 1, arc_court: 1 }, look: look({ female: false, tunic: '#6a3a5a', beard: true }), ai: { wander: 2 } },
     { id: 'dalla', name: 'Dalla l’armurière', role: 'merchant', merchant: true, smith: true, faction: 'peuple', x: 5, z: 44, yaw: -Math.PI / 2, weapon: 'masse', hp: 70,

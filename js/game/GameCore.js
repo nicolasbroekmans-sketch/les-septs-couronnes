@@ -8,6 +8,8 @@ import { DialogueEngine } from '../dialogue/DialogueEngine.js';
 import { DIALOGUES } from '../data/dialogues/index.js';
 import { WorldClock } from '../world/WorldClock.js';
 import { npcRecord } from '../ai/Memory.js';
+import { createRng } from '../core/Random.js';
+import { REGIONS } from '../data/regions/index.js';
 
 export class GameCore {
   constructor(state) {
@@ -16,10 +18,12 @@ export class GameCore {
     this.quests = new QuestEngine(this, QUESTS);
     this.dialogue = new DialogueEngine(this, DIALOGUES);
     this.clock = new WorldClock(state.world.time, this.bus);
+    this.rng = createRng((state.seed ?? 1) + state.world.time.day * 7919 + Math.floor(state.world.time.minutes));
     this.bus.on('quest:completed', () => this.state.stats.questsDone++);
     this.bus.on('player:gold', ({ amount }) => { if (amount > 0) this.state.stats.goldEarned += amount; });
     this.bus.on('npc:killed', ({ npc }) => { npcRecord(state, npc).alive = false; state.stats.kills++; });
     this.bus.on('npc:spared', () => state.stats.spared++);
   }
   effects(list, ctx) { return apply(list, this, ctx); }
+  get regionDef() { return REGIONS[this.state.player.region]; }
 }

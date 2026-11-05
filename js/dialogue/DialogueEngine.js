@@ -48,6 +48,7 @@ export class DialogueEngine {
     const o = this.options()[i]; if (!o) return this.view();
     if (o.trade) { const npc = this.cur.npc; this.close(); this.game.bus.emit('ui:trade', { npc: npc.id }); return null; }
     let branch = o;
+    if (o.chance !== undefined) branch = (this.game.rng?.() ?? Math.random()) < o.chance ? o.success : o.failure;
     if (o.check) {
       const ok = this.score(o.check) >= o.check.dc;
       branch = ok ? (o.success ?? {}) : (o.failure ?? {});

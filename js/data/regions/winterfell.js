@@ -7,8 +7,11 @@ export default {
   id: 'winterfell', scene: 'winterfell', name: 'Winterfell', region: 'Le Nord', climate: 'nord', lawFaction: 'stark',
   prices: { weapon: .95, armor: 1, luxe: 1.3, vivres: 1.1, fourrure: .7, consumable: 1.1 },
   spawn: { x: 0, z: 118, yaw: 0 }, bounds: [-160, -140, 120, 150],
+  rumors: ['Torvald le forgeron s\u2019arrache les cheveux : des déserteurs lui ont volé du fer. Ils se cachent dans le Bois-aux-Loups, au nord-ouest.', 'Les sources chaudes du bois sacré ne gèlent jamais. Maege dit que les anciens dieux y dorment.', 'Le Nord se souvient. Surtout des dettes.', 'Torvald peut renforcer ta lame et ton armure, si tu as de quoi payer.', 'On recrute des hommes d\u2019armes à la porte de Winter Town.'],
   intro: 'Winter Town, au pied des remparts de Winterfell. Le froid mord, la neige tombe. Ici, on juge un homme à ses actes.',
   npcs: [
+    { id: 'wf_beggar_1', name: 'Vieil Edrick', role: 'beggar', faction: 'peuple', x: -6, z: 82, weapon: 'poings', hp: 30, sit: true, look: look({ tunic: '#4a4036', pants: '#3a3028' }), story: ['J’ai combattu pour le Roi Robert. On m’a donné une jambe de bois et un merci.'], ai: {} },
+    { id: 'wf_beggar_2', name: 'Brienne la Glaneuse', role: 'beggar', faction: 'peuple', x: 12, z: 104, weapon: 'poings', hp: 30, sit: true, look: look({ tunic: '#4a4036', pants: '#3a3028' }), story: ['L’hiver dernier a pris ma ferme. Celui-ci prendra peut-être le reste.'], ai: {} },
     { id: 'torvald', name: 'Torvald le forgeron', role: 'merchant', merchant: true, smith: true, faction: 'stark', x: 23, z: 0, yaw: Math.PI, weapon: 'masse', hp: 90,
       stock: { epee_longue: 2, hache_guerre: 1, masse: 1, lance: 1, dague: 2, cuir: 2, brigandine: 1, maille: 1, arc_long: 1 }, look: look({ female: false, beard: true, tunic: '#3a2a22' }), ai: { wander: 1.5 } },
     { id: 'hilda', name: 'Hilda l’aubergiste', role: 'merchant', merchant: true, faction: 'peuple', x: 6, z: 64, weapon: 'poings', hp: 50,

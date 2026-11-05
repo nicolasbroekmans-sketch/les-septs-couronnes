@@ -8,11 +8,13 @@ export default {
   id: 'wall', scene: 'wall', name: 'Le Mur — Châteaunoir', region: 'Au bord du monde', climate: 'glace', lawFaction: 'garde',
   prices: { weapon: 1.2, armor: 1.2, vivres: 1.5, fourrure: .6, luxe: 1.8, consumable: 1.4 },
   spawn: { x: 22, z: 60, yaw: .1 }, bounds: [-130, -280, 120, 90],
+  rumors: ['Frère Aldous cherche une épée pour patrouiller au-delà du Mur. Le tunnel est derrière le réfectoire.', 'La cage monte jusqu\u2019au sommet. Deux cents mètres, un seul câble.', 'Les sauvageons se rassemblent, à ce qu\u2019on dit. Plus nombreux que jamais.', 'L\u2019intendant Corwen vend fourrures et rations — hors de prix, comme tout ici.'],
   intro: 'Châteaunoir. Derrière vous, le Mur : deux cents mètres de glace. Devant vous, des frères en noir qui ne vous font pas encore confiance.',
   npcs: [
     { id: 'aldous', name: 'Frère Aldous, patrouilleur', role: 'quest', faction: 'garde', x: 14, z: 8, weapon: 'epee_longue', armor: 'maille', hp: 160, when: { not: onPatrol }, look: crow({ female: false, beard: true }), ai: { wander: 2, aggression: .7, morale: .9 } },
     { id: 'aldous', name: 'Frère Aldous, patrouilleur', role: 'quest', faction: 'garde', x: GROVE[0] + 6, z: GROVE[1] + 14, weapon: 'epee_longue', armor: 'maille', hp: 160, when: onPatrol, look: crow({ female: false, beard: true }), ai: { wander: 3, aggression: .8, morale: .95, noFlee: true } },
     { id: 'wall_brother', name: 'Frère Edd le Taiseux', role: 'guard', faction: 'garde', x: GROVE[0] - 4, z: GROVE[1] + 16, weapon: 'lance', armor: 'cuir', hp: 110, when: onPatrol, look: crow(), ai: { wander: 3, aggression: .6, noFlee: true } },
+    { id: 'wall_beggar', name: 'Vieux frère manchot', role: 'beggar', faction: 'garde', x: -18, z: 16, weapon: 'poings', hp: 30, sit: true, look: look({ tunic: '#4a4036', pants: '#3a3028' }), story: ['Quarante ans sur le Mur. Il ne me reste qu’un bras et des histoires.'], ai: {} },
     { id: 'corwen', name: 'Intendant Corwen', role: 'merchant', merchant: true, faction: 'garde', x: 6, z: -15, weapon: 'dague', hp: 60,
       stock: { onguent: 4, ration: 15, fourrure: 6, cuir: 2, maille: 1, arc_long: 1, lance: 1 }, look: crow({ female: false, hair: '#8a8a8a' }), ai: { wander: 2 } },
     { id: 'dunstan', name: 'Dunstan, recrue', role: 'guard', faction: 'garde', x: -10, z: 12, weapon: 'epee_courte', armor: 'cuir', hp: 80, look: crow(), ai: { patrol: [[-14, 12], [14, 12], [14, -8], [-14, -8]] } },

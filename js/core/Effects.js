@@ -18,6 +18,7 @@ export function apply(effects, game, ctx = {}) {
     if (e.flag) { state.world.flags[e.flag] = e.value ?? true; bus.emit('world:flag', { flag: e.flag }); }
     if (e.npcFlag) { npcRecord(state, e.npcFlag.npc).flags[e.npcFlag.flag] = e.npcFlag.value ?? true; bus.emit('npc:flag', e.npcFlag); }
     if ('renown' in e) p.renown += e.renown;
+    if ('karma' in e) { p.karma = (p.karma ?? 0) + e.karma; bus.emit('player:karma', { value: p.karma }); }
     if (e.startQuest) game.quests.start(e.startQuest);
     if (e.signal) bus.emit('quest:signal', { quest: e.signal[0], signal: e.signal[1] });
     if (e.hostile) bus.emit('npc:provoked', { npc: e.hostile, group: e.group });
