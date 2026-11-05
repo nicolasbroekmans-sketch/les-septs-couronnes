@@ -13,9 +13,10 @@ export const height = (x, z) => Math.max(mountain(x, z), noise(x * .6, z * .6) *
 
 export async function build(ctx) {
   const { THREE, mat, props: P, rand } = ctx;
-  const grass = mat('brown_mud', { uv: 6, color: '#8fae6a', rough: 1 }), white = mat('plastered_wall', { uv: 5, color: '#f6f4ee' });
+  const grass = mat('grass_ground', { uv: 6, color: '#d0d8b0', rough: 1 }), white = mat('plastered_wall', { uv: 5, color: '#f6f4ee' });
   const grey = mat('castle_wall_slates', { normal: 'castle_wall_slates_nor', uv: 5, color: '#c8ccd2' }), blue = mat('grey_roof_tiles', { uv: 2, color: '#7a94b4' });
-  ctx.terrain({ size: 900, seg: 230, height, mat: grass });
+  ctx.terrain({ size: 900, seg: 230, height, mat: grass, splat: { slope: 'cliff_side', slopeTint: '#c8c8c4', high: 'snow_03', highY: 125, scale: 12 } });
+  ctx.grass({ area: [-130, 30, 130, 200], count: 40000, avoid: (x, z) => Math.abs(x) < 5 || Math.hypot(x, z - 100) < 46 || (Math.abs(x) < 32 && z < 52) });
   // neige et roche sur les hauteurs (anneau de pics + Lance du Géant)
   const rock = mat('rock_face', { uv: 8, color: '#9a9c9e' });
   for (let i = 0; i < 26; i++) { const a = rand() * 6.28, r = 40 + rand() * 50, x = PEAK[0] + Math.cos(a) * r, z = PEAK[1] + Math.sin(a) * r; ctx.cone(6 + rand() * 6, 14 + rand() * 18, x, height(x, z) - 6, z, rock, { seg: 5, solid: false, rotY: rand() * 3 }); }

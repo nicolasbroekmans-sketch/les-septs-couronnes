@@ -63,7 +63,7 @@ export async function build(ctx) {
   const stone = mat('castle_wall_slates', { normal: 'castle_wall_slates_nor', uv: 5, color: '#8f969e' });
   const wood = mat('weathered_planks', { uv: 3, color: '#8d7660' });
   const roofM = mat('grey_roof_tiles', { uv: 3, color: '#c5ced6' });
-  ctx.terrain({ size: 700, seg: 120, height: (x, z) => z > -55 ? Math.sin(x * .04) * Math.cos(z * .05) * 1.5 * Math.min(1, Math.max(0, (Math.hypot(x, z - 10) - 60) / 40)) : 0, mat: snow });
+  ctx.terrain({ size: 700, seg: 120, height: (x, z) => z > -55 ? Math.sin(x * .04) * Math.cos(z * .05) * 1.5 * Math.min(1, Math.max(0, (Math.hypot(x, z - 10) - 60) / 40)) : 0, mat: snow, splat: { slope: 'rocky_terrain_02', slopeTint: '#c8ccd0' } });
 
   // La paroi de glace
   const ice = new THREE.ShaderMaterial({ vertexShader: ICE_VS, fragmentShader: ICE_FS, fog: true,

@@ -14,7 +14,7 @@ export async function build(ctx) {
   const { mat, props: P, rand } = ctx;
   const gold = mat('rock_face', { uv: 12, color: '#f4cc84' }), sand = mat('yellow_stone_wall', { uv: 4, color: '#f0d8a8' });
   const red = mat('clay_roof_tiles', { uv: 2, color: '#b8502a' }), wall = mat('yellow_stone_wall', { uv: 5, color: '#e8cc98' }), cob = mat('cobblestone_floor_01', { uv: 3, color: '#cdb48c' });
-  ctx.terrain({ size: 800, seg: 230, height, mat: gold });
+  ctx.terrain({ size: 800, seg: 230, height, mat: gold, splat: { slope: 'cliff_side', slopeTint: '#f2c88a', scale: 14 } });
   ctx.box(240, .05, 320, -40, 1.02, 10, cob, { solid: false, cast: false });
   ctx.water({ reflect: true, y: 0, color: '#2c4a5a', w: 900, d: 1200, x: -580, sun: '#ffb46a' });
 

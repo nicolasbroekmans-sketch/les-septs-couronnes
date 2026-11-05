@@ -5,9 +5,9 @@ import { village, road, harbor } from './kit.js';
 
 const V = {
   combegivre: { hdri: 'kloofendal_overcast_puresky', ground: ['snow_02', '#eef2f6'], fog: ['#c3cad2', .006], sun: ['#e6ecf5', 1.5], tree: ['pine', '#2c3f33'], walls: ['#d8c6aa', '#cbbfae', '#e8d8c0'], roofs: ['#8a7a6a', '#6a5a4a'], banner: 'stark', particles: 'snow', sound: 'blizzard', feature: 'mill', hills: 14 },
-  gue: { hdri: 'kloofendal_misty_morning_puresky', ground: ['brown_mud', '#8fa86a'], fog: ['#cfd6d0', .007], sun: ['#fff0d8', 2.2], tree: ['round', '#4f7a3a'], walls: ['#e8d8c0', '#d8c6aa'], roofs: ['#8a6a4a', '#9a7a5a'], banner: 'baratheon', particles: 'dust', sound: 'wind', feature: 'river', hills: 6 },
-  portsel: { hdri: 'kloofendal_overcast_puresky', ground: ['brown_mud', '#a8a48a'], fog: ['#c8d0d4', .005], sun: ['#eef2f6', 2], tree: ['pine', '#3a5a44'], walls: ['#e6e2d8', '#d4d0c4'], roofs: ['#5a6a7a', '#4a5a6a'], banner: 'arryn', particles: 'dust', sound: 'waves', feature: 'port', hills: 8 },
-  mielbois: { hdri: 'kloppenheim_06_puresky', ground: ['brown_mud', '#9fbf6a'], fog: ['#e0e8d8', .004], sun: ['#fff4dc', 3], tree: ['round', '#5a8a3a'], walls: ['#fbf2e2', '#f0e2c8'], roofs: ['#c08050', '#a86a40'], banner: 'tyrell', particles: 'petals', sound: 'wind', feature: 'orchard', hills: 5 },
+  gue: { grass: 1, hdri: 'kloofendal_misty_morning_puresky', ground: ['grass_ground', '#c8ccb0'], fog: ['#cfd6d0', .007], sun: ['#fff0d8', 2.2], tree: ['round', '#4f7a3a'], walls: ['#e8d8c0', '#d8c6aa'], roofs: ['#8a6a4a', '#9a7a5a'], banner: 'baratheon', particles: 'dust', sound: 'wind', feature: 'river', hills: 6 },
+  portsel: { grass: 1, hdri: 'kloofendal_overcast_puresky', ground: ['grass_ground', '#b8b8a0'], fog: ['#c8d0d4', .005], sun: ['#eef2f6', 2], tree: ['pine', '#3a5a44'], walls: ['#e6e2d8', '#d4d0c4'], roofs: ['#5a6a7a', '#4a5a6a'], banner: 'arryn', particles: 'dust', sound: 'waves', feature: 'port', hills: 8 },
+  mielbois: { grass: 1, hdri: 'kloppenheim_06_puresky', ground: ['grass_ground', '#d8dcb0'], fog: ['#e0e8d8', .004], sun: ['#fff4dc', 3], tree: ['round', '#5a8a3a'], walls: ['#fbf2e2', '#f0e2c8'], roofs: ['#c08050', '#a86a40'], banner: 'tyrell', particles: 'petals', sound: 'wind', feature: 'orchard', hills: 5 },
   sablerouge: { hdri: 'qwantani_noon_puresky', ground: ['brown_mud', '#d8a070'], fog: ['#f0d0a8', .004], sun: ['#fff1d8', 4], tree: ['palm', '#4a7a3a'], walls: ['#e0b080', '#d8a070', '#e8c49a'], roofs: [], flat: true, banner: 'martell', particles: 'dust', sound: 'wind', feature: 'oasis', hills: 10 }
 };
 import { room } from './rooms.js';
@@ -17,7 +17,8 @@ export const config = id => { const v = V[id]; return { hdri: v.hdri, exposure: 
 export async function build(ctx, id) {
   const v = V[id], { mat, props: P, rand } = ctx;
   const h = (x, z) => noise(x, z) * .5 + v.hills * smooth(70, 150, Math.hypot(x, z)) * (1 + noise(x * .3, z * .3) * .3) - (v.feature === 'port' ? 6 * smooth(40, 70, z) : 0) - (v.feature === 'river' ? 2.4 * (1 - smooth(4, 9, Math.abs(z - 45))) : 0);
-  ctx.terrain({ size: 600, seg: 150, height: h, mat: mat(v.ground[0], { uv: 6, color: v.ground[1], rough: 1 }) });
+  ctx.terrain({ size: 600, seg: 150, height: h, mat: mat(v.ground[0], { uv: 6, color: v.ground[1], rough: 1 }), splat: { slope: 'rocky_terrain_02' } });
+  if (v.grass) ctx.grass({ area: [-110, -110, 110, 110], count: 36000, avoid: (x, z) => Math.hypot(x, z) < 44 || Math.abs(x) < 4 || (v.feature === 'river' && Math.abs(z - 45) < 8) || (v.feature === 'port' && z > 34) || Math.hypot(x, z + 56) < 16 });
   const wall = mat('plastered_wall', { uv: 4, instanced: true }), roof = mat(v.flat ? null : 'clay_roof_tiles', { uv: 2.5, instanced: true });
   village(ctx, 0, 0, { style: { combegivre: 'nord', gue: 'nord', portsel: 'fer', mielbois: 'bief', sablerouge: 'dorne' }[id], houses: 22, radius: 22, banner: v.banner, wall, roof, tints: v.walls, roofTints: v.roofs, flat: v.flat, avoid: (x, z) => Math.abs(x) < 5 && z > 0 || (v.feature === 'port' && z > 36) || (v.feature === 'river' && Math.abs(z - 45) < 7) });
   road(ctx, 0, 140, 0, 8, { w: 4.5 });

@@ -12,7 +12,7 @@ export async function build(ctx) {
   const { THREE, mat, props: P, rand } = ctx;
   const sand = mat('brown_mud', { uv: 6, color: '#e8cfa0', rough: 1 }), pink = mat('plastered_wall', { uv: 5, color: '#f2d6c8' }), marble = mat('plastered_wall', { uv: 4, color: '#fbf2ea' });
   const goldDome = mat(null, { color: '#e0b050', metal: .6, rough: .35 }), copper = mat(null, { color: '#5aa08a', metal: .5, rough: .4 }), tile = mat('cobblestone_floor_01', { uv: 2.5, color: '#f0dcc8' });
-  ctx.terrain({ size: 800, seg: 180, height, mat: sand });
+  ctx.terrain({ size: 800, seg: 180, height, mat: sand, splat: { slope: 'rocky_terrain_02', slopeTint: '#e8c090' } });
   ctx.water({ reflect: true, y: 0, color: '#1f6a7a', w: 1200, d: 500, z: 420, sun: '#fff1d8' });
 
   // --- le palais ---

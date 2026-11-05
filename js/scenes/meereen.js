@@ -11,7 +11,7 @@ export async function build(ctx) {
   const blocks = mat('large_sandstone_blocks', { uv: 4, color: '#e4c79a' });
   const pave = mat('large_sandstone_blocks', { uv: 3, color: '#d9bd8e' });
   const bronze = mat(null, { color: '#7a5a2e', metal: .85, rough: .38 });
-  ctx.terrain({ size: 800, seg: 120, height: (x, z) => { const d = Math.max(0, Math.hypot(x, z + 40) - 170); return Math.sin(x * .03) * Math.cos(z * .025) * d * .05 + d * .02; }, mat: sand });
+  ctx.terrain({ size: 800, seg: 120, height: (x, z) => { const d = Math.max(0, Math.hypot(x, z + 40) - 170); return Math.sin(x * .03) * Math.cos(z * .025) * d * .05 + d * .02; }, mat: sand, splat: { slope: 'rocky_terrain_02', slopeTint: '#e8c890' } });
   ctx.box(120, .05, 150, 0, 0, -10, pave, { solid: false, cast: false });
 
   // La Grande Pyramide : degrés colorés

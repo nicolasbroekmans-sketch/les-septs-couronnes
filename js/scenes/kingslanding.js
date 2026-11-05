@@ -18,7 +18,7 @@ export async function build(ctx) {
   const red = mat('castle_brick_02_red', { uv: 4, color: '#c46a52' });
   const marble = mat('plastered_wall', { uv: 6, color: '#f4efe6' });
   const wood = mat('weathered_planks', { uv: 3, color: '#a0846a' });
-  ctx.terrain({ size: 640, seg: 200, height, mat: ground });
+  ctx.terrain({ size: 640, seg: 200, height, mat: ground, splat: { slope: 'rocky_terrain_02', slopeTint: '#e0c8a0' } });
   ctx.water({ reflect: true, y: 0, z: 260, w: 900, d: 400, color: '#1f4752', sun: '#ffd9a0', distortion: 2.6 });
 
   // Donjon Rouge

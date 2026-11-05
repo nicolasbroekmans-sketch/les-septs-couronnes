@@ -10,7 +10,7 @@ export function terrainBuilders(E, ctx) {
       const p = g.attributes.position, uv = g.attributes.uv, k = size / (o.mat.userData.uv ?? 4);
       for (let i = 0; i < p.count; i++) { p.setY(i, o.height(p.getX(i) + (o.x ?? 0), p.getZ(i) + (o.z ?? 0))); uv.setXY(i, uv.getX(i) * k, uv.getY(i) * k); }
       g.computeVertexNormals();
-      const m = new THREE.Mesh(g, o.mat); m.position.set(o.x ?? 0, 0, o.z ?? 0); m.receiveShadow = true; E.scene.add(m);
+      const m = new THREE.Mesh(g, o.splat ? splat(ctx, o.mat, o.splat) : o.mat); m.position.set(o.x ?? 0, 0, o.z ?? 0); m.receiveShadow = true; E.scene.add(m);
       if (o.walk !== false) E.physics.groundFn = o.height;
       return m;
     },
@@ -31,4 +31,25 @@ export function terrainBuilders(E, ctx) {
       return m;
     }
   };
+}
+
+/** Terrain multi-textures : roche dans les pentes, neige en altitude, variation de teinte anti-répétition. */
+function splat(ctx, base, o) {
+  const m = base.clone(), slope = ctx.tex(o.slope ?? 'rocky_terrain_02'), high = o.high ? ctx.tex(o.high) : null;
+  m.onBeforeCompile = sh => {
+    Object.assign(sh.uniforms, { tSlope: { value: slope }, tHigh: { value: high ?? slope }, highY: { value: o.highY ?? 1e5 }, sTint: { value: new THREE.Color(o.slopeTint ?? '#ffffff') }, sScale: { value: o.scale ?? 7 } });
+    sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vWPos; varying vec3 vWNorm;')
+      .replace('#include <begin_vertex>', '#include <begin_vertex>\nvWPos = (modelMatrix * vec4(transformed, 1.0)).xyz; vWNorm = normalize(mat3(modelMatrix) * objectNormal);');
+    sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vWPos; varying vec3 vWNorm; uniform sampler2D tSlope; uniform sampler2D tHigh; uniform float highY; uniform vec3 sTint; uniform float sScale;')
+      .replace('#include <map_fragment>', `#include <map_fragment>
+        vec2 suv = vWPos.xz / sScale;
+        float var = texture2D(tSlope, vWPos.xz / 97.0).g;
+        diffuseColor.rgb *= 0.82 + 0.36 * var;
+        float sl = 1.0 - smoothstep(0.62, 0.86, vWNorm.y);
+        diffuseColor.rgb = mix(diffuseColor.rgb, texture2D(tSlope, suv).rgb * sTint, sl);
+        float hi = smoothstep(highY, highY + 10.0, vWPos.y + var * 6.0) * (1.0 - sl * 0.8);
+        diffuseColor.rgb = mix(diffuseColor.rgb, texture2D(tHigh, suv * 0.8).rgb, hi);`);
+  };
+  m.customProgramCacheKey = () => 'splat' + (o.slope ?? '') + (o.high ?? '');
+  return m;
 }

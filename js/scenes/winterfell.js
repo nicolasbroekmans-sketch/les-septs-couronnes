@@ -24,7 +24,7 @@ export async function build(ctx) {
   // Terrain : plat dans la ville et le château, collines enneigées au-delà
   const n2 = (x, z) => Math.sin(x * .021) * Math.cos(z * .017) * 6 + Math.sin(x * .05 + z * .03) * 2;
   const h = (x, z) => { const d = Math.max(0, Math.max(Math.abs(x) - 120, Math.abs(z - 20) - 160)); return n2(x, z) * Math.min(1, d / 40) + d * .08; };
-  ctx.terrain({ size: 800, seg: 160, height: h, mat: snow });
+  ctx.terrain({ size: 800, seg: 160, height: h, mat: snow, splat: { slope: 'rocky_terrain_02', slopeTint: '#b8bcc0' } });
 
   // Sol pavé/boue dans les enceintes
   ctx.box(76, .05, 76, 0, 0, -30, cobble, { solid: false, cast: false });

@@ -10,7 +10,8 @@ export const config = id => { const b = BATTLES[id], t = THEMES[b.theme]; return
 export async function build(ctx, id) {
   const b = BATTLES[id], t = THEMES[b.theme], { mat, props: P, rand } = ctx;
   const h = (x, z) => Math.sin(x * .03) * Math.cos(z * .025) * 2.2 + Math.max(0, Math.abs(x) - 70) * .25;
-  ctx.terrain({ size: 500, seg: 120, height: h, mat: mat(t.ground[0], { uv: 6, color: t.ground[1], rough: 1 }) });
+  ctx.terrain({ size: 500, seg: 120, height: h, mat: mat(b.theme === 'neige' ? 'snow_03' : 'grass_ground', { uv: 6, color: b.theme === 'neige' ? '#f2f4f6' : '#c8c4a0', rough: 1 }), splat: { slope: 'rocky_terrain_02' } });
+  if (b.theme !== 'neige') ctx.grass({ area: [-110, -140, 110, 100], count: 40000, avoid: (x, z) => Math.abs(x) < 50 && z > -75 && z < 55 });
   const trees = []; for (let i = 0; i < 160; i++) { const x = (rand() < .5 ? -1 : 1) * (80 + rand() * 120), z = -200 + rand() * 330; trees.push([x, z, 1 + rand()]); }
   ctx.trees(trees, 'pine', { leaf: t.leaf });
   const allyHouse = { couronne: 'baratheon', guet: 'baratheon', stark: 'stark', garde: 'garde' }[b.allies.faction] ?? 'stark';
