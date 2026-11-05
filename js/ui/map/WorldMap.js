@@ -135,7 +135,9 @@ export function createMap({ onPlace, onLevel, mode = 'discover', starts = [] }) 
     if (busy) return; busy = true;
     const s = seals.find(o => o.p === p);
     audio.sfx('seal', .7);
-    const tl = gsap.timeline({ onComplete: () => { busy = false; onPlace?.(p); } });
+    let done = false; const finish = () => { if (done) return; done = true; busy = false; onPlace?.(p); };
+    const tl = gsap.timeline({ onComplete: finish });
+    setTimeout(finish, 2500 * M() + 400); // filet de sécurité : si une animation de survol interrompt le bris du sceau
     tl.to(s.halves[0], { x: -9, y: 4, rotation: -24, transformOrigin: '50% 50%', duration: .5 * M(), ease: 'power2.out' }, 0)
       .to(s.halves[1], { x: 9, y: 5, rotation: 22, transformOrigin: '50% 50%', duration: .5 * M(), ease: 'power2.out' }, 0)
       .to(s.halves, { opacity: 0, duration: .3 * M() }, .3 * M())
