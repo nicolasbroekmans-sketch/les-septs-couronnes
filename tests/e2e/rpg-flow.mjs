@@ -49,7 +49,7 @@ try {
   await page.addScriptTag({ content: BOT });
 
   console.log('2. Parler au forgeron et accepter la quête');
-  await tp(23, 6); await toNpc('torvald');
+  await tp(6, 10); await toNpc('torvald');
   await until(`document.querySelector('#prompt').textContent.includes('Torvald')`, 60000, 'invite E');
   await press('KeyE'); await until(`document.querySelector('#dialogue').classList.contains('open')`, 60000, 'dialogue');
   await option('Je vous la ramène');
@@ -82,7 +82,7 @@ try {
   ok('Caisse récupérée, étape « retour »', await G(`__game.core.state.player.inventory.some(s => s.id === 'caisse_fer') && __game.core.state.quests.wf_iron.step === 'back'`));
 
   console.log('5. Retour chez Torvald et récompense');
-  await tp(23, 6); await toNpc('torvald');
+  await tp(6, 10); await toNpc('torvald');
   await until(`document.querySelector('#prompt').textContent.includes('Torvald')`, 60000, 'invite E');
   await press('KeyE'); await until(`document.querySelector('#dialogue').classList.contains('open')`, 60000, 'dialogue');
   await option('La voici');

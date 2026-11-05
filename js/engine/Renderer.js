@@ -20,6 +20,19 @@ const GRADE = { uniforms: { tDiffuse: { value: null }, uTint: { value: new THREE
     void main(){ vec4 c = texture2D(tDiffuse, vUv); float r = length(vUv - .5) * 1.25, v = smoothstep(.85, .25, r);
       c.rgb *= mix(1. - uVig * .55, 1., v); c.rgb *= uTint; c.rgb = mix(c.rgb, vec3(.6, 0., 0.), uHit * smoothstep(.2, .8, r)); gl_FragColor = c; }` };
 
+// Étalonnage « fantasy sombre » après le tone mapping : couleurs désaturées, contraste, ombres froides,
+// hautes lumières chaudes (torches), léger grain et vignette — le rendu des images de référence.
+const LOOK = { uniforms: { tDiffuse: { value: null }, uSat: { value: .8 }, uCon: { value: 1.12 }, uTime: { value: 0 }, uGrain: { value: .035 } }, vertexShader: VS,
+  fragmentShader: `uniform sampler2D tDiffuse; uniform float uSat, uCon, uTime, uGrain; varying vec2 vUv;
+    float h(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233)) + uTime) * 43758.5453); }
+    void main(){ vec3 c = texture2D(tDiffuse, vUv).rgb; float l = dot(c, vec3(.299, .587, .114));
+      c = mix(vec3(l), c, uSat);
+      c = (c - .5) * uCon + .5;
+      c += vec3(-.012, .0, .028) * (1. - smoothstep(0., .45, l));
+      c += vec3(.03, .012, -.02) * smoothstep(.55, 1., l);
+      c += (h(vUv * 917.) - .5) * uGrain;
+      gl_FragColor = vec4(clamp(c, 0., 1.), 1.); }` };
+
 export const QUALITY = {
   low: { ratio: 1, shadows: 1024, bloom: false, maxLights: 3, msaa: 0 },
   medium: { ratio: 1.5, shadows: 2048, bloom: true, maxLights: 6, msaa: 2 },
@@ -57,13 +70,14 @@ export class Renderer {
     if (Q.bloom) c.addPass(this.bloom = new UnrealBloomPass(new THREE.Vector2(w / 2, h / 2), cfg.bloom?.[0] ?? .45, cfg.bloom?.[1] ?? .5, cfg.bloom?.[2] ?? .85));
     this.grade = new ShaderPass(GRADE); this.grade.uniforms.uTint.value.set(cfg.tint ?? '#ffffff'); c.addPass(this.grade);
     c.addPass(new OutputPass());
+    this.look = new ShaderPass(LOOK); this.look.uniforms.uSat.value = cfg.sat ?? .8; this.look.uniforms.uCon.value = cfg.contrast ?? 1.12; c.addPass(this.look);
   }
   hitFlash(v) { if (this.grade) this.grade.uniforms.uHit.value = v; }
   resize() {
     this.camera.aspect = innerWidth / innerHeight; this.camera.updateProjectionMatrix();
     this.renderer.setSize(innerWidth, innerHeight); this.composer?.setSize(innerWidth, innerHeight);
   }
-  render(dt) { this.composer ? this.composer.render(dt) : this.renderer.render(this.scene, this.camera); }
+  render(dt) { if (this.look) this.look.uniforms.uTime.value = (this.look.uniforms.uTime.value + dt) % 100; this.composer ? this.composer.render(dt) : this.renderer.render(this.scene, this.camera); }
   dispose(scene) {
     scene?.traverse(o => {
       o.geometry?.dispose();

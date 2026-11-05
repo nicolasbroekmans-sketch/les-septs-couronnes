@@ -38,7 +38,7 @@ export function styledHouses(E, ctx, lots, styleName, o = {}) {
       const ri = Math.floor(rand() * S.roof.length), rf = S.roof[ri], along = l.w > l.d, rq = Q.clone().multiply(new THREE.Quaternion().setFromAxisAngle(up, along ? Math.PI / 2 : 0));
       const k = S.roofH[0] + rand() * (S.roofH[1] - S.roofH[0]), span = (along ? D : W) + .7, len = (along ? W : D) + .7;
       put('roof' + ri, () => [roofGeo(), ctx.mat(rf[0], { uv: 3, color: '#ffffff' })], at(0, l.h, 0), rq, V(span, k * span, len), tint(rf[1], .1));
-      if (rand() < S.chimney) { const cx = (rand() - .5) * W * .5, cz = (rand() - .5) * D * .4; put('chimney', () => [box(), ctx.mat('old_stone_wall', { uv: 2, instanced: true, color: '#9a948c' })], at(cx, l.h + k * span * .35, cz), Q, V(.7, k * span * .75 + .9, .7)); }
+      if (rand() < S.chimney) { const cx = (rand() - .5) * W * .5, cz = (rand() - .5) * D * .4; (E.chimneys ??= []).push(at(cx, l.h + k * span * 1.1 + 1, cz)); put('chimney', () => [box(), ctx.mat('old_stone_wall', { uv: 2, instanced: true, color: '#9a948c' })], at(cx, l.h + k * span * .35, cz), Q, V(.7, k * span * .75 + .9, .7)); }
     }
     // fenêtres (vitre sombre et chaude), volets, porte, auvent, balcon
     const glass = () => [new THREE.BoxGeometry(.7, 1, .1), ctx.mat(null, { color: '#2a2018', emissive: '#ff9a3a', ei: .5, rough: .3 })];
@@ -52,6 +52,8 @@ export function styledHouses(E, ctx, lots, styleName, o = {}) {
     if (rand() < S.awning) put('awning', () => [new THREE.BoxGeometry(1, .08, 1), ctx.mat(null, { color: '#ffffff', rough: 1 })], at(0, 2.6, face * (l.d / 2 + .7)), Q.clone().multiply(new THREE.Quaternion().setFromAxisAngle(V(1, 0, 0), face * .35)), V(Math.min(3.4, l.w * .7), 1, 1.5), C((S.awnings ?? ['#8b0000', '#c9a227', '#3a5a7a', '#5a6a3a'])[Math.floor(rand() * 4) % (S.awnings?.length ?? 4)]));
     if (two && rand() < (S.balcony ?? 0)) { put('balcony', () => [box(), ctx.mat('medieval_wood', { uv: 2, instanced: true, color: '#7a5a3a' })], at(0, g - .1, face * (D / 2 + .6)), Q, V(Math.min(4, W * .6), .15, 1.2)); put('balcony', null, at(0, g, face * (D / 2 + 1.15)), Q, V(Math.min(4, W * .6), .9, .08)); }
   }
+  // fumées : quelques cheminées choisies au hasard (coût limité)
+  for (const c of (E.chimneys ?? []).splice(0).sort(() => rand() - .5).slice(0, { low: 4, medium: 9, high: 16 }[E.quality] ?? 9)) ctx.emitter('smoke', c.x, c.y, c.z, { count: 26, opacity: .16, box: [3, 16, 3] });
   for (const [key, p] of parts) {
     const [geo, mat] = p.make();
     const m = new THREE.InstancedMesh(geo, mat, p.list.length), c = new THREE.Color();

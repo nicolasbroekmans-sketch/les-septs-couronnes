@@ -49,6 +49,11 @@ export function propBuilders(E, ctx) {
       for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2; P.stall(x + Math.cos(a) * r, z + Math.sin(a) * r, -a + Math.PI / 2, cloths[i % cloths.length]); }
       for (let i = 0; i < n * 2; i++) { const a = (i + .5) / (n * 2) * Math.PI * 2, rr = r + 2.4; (i % 3 ? P.crate : P.barrel)(x + Math.cos(a) * rr, z + Math.sin(a) * rr, .8 + ctx.rand() * .3, a); }
       P.well(x, z);
+    },
+    /** Flaques : plans sombres très lisses (reflètent le ciel et les torches) le long d'une rue boueuse. */
+    puddles(x0, z0, x1, z1, n = 20) {
+      const m = ctx.mat(null, { color: '#1c1a18', rough: .05, metal: .6 });
+      for (let i = 0; i < n; i++) { const x = x0 + ctx.rand() * (x1 - x0), z = z0 + ctx.rand() * (z1 - z0); const pd = ctx.cyl(.6 + ctx.rand() * 1.4, .02, x, y0(x, z) + .03, z, m, { seg: 12, solid: false, cast: false }); pd.scale.z = .5 + ctx.rand() * .6; pd.rotation.y = ctx.rand() * 3; }
     }
   };
   return P;
