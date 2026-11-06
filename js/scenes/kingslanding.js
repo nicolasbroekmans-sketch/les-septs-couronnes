@@ -3,6 +3,7 @@ import { height } from './details/klTerrain.js';
 import { room } from './places/rooms.js';
 import { walkHouse } from './places/houses.js';
 import { greatSept } from './details/klSept.js';
+import { kingslandingLore } from './details/klLore.js';
 
 // PORT-RÉAL — ville en pente vers la baie, Donjon Rouge sur la colline, Septuaire à dôme, port.
 export const config = {
@@ -52,7 +53,7 @@ export async function build(ctx) {
   ctx.poi(-12, 68, 'La porte de la Rivière', 'Les marins l’appellent la porte de la Gadoue. Ici débarquent le vin d’Arbor, les épices d’Essos et les rumeurs de partout.', { y: 1 });
 
   // La ville : grille irrégulière, ruelles étroites, toits de tuiles ocre
-  const avoid = (x, z, w = 0, d = 0) => (Math.abs(x) < 19 + w / 2 && z > 30 - d / 2 && z < 50 + d / 2) || avoidExtra(x, z, w, d) || (Math.abs(x - kx) < 46 && z < kz + 40 && z > kz - 40) || Math.hypot(x - sx, z - sz) < 38 || (Math.abs(x - kx) < 7 && z > kz + 26 && z < kz + 90) || (Math.abs(x) < 6 && z > 20) || z > 56 || (Math.abs(z - 20) < 3 + d / 2 && x < 0);
+  const avoid = (x, z, w = 0, d = 0) => Math.hypot(x + 112, z + 60) < 16 + w / 2 || (x > -102 && x < -66 && z > 44 - d / 2) || (Math.abs(x) < 19 + w / 2 && z > 30 - d / 2 && z < 50 + d / 2) || avoidExtra(x, z, w, d) || (Math.abs(x - kx) < 46 && z < kz + 40 && z > kz - 40) || Math.hypot(x - sx, z - sz) < 38 || (Math.abs(x - kx) < 7 && z > kz + 26 && z < kz + 90) || (Math.abs(x) < 6 && z > 20) || z > 56 || (Math.abs(z - 20) < 3 + d / 2 && x < 0);
   const city = ctx.cityGrid({ x0: -160, x1: 160, z0: -165, z1: 58, block: 13, street: 3.4, hMin: 4, hMax: 9, empty: .06, avoid });
   ctx.houses(city.lots, { style: 'couronne',
     wall: mat('plastered_wall', { uv: 4, instanced: true }), roof: mat('clay_roof_tiles', { uv: 2.5, instanced: true }),
@@ -72,6 +73,7 @@ export async function build(ctx) {
 
   ctx.particles('dust', { color: '#ffd9a0' });
   kingslandingCity(ctx, [kx, kz, ky]);
+  kingslandingLore(ctx, [kx, kz, ky]);
   ctx.spawn(0, 58, 0);
   ctx.sound(
     { name: 'crowd', volume: .4 }, { name: 'waves', volume: .35, pos: [0, 0, 90], ref: 25 },

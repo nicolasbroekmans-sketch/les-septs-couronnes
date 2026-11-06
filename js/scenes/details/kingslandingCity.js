@@ -16,7 +16,7 @@ export function kingslandingCity(ctx, keep) {
   ctx.poi(px - 28, pz + 8, 'La Fosse aux Dragons', 'On y gardait les dragons des Targaryen. Le dôme s’est effondré il y a plus d’un siècle ; les enfants jurent qu’on y entend encore des battements d’ailes.');
   // Porte des Dieux et remparts ouest (segments qui suivent la pente)
   for (let z = -150; z < 50; z += 20) {
-    if (Math.abs(z + 10 - 20) < 12) continue;
+    if (Math.abs(z + 10 - 20) < 12 || Math.abs(z + 10 + 90) < 12) continue;
     const y = Math.min(height(-165, z), height(-165, z + 20)) - 3;
     ctx.wall(-165, z, -165, z + 20, { h: height(-165, z + 10) - y + 9, t: 3, y, mat: red, outward: [-1, 0] });
   }
@@ -25,7 +25,7 @@ export function kingslandingCity(ctx, keep) {
   for (const s of [-1, 1]) ctx.tower(-165, 20 + s * 8, { w: 7, h: 16, y: gy, mat: red, round: true });
   ctx.box(3, 4, 12, -165, gy + 9, 20, red, { solid: false });
   for (const s of [-1, 1]) P.banner(-163.3, gy + 14, 20 + s * 8, 'baratheon', Math.PI / 2, 1.3);
-  ctx.poi(-158, 20, 'La porte des Dieux', 'La porte de l’ouest, flanquée de deux tours. Au-delà, la route qui mène aux collines… et aux bandits.');
+  ctx.poi(-158, 20, 'La porte de Fer', 'La porte de l’ouest, flanquée de deux tours. Au-delà, la route qui mène aux collines… et aux bandits.');
   // Place du marché
   P.market(PLAZA[0], PLAZA[1], 9, 7, ['#8b0000', '#c9a227', '#2f6b70', '#5a3a6e', '#c8702a', '#4f7a3a', '#6a2a5a']);
   ctx.poi(PLAZA[0], PLAZA[1] + 12, 'Le marché de la porte', 'Oranges de Dorne, soie de Myr, pain chaud et couteaux bon marché. Surveillez votre bourse.');
