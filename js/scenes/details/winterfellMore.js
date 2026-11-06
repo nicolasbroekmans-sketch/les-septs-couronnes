@@ -23,7 +23,7 @@ export function winterfellMore(ctx) {
   const mare = new THREE.Mesh(new THREE.CircleGeometry(3, 24), new THREE.MeshStandardMaterial({ color: '#0e1414', roughness: .02, metalness: .4 })); mare.rotation.x = -Math.PI / 2; mare.position.set(-32, .06, -17); ctx.add(mare);
   ctx.poi(-36, -12, 'La mare noire', 'Au pied de l’arbre-cœur, une eau froide et noire où Lord Stark vient nettoyer sa grande épée, Glace, après chaque exécution.');
   // cour d'entraînement : lices, râtelier, mannequins, bottes de paille
-  P.fence(-10, 2, 10, 2); P.fence(-10, 12, 10, 12);
+  P.fence(-14, 2, -5, 2); P.fence(-14, 11, -5, 11);
   for (let k = 0; k < 5; k++) ctx.box(.06, 2.2, .06, -14 + k * .35, 0, 6, mat(null, { color: '#7a6a50' }), { solid: false });
   ctx.box(2, .15, .3, -13.3, 1.8, 6, timber, { solid: false }); P.hay(-15, 9); P.hay(14, 4, .8);
   ctx.poi(0, 7, 'La cour d’entraînement', 'Les fils Stark y apprennent l’épée sous l’œil du maître d’armes, et les filles parfois aussi, quand il regarde ailleurs. Les flèches se plantent dans les cibles… ou à côté.');
