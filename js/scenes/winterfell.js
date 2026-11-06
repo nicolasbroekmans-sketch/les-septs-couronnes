@@ -1,6 +1,7 @@
 import { winterfellWalls } from './details/winterfellWalls.js';
 import { winterfellCastle } from './details/winterfellCastle.js';
 import { winterfellTown } from './details/winterfellTown.js';
+import { winterfellMore } from './details/winterfellMore.js';
 
 // WINTERFELL — d'après le plan du château : double enceinte avec douves gelées à l'ouest et à l'est, quatre
 // portes (nord, est vers la route royale, ouest « porte du Chasseur », sud), bois sacré à l'ouest, Premier
@@ -21,6 +22,7 @@ export async function build(ctx) {
   winterfellWalls(ctx);
   winterfellCastle(ctx);
   winterfellTown(ctx);
+  winterfellMore(ctx);
   // forêts : Bois-aux-Loups à l'ouest et au nord, pins épars ailleurs
   const pines = [];
   for (let i = 0; i < 560; i++) {

@@ -8,7 +8,7 @@ export function winterfellTown(ctx) {
   const mud = mat('dirt', { uv: 5, color: '#8a7e70', rough: 1 }), wood = mat('weathered_planks', { uv: 3, color: '#b09a80' }), cloth = c => mat(null, { color: c, flat: true });
   const MK = [132, -14], CAMP = [160, -14];
   const avoid = (x, z, w = 0, d = 0) => Math.abs(z + 14) < 6 + d / 2 || Math.hypot(x - MK[0], z - MK[1]) < 17 + w / 2 || (Math.abs(x - CAMP[0]) < 15 + w / 2 && Math.abs(z - CAMP[1]) < 14 + d / 2)
-    || (x < 124 + w / 2 && Math.abs(z + 14) < 22 + d / 2) || x - w / 2 < 72 || x + w / 2 > 206;
+    || (x < 124 + w / 2 && Math.abs(z + 14) < 22 + d / 2) || (Math.abs(x - 186) < 10 + w / 2 && Math.abs(z + 40) < 8 + d / 2) || x - w / 2 < 72 || x + w / 2 > 206;
   const city = ctx.cityGrid({ x0: 70, x1: 208, z0: -108, z1: 80, block: 14, street: 4.5, hMin: 3.4, hMax: 7, empty: .05, avoid });
   ctx.houses(city.lots, { style: 'nord', sink: 1.5 });
   for (const st of city.streets) ctx.box(st.w, .04, st.d, st.x, .01, st.z, mud, { solid: false, cast: false });
