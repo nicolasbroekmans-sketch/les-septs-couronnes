@@ -147,6 +147,8 @@ node tests/e2e/rpg-flow.mjs
 ## Crédits et licences
 
 - **Ciels HDRI et textures** : [Poly Haven](https://polyhaven.com), licence **CC0**. HDRI réduits en 512×256 et textures en .webp 384 px. Auteurs : Greg Zaal, Jarod Guest, Dimitrios Savva, Sergej Majboroda, Rob Tuytel, Dario Barresi, Amal Kumar, Charlotte Baglioni, Sơn Nguyễn.
+- **Modèles 3D Poly Haven** (`assets/models/ph/`) : tonneaux, caisses, coffre, fougères, souches, rochers, bouclier, table, tabourets, seau, hache, foyer, lanterne — licence **CC0**, optimisés (simplification, textures .webp, Draco).
+- **Maisons 3D BlenderKit** (`assets/models/bk/`) : licence **Royalty Free** de BlenderKit (usage gratuit, y compris commercial, dans un projet ; revente du modèle seul interdite). Auteurs : **Nana Nurzhau** (Medieval house ×4), **Ibrohim Toxirov** (Old Medieval House), **Jp Mamuse** (Thatched house). Textures regroupées en atlas, géométrie simplifiée ; toits et soubassements réhabillés avec des textures Poly Haven.
 - **Personnages, armes, navire, cheval, Titan** : créations procédurales originales, **CC0** (`engine/Humanoid.js`, `engine/Weapons3D.js`, `tools/make-models.html`).
 - **Sons et musique** : synthèse procédurale originale, **CC0**.
 - **Polices** : Cinzel, Cinzel Decorative (Natanael Gama) et IM Fell English (Igino Marini), sous **SIL OFL 1.1** (Google Fonts).

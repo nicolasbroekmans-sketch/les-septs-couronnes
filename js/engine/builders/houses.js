@@ -4,6 +4,8 @@
 // volets, porte, auvent de toile, balcon. Les choix dépendent du style régional (houseStyles.js).
 import * as THREE from 'three';
 import { STYLES } from './houseStyles.js';
+import { HOUSE_MODELS } from './models.js';
+const HERO = { nord: ['0ce7e508', 'd1a54956', 'fc4211f5', '7337edd5', '79fa3182', 'b6d9cd97'], couronne: ['0ce7e508', 'd1a54956', 'fc4211f5', '7337edd5'], bief: ['0ce7e508', 'd1a54956', 'fc4211f5', '7337edd5', '79fa3182'], ouest: ['0ce7e508', 'd1a54956', 'fc4211f5', '7337edd5'], fer: ['79fa3182', 'b6d9cd97', '0ce7e508'], garde: ['b6d9cd97', '79fa3182'] };
 
 export function styledHouses(E, ctx, lots, styleName, o = {}) {
   const S = STYLES[styleName] ?? STYLES.nord, { rand } = ctx, parts = new Map(), M = new THREE.Matrix4(), Q = new THREE.Quaternion(), up = new THREE.Vector3(0, 1, 0);
@@ -14,7 +16,13 @@ export function styledHouses(E, ctx, lots, styleName, o = {}) {
   const roofGeo = () => { const g = new THREE.ExtrudeGeometry(rs, { depth: 1, bevelEnabled: false }).translate(0, 0, -.5); const a = g.attributes.uv; for (let i = 0; i < a.count; i++) a.setXY(i, a.getX(i) * .25, a.getY(i) * .25); return g; };
   const tex = ([t, c], uv = 3) => ctx.mat(t, { uv, instanced: true, color: '#ffffff' });
   const tint = (c, v = .06) => C(c).offsetHSL(0, 0, (rand() - .5) * v);
+  const heroes = HERO[styleName], rate = { low: 0, medium: .45, high: .75 }[E.quality] ?? .45;
   for (const l of lots) {
+    if (heroes && !l.y && ctx.rand() < rate) { // maison réaliste importée (BlenderKit), mise à l'échelle de la parcelle
+      const id = heroes[Math.floor(ctx.rand() * heroes.length)], [fw, fd] = HOUSE_MODELS[id], q = Math.floor(ctx.rand() * 4), sw = q % 2 ? fd : fw, sd = q % 2 ? fw : fd;
+      ctx.placeModel(id, l.x, l.z, { rot: (l.rot ?? 0) + q * Math.PI / 2, s: Math.max(.6, Math.min(1.35, Math.min(l.w / sw, l.d / sd) * 1.08)), y: E.physics.groundFn(l.x, l.z) - .15 });
+      continue;
+    }
     const y = l.y ?? E.physics.groundFn(l.x, l.z), sink = o.sink ?? 2, rot = l.rot ?? 0; Q.setFromAxisAngle(up, rot);
     const at = (lx, ly, lz) => V(lx, ly, lz).applyQuaternion(Q).add(V(l.x, y, l.z));
     const bi = Math.floor(rand() * S.base.length), base = S.base[bi], two = !!S.upper && l.h >= 5 && rand() < S.upper2, g = two ? Math.min(l.h - 2.4, 3 + rand() * .8) : l.h, u = l.h - g;

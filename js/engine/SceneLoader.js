@@ -1,6 +1,8 @@
 // Chargement d'un lieu : module de scène, ciel HDRI, lumières, construction procédurale, fusion statique.
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+const draco = new DRACOLoader().setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/libs/draco/gltf/');
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { Physics } from './Physics.js';
@@ -20,7 +22,7 @@ export async function loadScene(R, sceneName, placeId, progress = () => {}, extr
   manager.onProgress = (_, l, t) => progress(.05 + .55 * l / t, 'On taille la pierre et le bois…');
   const E = {
     scene, physics, camera: R.camera, cfg, cache: new Map(), updaters: [], pois: [], mapMarks: [], ambience: [], nightLights: [],
-    texLoader: new THREE.TextureLoader(manager), gltfLoader: new GLTFLoader(manager), waterNormals: R.waterNormals,
+    texLoader: new THREE.TextureLoader(manager), gltfLoader: new GLTFLoader(manager).setDRACOLoader(draco), waterNormals: R.waterNormals,
     quality: R.quality, maxLights: QUALITY[R.quality].maxLights, lights: 0, lightBoost: 1, spawn: { x: 0, z: 0, yaw: 0, y: null },
     get groundFn() { return physics.groundFn; }
   };
