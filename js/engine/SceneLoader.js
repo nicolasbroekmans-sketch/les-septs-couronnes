@@ -43,6 +43,7 @@ export async function loadScene(R, sceneName, placeId, progress = () => {}, extr
   const ctx = makeCtx(E);
   await mod.build(ctx, placeId);
   if (extraBuild) await extraBuild(ctx);
+  progress(.62, 'On plante les forêts…'); await ctx.flushModels();
   if (!done) await new Promise(r => (wake = r));
   progress(.7, 'On allume les torches…');
   mergeStatic(scene);

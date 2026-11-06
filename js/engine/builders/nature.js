@@ -1,10 +1,26 @@
 // Végétation instanciée : pins, cyprès, palmiers, feuillus.
 import * as THREE from 'three';
+import { firGeometry, trunkGeometry } from './firTree.js';
 
 export function natureBuilders(E, ctx) {
   return {
     trees(list, type = 'pine', o = {}) {
       const n = list.length; if (!n) return;
+      if ((type === 'pine' || type === 'round') && !o.procedural) { // arbres réalistes + sous-bois (fougères, souches, rochers moussus, troncs morts)
+        const snowy = o.leaf && new THREE.Color(o.leaf).getHSL({}).l < .14;
+        list.forEach(([x, z, s = 1], i) => {
+
+          const r = ctx.rand(), dx = (ctx.rand() - .5) * 5, dz = (ctx.rand() - .5) * 5;
+          if (o.under === false || i % 2) return;
+          if (r < .3 && !snowy) ctx.placeModel('fern_02', x + dx, z + dz, { s: 1 + ctx.rand() });
+          else if (r < .42) ctx.placeModel('tree_stump_01', x + dx, z + dz, { s: .8 + ctx.rand() * .5 });
+          else if (r < .58) ctx.placeModel('rock_moss_set_01', x + dx, z + dz, { s: .7 + ctx.rand() * .8 });
+          else if (r < .66) ctx.placeModel('dead_tree_trunk', x + dx, z + dz, { s: .6 + ctx.rand() * .4 });
+          else if (r < .74) ctx.placeModel('namaqualand_boulder_02', x + dx, z + dz, { s: .4 + ctx.rand() * .6 });
+          else if (r < .86 && !snowy) ctx.placeModel('nettle_plant', x + dx, z + dz, { s: .8 + ctx.rand() * .6 });
+        });
+        if (type === 'pine') { firs(E, ctx, list, o); return; }
+      }
       const trunkM = ctx.mat(null, { color: o.trunk ?? '#4a3726' }), leafM = ctx.mat(null, { color: o.leaf ?? '#2f4a32', flat: true, rough: 1 });
       const trunk = new THREE.InstancedMesh(new THREE.CylinderGeometry(.18, .3, 1, 6).translate(0, .5, 0), trunkM, n);
       const geo = type === 'pine' ? mergeCones() : type === 'cypress' ? new THREE.SphereGeometry(1, 7, 6).scale(.35, 1, .35).translate(0, .5, 0)
@@ -32,4 +48,19 @@ function mergeCones() {
   for (const g of parts) { const ng = g.toNonIndexed(); pos.push(...ng.attributes.position.array); for (let i = 0; i < ng.attributes.position.count; i++) idx.push(off + i); off += ng.attributes.position.count; }
   const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.computeVertexNormals();
   return g;
+}
+
+/** Forêt de sapins réalistes : deux InstancedMesh (tronc, aiguilles), teinte variable, neige optionnelle. */
+function firs(E, ctx, list, o) {
+  const n = list.length, bark = ctx.mat('fir_bark', { uv: 1, color: '#8a7a6a' });
+  const needles = new THREE.MeshStandardMaterial({ map: ctx.tex('fir_needles'), alphaTest: .42, side: THREE.DoubleSide, roughness: .9, color: '#ffffff' });
+  const trunk = new THREE.InstancedMesh(trunkGeometry(), bark, n), crown = new THREE.InstancedMesh(firGeometry(), needles, n);
+  const M = new THREE.Matrix4(), Q = new THREE.Quaternion(), S = new THREE.Vector3(), P = new THREE.Vector3(), C = new THREE.Color(), base = new THREE.Color(o.leaf ?? '#2f4a32').lerp(new THREE.Color('#ffffff'), .55);
+  list.forEach(([x, z, s = 1], i) => {
+    const y = E.physics.groundFn(x, z) - .1, k = s * (.95 + ctx.rand() * .2);
+    Q.setFromAxisAngle(new THREE.Vector3(0, 1, 0), ctx.rand() * 6.28); M.compose(P.set(x, y, z), Q, S.set(k, k * (.9 + ctx.rand() * .25), k));
+    trunk.setMatrixAt(i, M); crown.setMatrixAt(i, M); crown.setColorAt(i, C.copy(base).offsetHSL((ctx.rand() - .5) * .03, 0, (ctx.rand() - .5) * .12));
+    ctx.collider(x - .3 * s, y, z - .3 * s, x + .3 * s, y + 8 * s, z + .3 * s, { noMap: true });
+  });
+  for (const m of [trunk, crown]) { m.castShadow = true; m.receiveShadow = true; m.frustumCulled = false; E.scene.add(m); }
 }

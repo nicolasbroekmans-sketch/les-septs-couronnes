@@ -8,11 +8,12 @@ import { natureBuilders } from './builders/nature.js';
 import { effectBuilders } from './builders/effects.js';
 import { propBuilders } from './builders/props.js';
 import { grassBuilders } from './builders/grass.js';
+import { modelBuilders } from './builders/models.js';
 
 /** E : environnement de construction { scene, physics, camera, texLoader, gltfLoader, cache, updaters, … } */
 export function makeCtx(E) {
   const ctx = { THREE, scene: E.scene, camera: E.camera, engine: E };
-  for (const make of [basicBuilders, fortBuilders, terrainBuilders, cityBuilders, natureBuilders, effectBuilders, grassBuilders]) Object.assign(ctx, make(E, ctx));
+  for (const make of [basicBuilders, fortBuilders, terrainBuilders, cityBuilders, natureBuilders, effectBuilders, grassBuilders, modelBuilders]) Object.assign(ctx, make(E, ctx));
   ctx.props = propBuilders(E, ctx);
   return ctx;
 }

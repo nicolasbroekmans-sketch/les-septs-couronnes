@@ -7,8 +7,8 @@ export function propBuilders(E, ctx) {
   const wood = () => ctx.mat('weathered_planks', { uv: 1.5, color: '#9a7a5a' }), dark = () => ctx.mat(null, { color: '#3a2a1c' });
   const iron = () => ctx.mat(null, { color: '#2e2e32', metal: .7, rough: .5 }), y0 = (x, z) => E.physics.groundFn(x, z);
   const P = {
-    barrel(x, z, s = 1) { const y = y0(x, z); ctx.cyl(.38 * s, .95 * s, x, y, z, wood(), { seg: 10, rTop: .34 * s }); ctx.cyl(.4 * s, .06, x, y + .25 * s, z, iron(), { seg: 10, solid: false }); ctx.cyl(.37 * s, .06, x, y + .72 * s, z, iron(), { seg: 10, solid: false }); },
-    crate(x, z, s = 1, rot = 0) { ctx.box(.9 * s, .9 * s, .9 * s, x, y0(x, z), z, ctx.mat('weathered_planks', { uv: 1, color: '#b08a60' }), { rotY: rot }); },
+    barrel(x, z, s = 1) { ctx.placeModel(ctx.rand() < .5 ? 'barrel_03' : 'wine_barrel_01', x, z, { s }); },
+    crate(x, z, s = 1, rot = 0) { ctx.placeModel('wooden_crate_01', x, z, { s: s * 1.4, rot }); },
     sack(x, z) { const m = new THREE.Mesh(new THREE.SphereGeometry(.35, 8, 6).scale(1, .75, .8), ctx.mat(null, { color: '#b8a070', rough: 1 })); m.position.set(x, y0(x, z) + .25, z); m.castShadow = true; m.userData.merge = true; E.scene.add(m); },
     cart(x, z, rot = 0) {
       const g = new THREE.Group(), w = wood(); g.position.set(x, y0(x, z), z); g.rotation.y = rot;
