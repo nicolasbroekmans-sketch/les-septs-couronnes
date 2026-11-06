@@ -5,7 +5,7 @@
 import * as THREE from 'three';
 
 const DIR = 'assets/models/ph/';
-const SOLID = { barrel_03: .4, wine_barrel_01: .5, wooden_crate_01: .45, treasure_chest: .5, tree_stump_01: .4, dead_tree_trunk: .5, namaqualand_boulder_02: .9, rock_moss_set_01: .6, stone_fire_pit: .7, WoodenTable_01: .6, painted_wooden_bench: .4, fir_lod: .35, island_tree_02: .3 };
+const SOLID = { barrel_03: .4, wine_barrel_01: .5, wooden_crate_01: .45, treasure_chest: .5, WoodenTable_01: .6 }; // le sous-bois ne bloque jamais le passage
 
 export function modelBuilders(E, ctx) {
   const queue = new Map();
