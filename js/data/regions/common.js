@@ -28,8 +28,8 @@ export function camp(ctx, x, z, o = {}) {
     const a = i / (o.tents ?? 3) * Math.PI * 2 + .4, tx = x + Math.cos(a) * 7, tz = z + Math.sin(a) * 7;
     ctx.cone(2.4, 3, tx, g(tx, tz), tz, cloth, { seg: 6, solid: true });
   }
-  ctx.box(1.2, .3, 1.2, x, g(x, z), z, mat('volcanic_rock_tiles', { uv: 2 }), { solid: false });
-  ctx.fire(x, g(x, z) + .3, z, .8, { intensity: 26 });
+  ctx.props.firepit(x, z, 1);
+  ctx.props.chest(x + 4, z - 5, .6);
   for (let i = 0; i < 14; i++) {
     const a = i / 14 * Math.PI * 2; if (Math.abs(a - (o.gap ?? Math.PI / 2)) < .5) continue;
     const px = x + Math.cos(a) * 13, pz = z + Math.sin(a) * 13;

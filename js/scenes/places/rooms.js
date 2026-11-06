@@ -24,7 +24,8 @@ export function room(ctx, kind, outside, o = {}) {
     for (let i = 0; i < 4; i++) P.barrel(cx + W / 2 - 1, cz - 4 + i * 1.2);
     for (const s of [-1, 1]) ctx.torch(cx + s * (W / 2 - .4), y + 2.4, cz + 2, { light: true, color: '#ffb36a' });
     for (const k of [-2, 3]) ctx.glow(cx, y + H - 1, cz + k, '#ffcf8a', 1.6);
-    for (const [tx, tz] of [[-4, -1], [-4, 3], [1, 3]]) { ctx.box(2.4, .8, 1.2, cx + tx, y, cz + tz, mat('weathered_planks', { uv: 2, color: '#7a5a3a' })); P.bench(cx + tx, cz + tz - 1.1); P.bench(cx + tx, cz + tz + 1.1); }
+    for (const [tx, tz] of [[-4, -1], [-4, 3], [1, 3], [5, -4]]) P.table(cx + tx, cz + tz, 0);
+    for (let k = 0; k < 4; k++) P.shield(cx - W / 2 + .4, y + 2.4, cz - 4 + k * 3, Math.PI / 2);
     people.push({ role: 'merchant', name: o.keeper ?? 'L’aubergiste', x: cx + W / 2 - 4, z: cz - 2.2, yaw: 0, stock: { ration: 12, onguent: 3, vin_arbor: 4 } });
     for (const [tx, tz] of [[-4, -2.1], [-4, 1.9], [1, 4.1]]) people.push({ role: 'villager', name: 'Client', x: cx + tx, z: cz + tz, sit: true });
   }
