@@ -1,6 +1,6 @@
 // Acteur (joueur ou PNJ) : position, physique de déplacement, combattant, modèle animé, plaque de nom.
 import { Fighter } from '../combat/Fighter.js';
-import { Humanoid } from '../engine/Humanoid.js';
+import { makeHumanoid } from '../engine/characters/index.js';
 import { Nameplate } from '../engine/Nameplate.js';
 import { ITEMS } from '../data/items.js';
 import { Motion } from './Motion.js';
@@ -11,7 +11,7 @@ export class Actor {
     this.pos = { x: o.x, y: o.y ?? 0, z: o.z }; this.yaw = o.yaw ?? 0; this.vy = 0; this.onGround = true;
     this.stats = o.stats; this.weaponId = o.weaponId ?? 'poings';
     this.fighter = new Fighter({ maxHp: o.stats.maxHp, maxStamina: o.stats.maxStamina, hp: o.hp, stamina: o.stamina, weapon: ITEMS[this.weaponId] ?? ITEMS.poings, stats: o.stats });
-    this.model = new Humanoid(o.look ?? {});
+    this.model = makeHumanoid(o.look ?? {});
     this.model.setWeapon(this.fighter.weapon.cls, this.weaponId);
     this.plate = o.kind === 'npc' ? new Nameplate(o.name) : null;
     if (this.plate) this.model.root.add(this.plate.sprite);

@@ -23,7 +23,8 @@ import { SaveManager } from '../core/SaveManager.js';
 import { createRng } from '../core/Random.js';
 import { createGameState } from '../core/GameState.js';
 import { audio } from '../audio.js';
-import { Humanoid } from '../engine/Humanoid.js';
+import { makeHumanoid } from '../engine/characters/index.js';
+import { LIB as CHARS } from '../engine/characters/library.js';
 import { lookFromCosmetics } from '../player/Rewards.js';
 import { Followers } from './Followers.js';
 import { ThiefBrain } from '../ai/ThiefBrain.js';
@@ -79,7 +80,7 @@ export class Game {
     this.player = new Actor({ id: 'player', kind: 'player', name: p.name, faction: 'joueur', x: sp[0], z: sp[2], yaw: position ? p.yaw : def.spawn.yaw, stats: derive(p), weaponId: p.equipped.weapon, hp: p.hp, stamina: p.stamina, look: this.playerLook() });
     this.player.pos.y = E.physics.groundAt(sp[0], sp[2], sp[1] ?? E.physics.groundFn(sp[0], sp[2]) + 1);
     this.player.hostileTo = o => this.hostile(this.player, o);
-    this.addActor(this.player); this.rig.yaw = this.player.yaw; this.player.lookKey = JSON.stringify(this.playerLook());
+    this.addActor(this.player); this.rig.yaw = this.player.yaw; this.player.lookKey = JSON.stringify(this.playerLook()) + CHARS.ready;
     this.region = new RegionRuntime(this, def); this.region.refresh();
     this.followers = new Followers(this); if (!def.battle && !st.explore) this.followers.spawn();
     if (def.lawFaction && !st.explore && this.rng() < .7) { // un tire-laine rôde dans les villes et les villages
@@ -108,10 +109,10 @@ export class Game {
     A.stats = d; f.stats = d; f.maxHp = d.maxHp; f.maxStamina = d.maxStamina;
     if (heal) { f.hp = d.maxHp; f.stamina = d.maxStamina; }
     if (A.weaponId !== p.equipped.weapon) A.setWeapon(p.equipped.weapon);
-    const lookKey = JSON.stringify(this.playerLook());
+    const lookKey = JSON.stringify(this.playerLook()) + CHARS.ready;
     if (A.lookKey !== lookKey) { // armure ou cosmétique : on reconstruit le modèle
       const m = A.model.root, parent = m.parent; A.lookKey = lookKey;
-      parent?.remove(m); A.model = new Humanoid(this.playerLook()); A.model.setWeapon(f.weapon.cls, A.weaponId); parent?.add(A.model.root);
+      parent?.remove(m); A.model = makeHumanoid(this.playerLook()); A.model.setWeapon(f.weapon.cls, A.weaponId); parent?.add(A.model.root);
     }
     this.ui.refresh();
   }

@@ -1,6 +1,6 @@
 // Aperçu 3D du personnage pendant la création (petit rendu indépendant).
 import * as THREE from 'three';
-import { Humanoid } from '../../engine/Humanoid.js';
+import { makeHumanoid, loadCharacters } from '../../engine/characters/index.js';
 import { ITEMS } from '../../data/items.js';
 
 export class CreationPreview {
@@ -16,7 +16,8 @@ export class CreationPreview {
   }
   set(look, weaponId) {
     this.h?.root.removeFromParent();
-    this.h = new Humanoid(look); this.h.setWeapon(ITEMS[weaponId]?.cls, weaponId); this.scene.add(this.h.root);
+    this.h = makeHumanoid(look); this.last = [look, weaponId];
+    if (!this.waiting) this.waiting = loadCharacters().then(() => this.last && this.set(...this.last)); this.h.setWeapon(ITEMS[weaponId]?.cls, weaponId); this.scene.add(this.h.root);
   }
   frame() {
     if ((this.skip = !this.skip)) { this.raf = requestAnimationFrame(this.loop); return; } // ~30 i/s suffisent pour un aperçu

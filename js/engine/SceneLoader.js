@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+import { loadCharacters } from './characters/library.js';
 const draco = new DRACOLoader().setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/libs/draco/gltf/');
 import { RGBELoader } from 'three/addons/loaders/RGBELoader.js';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
@@ -46,6 +47,7 @@ export async function loadScene(R, sceneName, placeId, progress = () => {}, extr
   await mod.build(ctx, placeId);
   if (extraBuild) await extraBuild(ctx);
   progress(.62, 'On plante les forêts…'); await ctx.flushModels();
+  progress(.7, 'Les habitants arrivent…'); await loadCharacters();
   if (!done) await new Promise(r => (wake = r));
   progress(.7, 'On allume les torches…');
   mergeStatic(scene);
