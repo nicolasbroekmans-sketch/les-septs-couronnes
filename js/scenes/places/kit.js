@@ -1,4 +1,5 @@
 // Briques de décor partagées par les lieux : dôme, village (place, puits, étals, maisons), port, route bordée.
+import * as THREE from 'three';
 export function dome(ctx, x, y, z, r, m, o = {}) {
   const { THREE } = ctx, d = new THREE.Mesh(new THREE.SphereGeometry(r, 24, 12, 0, Math.PI * 2, 0, o.half === false ? Math.PI : Math.PI / 2), m);
   d.position.set(x, y, z); d.scale.y = o.sy ?? 1; d.castShadow = true; d.receiveShadow = true; d.userData.merge = true; ctx.add(d);
@@ -41,9 +42,22 @@ export async function harbor(ctx, list, o = {}) {
 /** Route bordée de bornes et de lanternes entre deux points. */
 export function road(ctx, x0, z0, x1, z1, o = {}) {
   const g = ctx.engine.groundFn, n = Math.ceil(Math.hypot(x1 - x0, z1 - z0) / (o.step ?? 14)), m = o.mat ?? ctx.mat('brown_mud', { uv: 4, color: o.color ?? '#a89878', rough: 1 });
+  ctx.add(drape(g, x0, z0, x1, z1, o.w ?? 5, m));
   for (let i = 0; i < n; i++) {
-    const t = i / n, x = x0 + (x1 - x0) * t, z = z0 + (z1 - z0) * t, len = Math.hypot(x1 - x0, z1 - z0) / n;
-    ctx.box(o.w ?? 5, .06, len + .5, x, g(x, z) + .02, z, m, { rotY: Math.atan2(x1 - x0, z1 - z0), solid: false, cast: false });
+    const t = i / n, x = x0 + (x1 - x0) * t, z = z0 + (z1 - z0) * t;
     if (o.lanterns && i % 2) ctx.props.lantern(x + (o.w ?? 5) * .7, z);
   }
+}
+
+/** Ruban de route qui épouse le relief (sommets tous les 2 m, légèrement au-dessus du sol, bords adoucis). */
+function drape(g, x0, z0, x1, z1, w, m) {
+  const L = Math.hypot(x1 - x0, z1 - z0), n = Math.max(2, Math.ceil(L / 2)), ux = (x1 - x0) / L, uz = (z1 - z0) / L, px = -uz, pz = ux, pos = [], uv = [], idx = [], uvs = m.userData.uv ?? 4;
+  for (let i = 0; i <= n; i++) for (let j = 0; j <= 4; j++) {
+    const a = i / n * L, b = (j / 4 - .5) * w, x = x0 + ux * a + px * b, z = z0 + uz * a + pz * b;
+    pos.push(x, g(x, z) + (j === 0 || j === 4 ? .03 : .07), z); uv.push(b / uvs, a / uvs);
+  }
+  for (let i = 0; i < n; i++) for (let j = 0; j < 4; j++) { const a = i * 5 + j, c = a + 5; idx.push(a, a + 1, c, a + 1, c + 1, c); }
+  const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); geo.setAttribute('uv', new THREE.Float32BufferAttribute(uv, 2)); geo.setIndex(idx); geo.computeVertexNormals();
+  const mesh = new THREE.Mesh(geo, m); mesh.receiveShadow = true; mesh.userData.merge = true;
+  return mesh;
 }

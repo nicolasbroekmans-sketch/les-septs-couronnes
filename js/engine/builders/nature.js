@@ -22,10 +22,10 @@ export function natureBuilders(E, ctx) {
         if (type === 'pine' && E.quality !== 'low') { firs(E, ctx, list, o); return; } // qualité basse : sapins simples (portables, vieux Mac)
         if (type === 'pine') return natureBuilders(E, ctx).trees(list, type, { ...o, procedural: true });
       }
-      const trunkM = ctx.mat(null, { color: o.trunk ?? '#4a3726' }), leafM = ctx.mat(null, { color: o.leaf ?? '#2f4a32', flat: true, rough: 1 });
+      const trunkM = ctx.mat(null, { color: o.trunk ?? (type === 'palm' ? '#8a7050' : '#4a3726') }), leafM = ctx.mat(null, { color: '#ffffff', flat: true, rough: 1, side: type === 'palm' ? THREE.DoubleSide : THREE.FrontSide }); // teinte portée par setColorAt
       const trunk = new THREE.InstancedMesh(new THREE.CylinderGeometry(.18, .3, 1, 6).translate(0, .5, 0), trunkM, n);
       const geo = type === 'pine' ? mergeCones() : type === 'cypress' ? new THREE.SphereGeometry(1, 7, 6).scale(.35, 1, .35).translate(0, .5, 0)
-        : type === 'palm' ? new THREE.ConeGeometry(1, .3, 9, 1, true).rotateX(Math.PI).translate(0, .9, 0) : new THREE.IcosahedronGeometry(1, 1).translate(0, .6, 0);
+        : type === 'palm' ? palmCrown() : new THREE.IcosahedronGeometry(1, 1).translate(0, .6, 0);
       const leaves = new THREE.InstancedMesh(geo, leafM, n);
       const M = new THREE.Matrix4(), Q = new THREE.Quaternion(), S = new THREE.Vector3(), P = new THREE.Vector3(), C = new THREE.Color();
       list.forEach(([x, z, s = 1], i) => {
@@ -33,7 +33,7 @@ export function natureBuilders(E, ctx) {
         Q.setFromEuler(new THREE.Euler(type === 'palm' ? (ctx.rand() - .5) * .25 : 0, ctx.rand() * 6, 0));
         trunk.setMatrixAt(i, M.compose(P.set(x, y, z), Q, S.set(s, h, s)));
         const lh = type === 'pine' ? 6 * s : type === 'cypress' ? 7 * s : type === 'palm' ? 2.5 * s : 3.2 * s, lw = type === 'pine' ? 2.2 * s : type === 'palm' ? 3.2 * s : 2 * s;
-        leaves.setMatrixAt(i, M.compose(P.set(x, y + (type === 'pine' ? h * .6 : type === 'cypress' ? h * .4 : h * .9), z), Q, S.set(lw, lh, lw)));
+        leaves.setMatrixAt(i, M.compose(P.set(x, y + (type === 'pine' ? h * .6 : type === 'cypress' ? h * .4 : type === 'palm' ? h - .88 * lh : h * .9), z), Q, S.set(lw, lh, lw)));
         leaves.setColorAt(i, C.set(o.leaf ?? '#2f4a32').offsetHSL(0, 0, (ctx.rand() - .5) * .08));
         ctx.collider(x - .3 * s, y, z - .3 * s, x + .3 * s, y + h, z + .3 * s, { noMap: true });
       });
@@ -64,4 +64,19 @@ function firs(E, ctx, list, o) {
     ctx.collider(x - .3 * s, y, z - .3 * s, x + .3 * s, y + 8 * s, z + .3 * s, { noMap: true });
   });
   trunk.castShadow = true; crown.castShadow = E.quality === 'high'; for (const m of [trunk, crown]) { m.receiveShadow = true; m.frustumCulled = false; E.scene.add(m); }
+}
+
+// Couronne de palmier : 8 palmes qui s'élèvent puis retombent, plus larges au milieu (visibles des deux côtés).
+function palmCrown() {
+  const pos = [], idx = [], N = 6;
+  for (let k = 0; k < 8; k++) {
+    const a = k / 8 * Math.PI * 2 + (k % 2) * .2, ca = Math.cos(a), sa = Math.sin(a), base = pos.length / 3;
+    for (let i = 0; i <= N; i++) {
+      const t = i / N, d = t * 1.05, y = .9 + .28 * Math.sin(Math.PI * t * .8) - .55 * t * t, w = .2 * Math.sin(Math.PI * Math.min(1, t * 1.1)) + .01;
+      pos.push(ca * d - sa * w, y - w * .25, sa * d + ca * w, ca * d + sa * w, y - w * .25, sa * d - ca * w);
+    }
+    for (let i = 0; i < N; i++) { const a0 = base + i * 2; idx.push(a0, a0 + 2, a0 + 1, a0 + 1, a0 + 2, a0 + 3); }
+  }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals();
+  return g;
 }

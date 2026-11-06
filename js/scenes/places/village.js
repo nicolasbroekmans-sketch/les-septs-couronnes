@@ -21,7 +21,7 @@ export async function build(ctx, id) {
   if (v.grass) ctx.grass({ area: [-110, -110, 110, 110], count: 36000, avoid: (x, z) => Math.hypot(x, z) < 44 || Math.abs(x) < 4 || (v.feature === 'river' && Math.abs(z - 45) < 8) || (v.feature === 'port' && z > 34) || Math.hypot(x, z + 56) < 16 });
   const wall = mat('plastered_wall', { uv: 4, instanced: true }), roof = mat(v.flat ? null : 'clay_roof_tiles', { uv: 2.5, instanced: true });
   village(ctx, 0, 0, { style: { combegivre: 'nord', gue: 'nord', portsel: 'fer', mielbois: 'bief', sablerouge: 'dorne' }[id], houses: 22, radius: 22, banner: v.banner, wall, roof, tints: v.walls, roofTints: v.roofs, flat: v.flat, avoid: (x, z) => Math.abs(x) < 5 && z > 0 || (v.feature === 'port' && z > 36) || (v.feature === 'river' && Math.abs(z - 45) < 7) });
-  road(ctx, 0, 140, 0, 8, { w: 4.5 });
+  road(ctx, 0, v.feature === 'port' ? 38 : 140, 0, 8, { w: 4.5 }); // au port, la route s'arrête au quai
   const warm = !!v.flat, style = warm ? { stone: '#c8a070', plaster: '#e8c49a', roofTex: 'clay_roof_tiles', roof: '#b0704a' } : { stone: '#9a9690', plaster: '#e6dcc8', roof: v.roofs[0] ?? '#7a6a5a' };
   walkHouse(ctx, -9, -56, 0, { ...style, house: v.banner, owner: 'La veuve du meunier', name: 'Une maison du village' }); walkHouse(ctx, 9, -56, 0, { ...style, owner: 'Le forgeron du village' }); road(ctx, -140, -10, -8, -4, { w: 4 });
   // auberge : grande maison à étage, enseigne, bancs
@@ -39,6 +39,6 @@ export async function build(ctx, id) {
   const trees = []; for (let i = 0; i < 160; i++) { const a = rand() * 6.28, r = 60 + rand() * 120; trees.push([Math.cos(a) * r, Math.sin(a) * r, .9 + rand() * .6]); }
   ctx.trees(trees.filter(([x, z]) => Math.abs(x) > 8 && !(F === 'port' && z > 30)), v.tree[0], { leaf: v.tree[1] });
   ctx.particles(v.particles);
-  ctx.spawn(0, 60, 0);
+  ctx.spawn(0, v.feature === 'port' ? 30 : 60, 0); // jamais dans l'eau ni sous la jetée
   ctx.sound({ name: v.sound, volume: .4 }, { name: 'crowd', volume: .15 });
 }
