@@ -24,6 +24,7 @@ export class PlayerController {
     const G = this.game, I = G.input, A = G.player, f = A.fighter, rig = G.rig;
     rig.input(I.dx, I.dy, I.wheel);
     if (!A.alive) return;
+    if (G.boats?.active) return G.boats.drive(dt);
     const st = G.core.state.player, d = derive(st);
     // déplacement relatif à la caméra
     let mx = (I.down('KeyD', 'ArrowRight') ? 1 : 0) - (I.down('KeyA', 'ArrowLeft') ? 1 : 0);

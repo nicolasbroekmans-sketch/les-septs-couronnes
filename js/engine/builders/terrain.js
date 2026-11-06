@@ -27,6 +27,7 @@ export function terrainBuilders(E, ctx) {
         ctx.update(t => nm.offset.set(t * .015, t * .01));
       }
       m.rotation.x = -Math.PI / 2; m.position.set(o.x ?? 0, o.y ?? 0, o.z ?? 0); E.scene.add(m);
+      E.waters?.push({ y: m.position.y, x0: m.position.x - w / 2, x1: m.position.x + w / 2, z0: m.position.z - d / 2, z1: m.position.z + d / 2 });
       ctx.mapMark(m.position.x - w / 2, m.position.z - d / 2, m.position.x + w / 2, m.position.z + d / 2, '#8fa7a6');
       return m;
     }

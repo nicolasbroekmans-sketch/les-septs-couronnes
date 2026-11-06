@@ -7,6 +7,13 @@ export class Interaction {
   find() {
     const G = this.game, p = G.player, out = [];
     if (!p?.alive) return null;
+    const B = G.boats;
+    if (B?.active) { // en bateau : débarquer, ou passer de la barque au navire
+      const ship = B.active.kind === 'barque' && B.nearest(p.pos);
+      if (ship?.b?.kind === 'navire') return (this.current = { kind: 'boat', ref: ship.b, label: 'Monter à bord du navire' });
+      return (this.current = { kind: 'leave', ref: B.active, label: B.shore() ? 'Débarquer' : 'Débarquer (approchez-vous du rivage)' });
+    }
+    const nb = B?.nearest(p.pos); if (nb) out.push({ kind: 'boat', ref: nb.b, d: nb.d - 1, label: `Prendre ${nb.b.name}` });
     for (const a of G.actors) {
       if (a === p || a.kind === 'crowd' || !a.alive || a.hidden || a.brain?.state === 'flee') continue;
       if (!a.surrendered && G.hostile(a, p)) continue;
@@ -37,6 +44,8 @@ export class Interaction {
   }
   use() {
     const c = this.current, G = this.game; if (!c) return;
+    if (c.kind === 'boat') return G.boats.board(c.ref);
+    if (c.kind === 'leave') return G.boats.leave();
     if (c.kind === 'npc') return G.openDialogue(c.ref);
     if (c.kind === 'object') { const txt = G.region.useObject(c.ref); if (txt) G.ui.toast(txt, 'lore'); return; }
     if (c.kind === 'door') return G.goThrough(c.ref);

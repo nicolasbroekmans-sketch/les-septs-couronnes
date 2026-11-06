@@ -32,6 +32,7 @@ import { ContractRuntime } from './ContractRuntime.js';
 import { look as roomLook } from '../data/regions/common.js';
 import { pardon } from '../factions/Reputation.js';
 import { WorldMethods } from './GameWorld.js';
+import { Boats } from './Boats.js';
 import { submitScore } from '../online/Leaderboard.js';
 
 export class Game {
@@ -80,7 +81,7 @@ export class Game {
     this.player = new Actor({ id: 'player', kind: 'player', name: p.name, faction: 'joueur', x: sp[0], z: sp[2], yaw: position ? p.yaw : def.spawn.yaw, stats: derive(p), weaponId: p.equipped.weapon, hp: p.hp, stamina: p.stamina, look: this.playerLook() });
     this.player.pos.y = E.physics.groundAt(sp[0], sp[2], sp[1] ?? E.physics.groundFn(sp[0], sp[2]) + 1);
     this.player.hostileTo = o => this.hostile(this.player, o);
-    this.addActor(this.player); this.rig.yaw = this.player.yaw; this.player.lookKey = JSON.stringify(this.playerLook()) + CHARS.ready;
+    this.addActor(this.player); this.boats = new Boats(this); this.rig.yaw = this.player.yaw; this.player.lookKey = JSON.stringify(this.playerLook()) + CHARS.ready;
     this.region = new RegionRuntime(this, def); this.region.refresh();
     this.followers = new Followers(this); if (!def.battle && !st.explore) this.followers.spawn();
     if (def.lawFaction && !st.explore && this.rng() < .7) { // un tire-laine rôde dans les villes et les villages
@@ -139,7 +140,7 @@ export class Game {
   }
   autosave() { if (!this.core || this.battle || this.region?.def.battle || !this.player?.alive || this.core.state.explore) return; this.persistPosition(); this.saves.save('auto', this.core.state, 'Sauvegarde auto'); this.ui.saved?.(); submitScore(this.storage, this.core.state).catch(() => {}); }
   save(slot) { if (this.battle) { this.ui.toast('Impossible de sauvegarder pendant une bataille.', 'warn'); return false; } this.persistPosition(); return this.saves.save(slot, this.core.state, slot); }
-  persistPosition() { const p = this.core.state.player, A = this.player; if (A) { p.position = [A.pos.x, A.pos.y, A.pos.z]; p.yaw = A.yaw; p.hp = A.fighter.hp; p.stamina = A.fighter.stamina; } }
+  persistPosition() { const p = this.core.state.player, A = this.player; if (A) { const s = this.boats?.safePos() ?? A.pos; p.position = [s.x, s.y, s.z]; p.yaw = A.yaw; p.hp = A.fighter.hp; p.stamina = A.fighter.stamina; } }
   playerDied() { if (this.battle) return this.battle.finish(false); this.input.unlock(); this.ui.gameOver(); }
   async respawn() {
     const s = this.core.state; s.player.gold = Math.floor(s.player.gold * .8); s.player.hp = derive(s.player).maxHp; s.player.position = null;

@@ -64,6 +64,7 @@ export function effectBuilders(E, ctx) {
       if (!E.cache.has(key)) E.cache.set(key, E.gltfLoader.loadAsync(`assets/models/${name}.glb`).then(g => g.scene));
       const s = (await E.cache.get(key)).clone(true);
       s.traverse(o => { if (o.isMesh) o.castShadow = o.receiveShadow = true; });
+      if (name === 'ship') s.userData.drivable = 'navire';
       return s;
     }
   };

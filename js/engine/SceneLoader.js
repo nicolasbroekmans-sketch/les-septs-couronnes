@@ -24,7 +24,7 @@ export async function loadScene(R, sceneName, placeId, progress = () => {}, extr
   const E = {
     scene, physics, camera: R.camera, cfg, cache: new Map(), updaters: [], pois: [], mapMarks: [], ambience: [], nightLights: [],
     texLoader: new THREE.TextureLoader(manager), gltfLoader: new GLTFLoader(manager).setDRACOLoader(draco), waterNormals: R.waterNormals,
-    quality: R.quality, maxLights: QUALITY[R.quality].maxLights, lights: 0, lightBoost: 1, spawn: { x: 0, z: 0, yaw: 0, y: null },
+    waters: [], quality: R.quality, maxLights: QUALITY[R.quality].maxLights, lights: 0, lightBoost: 1, spawn: { x: 0, z: 0, yaw: 0, y: null },
     get groundFn() { return physics.groundFn; }
   };
   const hdr = await new RGBELoader(manager).loadAsync(`assets/hdri/${cfg.hdri}.hdr`);
