@@ -30,7 +30,7 @@ export function modelBuilders(E, ctx) {
           for (const part of v.parts) {
             const im = new THREE.InstancedMesh(part.geo, part.mat, pl.length);
             pl.forEach((p, i) => { const y = p.y ?? E.physics.groundFn(p.x, p.z) - .05; Q.setFromAxisAngle(up, p.rot); im.setMatrixAt(i, M.compose(P.set(p.x, y, p.z), Q, S.set(p.s, p.s * (p.sy ?? 1), p.s)).multiply(part.m)); });
-            im.castShadow = true; im.receiveShadow = true; im.frustumCulled = false; E.scene.add(im);
+            im.castShadow = E.quality !== 'low' && (E.quality === 'high' || !!SOLID[name]); im.receiveShadow = true; im.frustumCulled = false; E.scene.add(im);
           }
           const k = SOLID[name]; if (k) for (const p of pl) { const y = p.y ?? E.physics.groundFn(p.x, p.z), r = v.r * k * p.s; ctx.collider(p.x - r, y, p.z - r, p.x + r, y + v.h * p.s * (name.includes('tree') || name.startsWith('fir') ? 1 : .9), p.z + r, { noMap: !!name.match(/fir|tree/) }); }
         });

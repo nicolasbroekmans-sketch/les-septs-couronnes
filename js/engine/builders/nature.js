@@ -11,7 +11,7 @@ export function natureBuilders(E, ctx) {
         list.forEach(([x, z, s = 1], i) => {
 
           const r = ctx.rand(), dx = (ctx.rand() - .5) * 5, dz = (ctx.rand() - .5) * 5;
-          if (o.under === false || i % 2) return;
+          if (o.under === false || E.quality === 'low' || i % (E.quality === 'high' ? 2 : 3)) return;
           if (r < .3 && !snowy) ctx.placeModel('fern_02', x + dx, z + dz, { s: 1 + ctx.rand() });
           else if (r < .42) ctx.placeModel('tree_stump_01', x + dx, z + dz, { s: .8 + ctx.rand() * .5 });
           else if (r < .58) ctx.placeModel('rock_moss_set_01', x + dx, z + dz, { s: .7 + ctx.rand() * .8 });
@@ -19,7 +19,8 @@ export function natureBuilders(E, ctx) {
           else if (r < .74) ctx.placeModel('namaqualand_boulder_02', x + dx, z + dz, { s: .4 + ctx.rand() * .6 });
           else if (r < .86 && !snowy) ctx.placeModel('nettle_plant', x + dx, z + dz, { s: .8 + ctx.rand() * .6 });
         });
-        if (type === 'pine') { firs(E, ctx, list, o); return; }
+        if (type === 'pine' && E.quality !== 'low') { firs(E, ctx, list, o); return; } // qualité basse : sapins simples (portables, vieux Mac)
+        if (type === 'pine') return natureBuilders(E, ctx).trees(list, type, { ...o, procedural: true });
       }
       const trunkM = ctx.mat(null, { color: o.trunk ?? '#4a3726' }), leafM = ctx.mat(null, { color: o.leaf ?? '#2f4a32', flat: true, rough: 1 });
       const trunk = new THREE.InstancedMesh(new THREE.CylinderGeometry(.18, .3, 1, 6).translate(0, .5, 0), trunkM, n);
@@ -62,5 +63,5 @@ function firs(E, ctx, list, o) {
     trunk.setMatrixAt(i, M); crown.setMatrixAt(i, M); crown.setColorAt(i, C.copy(base).offsetHSL((ctx.rand() - .5) * .03, 0, (ctx.rand() - .5) * .12));
     ctx.collider(x - .3 * s, y, z - .3 * s, x + .3 * s, y + 8 * s, z + .3 * s, { noMap: true });
   });
-  for (const m of [trunk, crown]) { m.castShadow = true; m.receiveShadow = true; m.frustumCulled = false; E.scene.add(m); }
+  trunk.castShadow = true; crown.castShadow = E.quality === 'high'; for (const m of [trunk, crown]) { m.receiveShadow = true; m.frustumCulled = false; E.scene.add(m); }
 }
